@@ -11,11 +11,3 @@ export default function App() {
       </NavigationContainer>
   );
 }
-
-{/*<NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={Home} />
-        <Drawer.Screen name="Notifications" component={Notifications} />
-      </Drawer.Navigator>
-      <tabRoutes/>
-  </NavigationContainer>*/}
