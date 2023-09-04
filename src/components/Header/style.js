@@ -1,6 +1,6 @@
 import { StyleSheet, StatusBar } from 'react-native';
 
-const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 25 : 65;
+const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 20 : 60;
 
 export const styles = StyleSheet.create({
     container: {
