@@ -2,14 +2,6 @@ import React from 'react';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { styles } from './style'
 
-// import LoginSVG from '../assets/images/misc/login.svg';
-// import GoogleSVG from '../assets/images/misc/google.svg';
-// import FacebookSVG from '../assets/images/misc/facebook.svg';
-// import TwitterSVG from '../assets/images/misc/twitter.svg';
-
-// import CustomButton from '../components/CustomButton';
-// import InputField from '../components/InputField';
-
 const Login = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
