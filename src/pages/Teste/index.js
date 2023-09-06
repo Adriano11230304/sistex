@@ -1,9 +1,8 @@
 import React from "react";
-import { ActivityIndicator, Modal, Text, View } from "react-native";
+import { ActivityIndicator, Modal, Text, View, TextInput } from "react-native";
 import Button from "../../components/Button";
-
 import { useSelector, useDispatch } from "react-redux";
-import {logado, naoLogado } from "../../store/actions";
+import { user, store } from "../../store";
 import { styles } from "./styles";
 
 const Teste = () => {
@@ -12,7 +11,8 @@ const Teste = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>sdcsdcsdcsd</Text>
+      <TextInput style={styles.text}>sdcsdcsdcsd</TextInput>
+      <Button title={"Pressione"}/>
     </View>
   );
 };

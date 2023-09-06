@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ee7517",
     padding: 10,
     borderRadius: 5,
-    width: 90,
+    width: 100,
   },
   text: {
     color: "white",
