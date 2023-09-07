@@ -8,27 +8,27 @@ const Login = ({navigation}) => {
       <View style={styles.content}>
         <Text
           style={styles.login}>
-          Login
+          Faça o seu Login
         </Text>
-
-        <View
-          style={styles.buttonView}>
+      </View>
+      <View style={styles.form}>
+        <View>
+          <Text style={styles.title}>E-mail</Text>
+          <TextInput style={styles.input} placeholder='Digite o seu e-mail'/>
+        </View>
+        <View>
+          <Text style={styles.title}>Password</Text>
+          <TextInput style={styles.input} placeholder='Digite a sua senha' />
+        </View>
           <TouchableOpacity
             onPress={() => {}}
             style={styles.button}>
-                <Text>Login</Text>
+            <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginBottom: 30,
-          }}>
-          <Text>New to the app?</Text>
+        <View style={styles.nowRegister}>
+          <Text style={styles.textNowRegister}>Não possui um registro?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <Text style={{color: '#AD40AF', fontWeight: '700'}}> Register</Text>
+            <Text style={styles.register}> Register</Text>
           </TouchableOpacity>
         </View>
       </View>
