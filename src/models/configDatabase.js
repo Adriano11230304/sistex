@@ -4,10 +4,11 @@ import Sequelize from "rn-sequelize";
 const sequelize = new Sequelize({
     dialectModule: SQLite,
     database: "db",
+    logging: false,
     dialectOptions: {
         version: "1.0",
         description: "Database",
-    }
+    },
 });
 
 sequelize.authenticate().then(() => {

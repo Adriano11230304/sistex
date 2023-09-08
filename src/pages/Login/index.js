@@ -11,18 +11,28 @@ const Login = ({navigation}) => {
 
   async function Sigin(){
     
-    const user = await UserController.findUser(email, password);
+    const users = await UserController.findUser(email, password);
 
-    if(user && email == user.email && password == user.password){
-      console.log(user);
+    if(users){
+      store.dispatch(user.actions.setUser({
+        'email': email,
+        'password': password,
+        'token': 'ddddddddddddddd',
+        'isLogged': true
+      }));
+      
+      navigation.navigate("Home");
+    }else{
+      store.dispatch(user.actions.setUser({
+        'email': null,
+        'password': null,
+        'token': null,
+        'isLogged': false
+      }));
     }
 
-    /*store.dispatch(user.actions.setUser({
-      'email': email, 
-      'password': password, 
-      'token': 'scsdcsdcsdc'
-    }));
-    console.log(store.getState().user);*/
+    console.log(store.getState().user);
+
   }
 
   return (
