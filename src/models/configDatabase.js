@@ -1,5 +1,19 @@
-import * as SQLite from 'expo-sqlite'
+import * as SQLite from 'expo-sqlite';
+import Sequelize from "rn-sequelize";
 
-const db = SQLite.openDatabase("db.db")
+const sequelize = new Sequelize({
+    dialectModule: SQLite,
+    database: "db",
+    dialectOptions: {
+        version: "1.0",
+        description: "Database",
+    }
+});
 
-export default db
+sequelize.authenticate().then(() => {
+    console.log('Connection has been established successfully.');
+}).catch(error => {
+    console.log('Unable to connect to the database:', error);
+});
+
+export default sequelize;
