@@ -10,10 +10,9 @@ import Login from './src/pages/Login';
 export default function App() {
   return (
     <Provider store={store}>
-      {/*<NavigationContainer>
+      <NavigationContainer>
         <AuthStack/>
-  </NavigationContainer>*/}
-      <Login/>
+      </NavigationContainer>
     </Provider>
   );
 }

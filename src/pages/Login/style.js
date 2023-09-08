@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
         
     },
     title:{
-        marginTop: '5%',
+        marginTop: '10%',
         fontSize: 20
     },
     input: {

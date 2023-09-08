@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { styles } from './style'
+import { styles } from './style';
+import { store, user } from '../../store'
 
 const Login = ({navigation}) => {
+  const [ email, setEmail ] = useState("");
+  const [ password, setPassword ] = useState("");
+
+  function Sigin(){
+    // puxo do banco todos os users e se existir algum com esse usuário e senha faço o dispatch
+
+    store.dispatch(user.actions.setUser({
+      'email': email, 
+      'password': password, 
+      'token': 'scsdcsdcsdc'
+    }));
+    console.log(store.getState().user);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -14,15 +29,23 @@ const Login = ({navigation}) => {
       <View style={styles.form}>
         <View>
           <Text style={styles.title}>E-mail</Text>
-          <TextInput style={styles.input} placeholder='Digite o seu e-mail'/>
+          <TextInput
+            style={styles.input} 
+            placeholder='Digite o seu e-mail'
+            onChangeText={setEmail} 
+            value={email}
+          />
         </View>
         <View>
           <Text style={styles.title}>Password</Text>
-          <TextInput style={styles.input} placeholder='Digite a sua senha' />
+          <TextInput 
+            style={styles.input} 
+            placeholder='Digite a sua senha' 
+            onChangeText={setPassword}
+            value={password} 
+          />
         </View>
-          <TouchableOpacity
-            onPress={() => {}}
-            style={styles.button}>
+          <TouchableOpacity onPress={Sigin} style={styles.button}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         <View style={styles.nowRegister}>
