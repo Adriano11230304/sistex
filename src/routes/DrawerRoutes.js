@@ -13,19 +13,15 @@ const Drawer = createDrawerNavigator();
 
 
 export default function DrawerRoutes() {
-    const [logged, setLogged] = useState(false);
-    useEffect(() => {
-        setLogged(store.getState().user)
-        console.log(store.getState().user);
-        console.log(logged);
-
-    }, []);
     
     return(
             <Drawer.Navigator initialRouteName="Home" screenOptions={{ drawerInactiveBackgroundColor: '#a9a9a9', drawerStyle: { backgroundColor: '#a9a9a9' } }} >
-                <Drawer.Screen name="Login" component={Login} />
-                <Drawer.Screen name="Home" component={Home} />
-                <Drawer.Screen name="Notifications" component={Notifications} />
+                <Drawer.Screen name="Login" component={AuthStack} />
+            {store.getState().user.isLogged && 
+                <>
+                    <Drawer.Screen name="Home" component={Home} />
+                    <Drawer.Screen name="Notifications" component={Notifications} /> 
+                </>}
             </Drawer.Navigator>
 
     )

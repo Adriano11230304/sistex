@@ -33,6 +33,8 @@ const Login = ({navigation}) => {
 
     console.log(store.getState().user);
 
+    // alterar o routes aqui colocando o drawer
+
   }
 
   return (
