@@ -5,7 +5,6 @@ import { styles } from './style';
 import { store, user } from '../../store';
 
 export default function Home() {
-    console.log(store.getState().user);
 
     return (
         <View style={styles.container}>

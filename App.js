@@ -8,28 +8,13 @@ import React, { useEffect, useState } from "react";
 import sync from "./src/models/sync";
 
 export default function App() {
-  const [ routes, setRoutes ] = useState(<AuthStack/>);
-
-  useEffect(() => {
-    function teste(){
-      console.log(store.getState().user.isLogged);
-      if (store.getState().user.isLogged) {
-        setRoutes(<DrawerRoutes />)
-      } else {
-        setRoutes(<AuthStack />);
-      }
-
-      console.log(routes);
-    }
-
-    teste();
-  }, [])
+  // Não vai dar de fazer porque o App é carregado uma vez só - testar middlewares;
 
   return (
-    <Provider store={store}>
       <NavigationContainer>
-        {routes}
+        <Provider store={store}>
+          <DrawerRoutes/>
+        </Provider>
       </NavigationContainer>
-    </Provider>
   );
 }
