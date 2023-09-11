@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
 import Notifications from '../pages/Notifications';
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native';
 
 
 const Stack = createNativeStackNavigator();

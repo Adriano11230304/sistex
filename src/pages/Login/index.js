@@ -3,39 +3,19 @@ import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-nat
 import { styles } from './style';
 import { store, user } from '../../store';
 import UserController from '../../controllers/UserController';
-import User from '../../models/User';
-
 const Login = ({navigation}) => {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
 
   async function Sigin(){
-    
     const users = await UserController.findUser(email, password);
 
     if(users){
-      store.dispatch(user.actions.setUser({
-        'email': email,
-        'password': password,
-        'token': 'ddddddddddddddd',
-        'isLogged': true
-      }));
       
-      navigation.navigate("Home");
     }else{
-      store.dispatch(user.actions.setUser({
-        'email': null,
-        'password': null,
-        'token': null,
-        'isLogged': false
-      }));
-    }
-
-    console.log(store.getState().user);
-
-    // alterar o routes aqui colocando o drawer
-
+      
   }
+}
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,7 +49,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         <View style={styles.nowRegister}>
           <Text style={styles.textNowRegister}>Não possui um registro?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <TouchableOpacity>
             <Text style={styles.register}> Register</Text>
           </TouchableOpacity>
         </View>
