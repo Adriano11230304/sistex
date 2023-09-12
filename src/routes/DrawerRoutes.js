@@ -6,8 +6,6 @@ import { useAuth } from '../store/auth'
 
 const Drawer = createDrawerNavigator();
 
-
-
 export default function DrawerRoutes({ navigation }) {
     const { state } = useAuth();
     
@@ -24,6 +22,5 @@ export default function DrawerRoutes({ navigation }) {
                 </>
             )}
             </Drawer.Navigator>
-
     )
 }
