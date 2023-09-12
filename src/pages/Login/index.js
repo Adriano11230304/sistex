@@ -1,34 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { styles } from './style';
-import { store, user } from '../../store';
 import UserController from '../../controllers/UserController';
 import User from '../../models/User';
+import { useAuth } from '../../store/auth'
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const { state, dispatch } = useAuth();
+  
   async function Sigin() {
+    
     const users = await UserController.findUser(email, password);
       if (users) {
-        store.dispatch(user.actions.setUser({
-          'email': email,
-          'password': password,
-          'token': 'ddddddddddddddd',
-          'isLogged': true
-        }));
-
-        navigation.navigate("Home");
-
-      } else {
-        store.dispatch(user.actions.setUser({
-          'email': null,
-          'password': null,
-          'token': null,
-          'isLogged': false
-        }));
+        console.log("entrou");
+        dispatch({type: "signIn"})
       }
-      console.log(store.getState().user);
   }
 
   return (
