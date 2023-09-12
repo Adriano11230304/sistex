@@ -3,19 +3,33 @@ import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-nat
 import { styles } from './style';
 import { store, user } from '../../store';
 import UserController from '../../controllers/UserController';
-const Login = ({navigation}) => {
-  const [ email, setEmail ] = useState("");
-  const [ password, setPassword ] = useState("");
+import User from '../../models/User';
+const Login = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  async function Sigin(){
+  async function Sigin() {
     const users = await UserController.findUser(email, password);
+      if (users) {
+        store.dispatch(user.actions.setUser({
+          'email': email,
+          'password': password,
+          'token': 'ddddddddddddddd',
+          'isLogged': true
+        }));
 
-    if(users){
-      
-    }else{
-      
+        navigation.navigate("Home");
+
+      } else {
+        store.dispatch(user.actions.setUser({
+          'email': null,
+          'password': null,
+          'token': null,
+          'isLogged': false
+        }));
+      }
+      console.log(store.getState().user);
   }
-}
 
   return (
     <SafeAreaView style={styles.container}>

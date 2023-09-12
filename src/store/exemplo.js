@@ -4,85 +4,42 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const AuthContext = React.createContext();
-
-function SplashScreen() {
-    return (
-        <View>
-            <Text>Loading...</Text>
-        </View>
-    );
+function reducer(prevState, action){
+    switch (action.type) {
+        case 'RESTORE_TOKEN':
+            return {
+                ...prevState,
+                userToken: action.token,
+                isLoading: false,
+            };
+        case 'SIGN_IN':
+            return {
+                ...prevState,
+                isSignout: false,
+                userToken: action.token,
+            };
+        case 'SIGN_OUT':
+            return {
+                ...prevState,
+                isSignout: true,
+                userToken: null,
+            };
+    }
 }
 
-function HomeScreen() {
-    const { signOut } = React.useContext(AuthContext);
-
-    return (
-        <View>
-            <Text>Signed in!</Text>
-            <Button title="Sign out" onPress={signOut} />
-        </View>
-    );
+const initialState = {
+    isLoading: true,
+    isSignout: false,
+    userToken: null,
 }
 
-// entender como se usa o useReducer e o useMemo
 
-function SignInScreen() {
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
-
-    const { signIn } = React.useContext(AuthContext);
-
-    return (
-        <View>
-            <TextInput
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
-            />
-            <TextInput
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            <Button title="Sign in" onPress={() => signIn({ username, password })} />
-        </View>
-    );
-}
 
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation }) {
-    const [state, dispatch] = React.useReducer(
-        (prevState, action) => {
-            switch (action.type) {
-                case 'RESTORE_TOKEN':
-                    return {
-                        ...prevState,
-                        userToken: action.token,
-                        isLoading: false,
-                    };
-                case 'SIGN_IN':
-                    return {
-                        ...prevState,
-                        isSignout: false,
-                        userToken: action.token,
-                    };
-                case 'SIGN_OUT':
-                    return {
-                        ...prevState,
-                        isSignout: true,
-                        userToken: null,
-                    };
-            }
-        },
-        {
-            isLoading: true,
-            isSignout: false,
-            userToken: null,
-        }
-    );
-
+    const [state, dispatch] = React.useReducer(reducer, initialState);
+    
     React.useEffect(() => {
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
