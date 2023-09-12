@@ -9,13 +9,11 @@ const Drawer = createDrawerNavigator();
 
 
 export default function DrawerRoutes({ navigation }) {
-    const {
-        state: { signed },
-    } = useAuth();
+    const { state } = useAuth();
     
     return(
-        <Drawer.Navigator screenOptions={{ headerShown: signed, drawerInactiveBackgroundColor: '#a9a9a9', drawerStyle: { backgroundColor: '#fff' } }} >
-            {signed ? (
+        <Drawer.Navigator screenOptions={{ headerShown: state.signed, drawerInactiveBackgroundColor: '#a9a9a9', drawerStyle: { backgroundColor: '#fff' } }} >
+            {state.signed ? (
                 <>
                     <Drawer.Screen name="Home" component={Home} />
                     <Drawer.Screen name="Notifications" component={Notifications} />
