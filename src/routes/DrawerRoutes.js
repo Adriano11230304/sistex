@@ -6,6 +6,8 @@ import { useAuth } from '../store/auth'
 
 const Drawer = createDrawerNavigator();
 
+// colocar em toda a view um botão para opendrawer
+
 export default function DrawerRoutes({ navigation }) {
     const { state } = useAuth();
     
@@ -13,8 +15,8 @@ export default function DrawerRoutes({ navigation }) {
         <Drawer.Navigator screenOptions={{ headerShown: state.signed, drawerInactiveBackgroundColor: '#a9a9a9', drawerStyle: { backgroundColor: '#fff' } }} >
             {state.signed ? (
                 <>
-                    <Drawer.Screen name="Home" component={Home} />
-                    <Drawer.Screen name="Notifications" component={Notifications} />
+                    <Drawer.Screen options={{headerShown: false}} name="Home" component={Home} />
+                    <Drawer.Screen options={{ headerShown: false }} name="Notifications" component={Notifications} />
                 </>
             ) : (
                 <>
