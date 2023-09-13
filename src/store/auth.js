@@ -5,28 +5,20 @@ const AuthContext = createContext();
 function authReducer(state, action) {
     switch (action.type) {
         case 'signIn': {
-            return { ...state, signed: true };
+            return { ...state, signed: true, user: action.user };
         }
         case 'signOut': {
-            return { ...state, signed: false };
-        }
-        case 'validateSignUp': {
-            return { ...state, signed: true };
-        }
-        case 'invalidateSignUp': {
-            return { ...state, signed: false };
-        }
-        case 'signOutAndInvalidateSignUp': {
-            return { signed: false };
+            return { ...state, signed: false, user: action.user };
         }
         default: {
-            throw new Error(`Unhandled action type: ${action.type}`);
+            throw new Error(`action.type não tratada: ${action.type}`);
         }
     }
 }
 
 const initialState = {
-    signed: false
+    signed: false,
+    user: null
 }
 
 function AuthProvider({ children }) {

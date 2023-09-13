@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Alert, TouchableOpacity } from 'react-native';
 import Header from '../../components/Header';
 import { styles } from './style';
-import { store, user } from '../../store';
+import { useAuth } from '../../store/auth';
 
 export default function Home({ navigation }) {
 

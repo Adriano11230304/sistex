@@ -1,13 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
-import DrawerRoutes from './src/routes/DrawerRoutes';
 import { AuthProvider } from './src/store/auth';
+import TabRoutes from './src/routes/TabRoutes';
 
 export default function App() {
   
   return (
     <AuthProvider>
       <NavigationContainer>
-        <DrawerRoutes/>
+        <TabRoutes/>
       </NavigationContainer>
     </AuthProvider>
   );

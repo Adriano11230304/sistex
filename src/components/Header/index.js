@@ -8,10 +8,10 @@ export default function Header({name}) {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.username}>{name}</Text>
                 <TouchableOpacity style={styles.buttonUser}>
-                    <Feather name="user" size={25} color="#FFF"/>
+                    <Feather name="user" size={25} color="#FFF" />
                 </TouchableOpacity>
+                <Text style={styles.username}>{name}</Text>
             </View>
 
         </View>

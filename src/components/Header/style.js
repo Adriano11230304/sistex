@@ -16,12 +16,12 @@ export const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'space-between'
     },
     username: {
         fontSize: 18,
         color: '#FFF',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        paddingLeft: '5%'
     },
     buttonUser: {
         width: 45,

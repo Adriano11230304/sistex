@@ -13,8 +13,10 @@ const Login = ({ navigation }) => {
     
     const users = await UserController.findUser(email, password);
       if (users) {
-        console.log("entrou");
-        dispatch({type: "signIn"})
+        action = {
+          type: "signIn"
+        }
+        dispatch(action)
       }
   }
 
