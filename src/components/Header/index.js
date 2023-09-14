@@ -11,7 +11,9 @@ export default function Header({name}) {
                 <TouchableOpacity style={styles.buttonUser}>
                     <Feather name="user" size={25} color="#FFF" />
                 </TouchableOpacity>
-                <Text style={styles.username}>{name}</Text>
+                <TouchableOpacity style={styles.buttonUser}>
+                    <Text>Logout</Text>
+                </TouchableOpacity>
             </View>
 
         </View>

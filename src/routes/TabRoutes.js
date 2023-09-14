@@ -13,15 +13,6 @@ const Stack = createNativeStackNavigator();
 export default function TabRoutes() {
     const { state, dispatch } = useAuth();
 
-    function logout() {
-        const action = {
-            type: 'signOut',
-            user: null
-        }
-
-        dispatch(action);
-    }
-
     return (
         <>
             {state.signed ? (

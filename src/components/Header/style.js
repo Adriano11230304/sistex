@@ -14,14 +14,16 @@ export const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'flex-start',
         flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     username: {
         fontSize: 18,
         color: '#FFF',
         fontWeight: 'bold',
-        paddingLeft: '5%'
+        paddingLeft: '5%',
+        paddingTop: '5%'
     },
     buttonUser: {
         width: 45,
