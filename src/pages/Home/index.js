@@ -1,18 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, Alert, TouchableOpacity } from 'react-native';
+import { Text, View, Button, Alert, TouchableOpacity, SafeAreaView } from 'react-native';
 import Header from '../../components/Header';
 import { styles } from './style';
-import { useAuth } from '../../store/auth';
 
 export default function Home({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Header name="Adriano Pereira"/>
-            <Text>Página Home</Text>
-            <TouchableOpacity>
-                <Text>Notifications</Text>
-            </TouchableOpacity>
+            <View>
+                <Header/>
+                <Text style={styles.textHome}>Olá, Adriano!</Text>
+            </View>
+            <View style={styles.contas}>
+                <View style={styles.viewPagar}>
+                    <Text style={styles.contasPagar}>Pagar</Text>
+                    <Text style={styles.valorPagar}>R$ 345,00</Text>
+                </View>
+                <View style={styles.viewReceber}>
+                    <Text style={styles.contasReceber}>Receber</Text>
+                    <Text style={styles.valorReceber}>R$ 645,00</Text>
+                </View>
+            </View>
         </View>
     );
 }

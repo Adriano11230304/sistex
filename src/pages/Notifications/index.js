@@ -6,9 +6,8 @@ import { styles } from './style'
 export default function Home() {
     return (
         <View style={styles.container}>
-            <Header name="Adriano Pereira" />
+            <Header />
             <Text>Página Notifications</Text>
-            <StatusBar style="auto" />
         </View>
     );
 }

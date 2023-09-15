@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { styles } from './style';
 import UserController from '../../controllers/UserController';
-import User from '../../models/User';
 import { useAuth } from '../../store/auth'
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -14,14 +13,15 @@ const Login = ({ navigation }) => {
     const users = await UserController.findUser(email, password);
       if (users) {
         action = {
-          type: "signIn"
+          type: "signIn",
+          user: users
         }
         dispatch(action)
       }
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.content}>
         <Text
           style={styles.login}>
@@ -57,7 +57,7 @@ const Login = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

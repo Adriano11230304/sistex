@@ -4,7 +4,15 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center'
+    },
+    textHome: {
+        paddingLeft: '5%',
+        fontSize: 23,
+        backgroundColor: '#5d8aa8',
+        color: '#fff',
+        fontWeight: 'bold',
+        paddingBottom: '5%'
+
     },
     button: {
         backgroundColor: 'gray',
@@ -14,5 +22,34 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 10
     },
+    contas: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: '10%',
+        paddingEnd: '10%',
+        paddingTop: '5%',
+    },
+    contasPagar: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'red'
+    },
+    contasReceber: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'green'
+    },
+    viewPagar: {
+        alignItems: 'center'
+    },
+    viewReceber: {
+        alignItems: 'center'
+    },
+    valorPagar:{
+        fontSize: 20
+    },
+    valorReceber:{
+        fontSize: 20
+    }
 });
 

@@ -4,7 +4,7 @@ import Login from '../pages/Login';
 import Home from '../pages/Home';
 import Notifications from '../pages/Notifications';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { useAuth } from '../store/auth'
+import { useAuth } from '../store/auth';
 
 
 const Stack = createNativeStackNavigator();
@@ -17,7 +17,7 @@ const AuthStack = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {signed ? (
         <>
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen  name="Home" component={Home} />
           <Stack.Screen name="Notifications" component={Notifications} />
         </>
       ) : (

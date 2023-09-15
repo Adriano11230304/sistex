@@ -1,15 +1,14 @@
 import { StyleSheet, StatusBar } from 'react-native';
 
-const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 20 : 60;
 
 export const styles = StyleSheet.create({
     container: {
         backgroundColor: '#5d8aa8',
-        paddingTop: statusBarHeight,
+        paddingTop: 40,
         flexDirection: 'row',
         paddingStart: 15,
         paddingEnd: 15,
-        paddingBottom: 45
+        paddingBottom: 20
 
     },
     content: {
@@ -26,9 +25,17 @@ export const styles = StyleSheet.create({
         paddingTop: '5%'
     },
     buttonUser: {
-        width: 45,
-        height: 45,
-        backgroundColor: 'gray',
+        width: 40,
+        height: 40,
+        backgroundColor: '#FFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 50,
+    },
+    buttonLogout: {
+        width: 40,
+        height: 40,
+        backgroundColor: '#FFF',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 50,
