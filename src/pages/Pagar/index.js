@@ -3,11 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
 
-export default function Notifications() {
+export default function Pagar() {
     return (
         <View style={styles.container}>
             <Header />
-            <Text>Página Notifications</Text>
+            <Text>Página Pagar</Text>
         </View>
     );
 }
