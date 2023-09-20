@@ -13,8 +13,8 @@ export const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        alignItems: 'flex-start',
-        flexDirection: 'row',
+        alignItems: 'flex-end',
+        flexDirection: 'column-reverse',
         justifyContent: 'space-between',
     },
     username: {
@@ -33,9 +33,8 @@ export const styles = StyleSheet.create({
         borderRadius: 50,
     },
     buttonLogout: {
-        width: 40,
-        height: 40,
-        backgroundColor: '#FFF',
+        width: 35,
+        height: 35,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 50,

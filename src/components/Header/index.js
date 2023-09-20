@@ -19,12 +19,9 @@ export default function Header() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                {/*<TouchableOpacity style={styles.buttonUser}>
-                    <SimpleLineIcons name="user" size={24} color="black" />
-                </TouchableOpacity>*/}
-                {/*<TouchableOpacity style={styles.buttonLogout} onPress={logout}>
+                <TouchableOpacity style={styles.buttonLogout} onPress={logout}>
                     <MaterialIcons name="logout" size={24} color="black" />
-                </TouchableOpacity>*/}
+                </TouchableOpacity>
             </View>
 
         </View>
