@@ -16,8 +16,8 @@ const Drawer = createDrawerNavigator();
 
 export default function DrawerRoutes({ navigation }) {
     const { state } = useAuth();
-    // const signed = state.signed;
-    const signed = true;
+    const signed = state.signed;
+    
     
     return(
         <Drawer.Navigator screenOptions={{ 

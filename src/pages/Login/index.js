@@ -3,6 +3,8 @@ import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-nat
 import { styles } from './style';
 import UserController from '../../controllers/UserController';
 import { useAuth } from '../../store/auth'
+import { AntDesign } from '@expo/vector-icons';
+
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,14 +12,14 @@ const Login = ({ navigation }) => {
   
   async function Sigin() {
     
-    const users = await UserController.findUser(email, password);
+    /*const users = true;
       if (users) {
         action = {
           type: "signIn",
           user: users
         }
         dispatch(action)
-      }
+      }*/
   }
 
   return (
@@ -25,37 +27,14 @@ const Login = ({ navigation }) => {
       <View style={styles.content}>
         <Text
           style={styles.login}>
-          Faça o seu Login
+          Faça o seu Login com um e-mail Google
         </Text>
       </View>
       <View style={styles.form}>
-        <View>
-          <Text style={styles.title}>E-mail</Text>
-          <TextInput
-            style={styles.input} 
-            placeholder='Digite o seu e-mail'
-            onChangeText={setEmail} 
-            value={email}
-          />
-        </View>
-        <View>
-          <Text style={styles.title}>Password</Text>
-          <TextInput 
-            style={styles.input} 
-            placeholder='Digite a sua senha' 
-            onChangeText={setPassword}
-            value={password} 
-          />
-        </View>
           <TouchableOpacity onPress={Sigin} style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
+            <AntDesign name="googleplus" size={24} color="black" />
+            <Text style={styles.buttonText}>Google</Text>
           </TouchableOpacity>
-        <View style={styles.nowRegister}>
-          <Text style={styles.textNowRegister}>Não possui um registro?</Text>
-          <TouchableOpacity>
-            <Text style={styles.register}> Register</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
   );

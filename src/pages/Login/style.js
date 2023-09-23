@@ -10,30 +10,34 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 25,
         marginTop: '14%',
         marginBottom: '8%',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     login: {
-        fontSize: 28,
+        fontSize: 25,
         fontWeight: '500',
         marginBottom: 30,
         color: '#F0F8FF',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        paddingTop: '10%'
     },
     button: {
         borderColor: '#ddd',
-        backgroundColor: '#4682B4',
+        backgroundColor: '#fff',
         borderWidth: 2,
         borderRadius: 28,
         paddingHorizontal: 30,
         paddingVertical: 10,
-        width: '100%',
+        width: '50%',
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: '5%',
-        marginBottom: '5%'
+        marginBottom: '5%',
+        flexDirection: 'row',
     },
     buttonText:{
-        color: '#F0F8FF',
+        fontWeight: 'bold',
+        paddingStart: '5%',
+        fontSize: 20
     },
     register: { 
         color: '#AD40AF', 
