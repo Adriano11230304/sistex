@@ -18,10 +18,9 @@ export default function DrawerRoutes({ navigation }) {
     const { state } = useAuth();
     const signed = state.signed;
     
-    
     return(
         <Drawer.Navigator screenOptions={{ 
-            headerShown: true, 
+            headerShown: signed, 
             drawerInactiveBackgroundColor: '#fff',
             drawerStyle: { backgroundColor: '#fff' },
             headerStyle: { backgroundColor: '#5d8aa8', height: 0, },

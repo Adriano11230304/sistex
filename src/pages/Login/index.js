@@ -11,6 +11,7 @@ const Login = ({ navigation }) => {
   const { state, dispatch } = useAuth();
   
   async function Sigin() {
+    console.log("login");
     
     /*const users = true;
       if (users) {
@@ -27,7 +28,7 @@ const Login = ({ navigation }) => {
       <View style={styles.content}>
         <Text
           style={styles.login}>
-          Faça o seu Login com um e-mail Google
+          Faça o seu Login
         </Text>
       </View>
       <View style={styles.form}>

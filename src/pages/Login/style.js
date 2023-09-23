@@ -68,5 +68,6 @@ export const styles = StyleSheet.create({
         paddingStart: '5%',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
+        alignItems: 'center'
     }
 });
