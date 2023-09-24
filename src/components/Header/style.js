@@ -4,7 +4,7 @@ import { StyleSheet, StatusBar } from 'react-native';
 export const styles = StyleSheet.create({
     container: {
         backgroundColor: '#5d8aa8',
-        paddingTop: 40,
+        paddingTop: 45,
         flexDirection: 'row',
         paddingStart: 15,
         paddingEnd: 15,

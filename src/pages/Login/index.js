@@ -1,17 +1,29 @@
-import { useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import { styles } from './style';
 import UserController from '../../controllers/UserController';
 import { useAuth } from '../../store/auth'
 import { AntDesign } from '@expo/vector-icons';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+
+
+WebBrowser.maybeCompleteAuthSession();
+
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { state, dispatch } = useAuth();
+
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: "1099078308735-mmsolhd675dile5m6tt3ta01bjapodp0.apps.googleusercontent.com",
+    androidClientId: "1099078308735-7ak00a0clhai3m0bs4d4qccrduljif4u.apps.googleusercontent.com"
+  });
   
   async function Sigin() {
     console.log("login");
+    promptAsync();
     
     /*const users = true;
       if (users) {
@@ -22,6 +34,39 @@ const Login = ({ navigation }) => {
         dispatch(action)
       }*/
   }
+
+  const getUserInfo = async () => {
+    if(response) {
+      switch(response.type){
+        case "error":
+          ToastAndroid.show('Houve um erro!', ToastAndroid.SHORT);
+          break;
+        case "cancel":
+          ToastAndroid.show('Login Cancelado!', ToastAndroid.SHORT);
+          break;
+        case "success":
+          try {
+            const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+              headers: {
+                Authorization: `Bearer ${response.authentication?.accesstoken}`,
+              },
+            });
+
+            const userLogin = await res.json();
+            console.log(await userLogin);
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+        default:
+          () => {};
+      }
+    }
+  }
+
+  useEffect(() => {
+    getUserInfo();
+  }, [response])
 
   return (
     <View style={styles.container}>

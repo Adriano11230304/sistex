@@ -1,14 +1,16 @@
 import { Text, View, Button, Alert, TouchableOpacity, SafeAreaView } from 'react-native';
 import Header from '../../components/Header';
 import { styles } from './style';
+import UserController from '../../controllers/UserController';
+import { useEffect } from 'react';
 
 export default function Home({ navigation }) {
-
+    
     return (
         <View style={styles.container}>
             <View>
                 <Header/>
-                <Text style={styles.textHome}>Olá, Adriano!</Text>
+                <Text style={styles.textHome}>Seja Bem-vindo!</Text>
             </View>
             <View style={styles.contas}>
                 <View style={styles.viewPagar}>

@@ -21,7 +21,6 @@ export default function TabRoutes() {
 
     return (
                 <Tab.Navigator 
-                initialRouteName="Home"
                 activeColor='black'
                 inactiveColor='black'
                 shifting={false}
@@ -35,5 +34,29 @@ export default function TabRoutes() {
                     <Tab.Screen name="Receber" component={Receber} />
                     <Tab.Screen name="NFSe" component={Nfse} />
                 </Tab.Navigator>
+    );
+}
+
+export function TabRoutesReceber() {
+    const { state, dispatch } = useAuth();
+    // const signed = state.signed;
+    const signed = true;
+
+    return (
+        <Tab.Navigator
+            initialRouteName="Receber"
+            activeColor='black'
+            inactiveColor='black'
+            shifting={false}
+            barStyle={{ backgroundColor: '#5d8aa8' }}
+        >
+            <Tab.Screen options={{
+                tabBarIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />),
+                tabBarColor: "red"
+            }} name="Home" component={Home} />
+            <Tab.Screen name="Pagar" component={Pagar} />
+            <Tab.Screen name="Receber" component={Receber} />
+            <Tab.Screen name="NFSe" component={Nfse} />
+        </Tab.Navigator>
     );
 }
