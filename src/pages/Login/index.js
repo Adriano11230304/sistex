@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
 import { styles } from './style';
-import UserController from '../../controllers/UserController';
-import { useAuth } from '../../store/auth'
+// import { useAuth } from '../../store/auth'
 import { AntDesign } from '@expo/vector-icons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
@@ -13,18 +12,17 @@ WebBrowser.maybeCompleteAuthSession();
 
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { state, dispatch } = useAuth();
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const { state, dispatch } = useAuth();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: "1099078308735-mmsolhd675dile5m6tt3ta01bjapodp0.apps.googleusercontent.com",
+    webClientId: "1099078308735-mmsolhd675dile5m6tt3ta01bjapodp0.apps.googleusercontent.com",
     androidClientId: "1099078308735-7ak00a0clhai3m0bs4d4qccrduljif4u.apps.googleusercontent.com",
     redirectUri: makeRedirectUri({
-      scheme: "sistex",
+      native: "exp://10.14.130.214:8081",
     }),
     ...{useProxy: true}
-    
   });
   
   async function Sigin() {
@@ -45,10 +43,10 @@ const Login = ({ navigation }) => {
     if(response) {
       switch(response.type){
         case "error":
-          ToastAndroid.show('Houve um erro!', ToastAndroid.SHORT);
+          console.log('Houve um erro!');
           break;
         case "cancel":
-          ToastAndroid.show('Login Cancelado!', ToastAndroid.SHORT);
+          console.log('Login Cancelado!');
           break;
         case "success":
           try {
@@ -83,10 +81,11 @@ const Login = ({ navigation }) => {
         </Text>
       </View>
       <View style={styles.form}>
-          <TouchableOpacity onPress={Sigin} style={styles.button}>
+        <TouchableOpacity onPress={Sigin} style={styles.button}>
             <AntDesign name="googleplus" size={24} color="black" />
             <Text style={styles.buttonText}>Google</Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
+    {/*<Button onPress={Sigin}>dcsdcdscds</Button>*/}
       </View>
     </View>
   );
