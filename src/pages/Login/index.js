@@ -6,6 +6,7 @@ import { useAuth } from '../../store/auth'
 import { AntDesign } from '@expo/vector-icons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
+import { makeRedirectUri } from 'expo-auth-session';
 
 
 WebBrowser.maybeCompleteAuthSession();
@@ -16,9 +17,14 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const { state, dispatch } = useAuth();
 
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: "1099078308735-mmsolhd675dile5m6tt3ta01bjapodp0.apps.googleusercontent.com",
-    androidClientId: "1099078308735-7ak00a0clhai3m0bs4d4qccrduljif4u.apps.googleusercontent.com"
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: "1099078308735-mmsolhd675dile5m6tt3ta01bjapodp0.apps.googleusercontent.com",
+    androidClientId: "1099078308735-7ak00a0clhai3m0bs4d4qccrduljif4u.apps.googleusercontent.com",
+    redirectUri: makeRedirectUri({
+      scheme: "sistex",
+    }),
+    ...{useProxy: true}
+    
   });
   
   async function Sigin() {

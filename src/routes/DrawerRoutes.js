@@ -27,7 +27,8 @@ export default function DrawerRoutes({ navigation }) {
             
             
         }}
-        >          
+        >   
+            <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} name="Login" component={Login} />       
             <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} name="Home" component={Home} />
             <Drawer.Screen name="Contas a Pagar" component={Pagar} options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} />
             <Drawer.Screen name="Contas a Receber" component={Receber} options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} />
