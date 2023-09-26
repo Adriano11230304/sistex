@@ -18,17 +18,15 @@ const Login = ({ navigation }) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId: "1099078308735-mmsolhd675dile5m6tt3ta01bjapodp0.apps.googleusercontent.com",
+    expoClientId: "1099078308735-uf7i6v75ce2p5551hmqljb6chd74tau9.apps.googleusercontent.com",
     androidClientId: "1099078308735-7ak00a0clhai3m0bs4d4qccrduljif4u.apps.googleusercontent.com",
-    redirectUri: makeRedirectUri({
-      native: "exp://10.14.130.214:8081",
-    }),
+    redirectUri: makeRedirectUri({ native: "com.anonymous.sistex://"}),
     ...{useProxy: true}
   });
   
   async function Sigin() {
     console.log("login");
     promptAsync();
-    
     /*const users = true;
       if (users) {
         action = {

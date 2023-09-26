@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "sistex",
-    "scheme": "sistex",
+    "scheme": "com.anonymous.sistex",
     "slug": "sistex",
     "version": "1.0.0",
     "orientation": "portrait",
