@@ -27,10 +27,11 @@ export const styles = StyleSheet.create({
         borderRadius: 28,
         paddingHorizontal: 30,
         paddingVertical: 10,
-        width: '50%',
+        width: 250,
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '5%',
+        marginTop: '20%',
         marginBottom: '5%',
         flexDirection: 'row',
     },
@@ -69,5 +70,10 @@ export const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         alignItems: 'center'
+    },
+    image:{
+        width: 250,
+        height: 50,
+        borderRadius: 28,
     }
 });

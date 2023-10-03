@@ -1,8 +1,7 @@
-// import { NavigationContainer } from '@react-navigation/native';
-// import { AuthProvider } from './src/store/auth';
-// import DrawerRoutes from './src/routes/DrawerRoutes';
-// import TabRoutes from './src/routes/TabRoutes';
-// import View from '@bacons/react-views/build/View';
+import { NavigationContainer } from '@react-navigation/native';
+import { AuthProvider } from './src/store/auth';
+import DrawerRoutes from './src/routes/DrawerRoutes';
+import TabRoutes from './src/routes/TabRoutes';
 import { View, Text } from 'react-native';
 import Login from './src/pages/Login';
 
@@ -13,11 +12,11 @@ import Login from './src/pages/Login';
 export default function App() {
   
   return (
-    <Login/>
-    /*<AuthProvider>
+    /*<Login/>*/
+    <AuthProvider>
       <NavigationContainer>
         <DrawerRoutes />
       </NavigationContainer>
-  </AuthProvider>*/
+  </AuthProvider>
   );
 }

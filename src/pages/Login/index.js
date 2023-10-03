@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Button, Image } from 'react-native';
 import { styles } from './style';
 // import { useAuth } from '../../store/auth'
 import { AntDesign } from '@expo/vector-icons';
@@ -80,10 +80,10 @@ const Login = ({ navigation }) => {
       </View>
       <View style={styles.form}>
         <TouchableOpacity onPress={Sigin} style={styles.button}>
-            <AntDesign name="googleplus" size={24} color="black" />
-            <Text style={styles.buttonText}>Google</Text>
+            <Image style={styles.image}
+              source={require('../../../assets/google.png')}
+            />
         </TouchableOpacity>
-    {/*<Button onPress={Sigin}>dcsdcdscds</Button>*/}
       </View>
     </View>
   );
