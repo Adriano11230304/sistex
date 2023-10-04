@@ -50,6 +50,29 @@ export const styles = StyleSheet.create({
     },
     valorReceber:{
         fontSize: 20
+    },
+    select: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: '5%'
+    },
+    grafico: {
+        alignContent: 'center',
+        alignItems: 'center',
+        paddingTop: 100,
+        borderColor: '#000000',
+        borderWidth: 1,
+        paddingLeft: '5%',
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 20,
+    },
+    graficoText: {
+        fontSize: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignContent: 'center',
+        paddingBottom: 100
     }
 });
 
