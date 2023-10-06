@@ -12,11 +12,11 @@ import Login from './src/pages/Login';
 export default function App() {
   
   return (
-    /*<Login/>*/
-    <AuthProvider>
+    <Login/>
+    /*<AuthProvider>
       <NavigationContainer>
         <DrawerRoutes />
       </NavigationContainer>
-  </AuthProvider>
+  </AuthProvider>*/
   );
 }
