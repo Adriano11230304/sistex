@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "sistex",
-    "scheme": "com.anonymous.sistex",
+    "scheme": "com.adriano11230304.sistex",
     "slug": "sistex",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,15 +17,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.sistex"
+      "bundleIdentifier": "com.adriano11230304.sistex"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "googleServicesFile": "./google-services.json"
+        "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.sistex"
+      "package": "com.adriano11230304.sistex"
     },
     "web": {
       "favicon": "./assets/favicon.png"

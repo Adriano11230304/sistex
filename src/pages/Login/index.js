@@ -17,12 +17,14 @@ const Login = ({ navigation }) => {
   // const { state, dispatch } = useAuth();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    // expoClientId: "1099078308735-uf7i6v75ce2p5551hmqljb6chd74tau9.apps.googleusercontent.com ",
-    androidClientId: "1099078308735-7ak00a0clhai3m0bs4d4qccrduljif4u.apps.googleusercontent.com",
-     
-    redirectUri: makeRedirectUri({ native: "exp://"}),
+    androidClientId: "1099078308735-87979lob5dicr95qfhkas7i0dm5pbpd6.apps.googleusercontent.com", 
+    redirectUri: makeRedirectUri({ scheme: "com.adriano11230304.sistex" }),
     ...{useProxy: true}
   });
+
+  useEffect(() => {
+    console.log(response);
+  }, [response])
   
   async function Sigin() {
     console.log("login");
