@@ -16,8 +16,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.adriano11230304.sistex"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {

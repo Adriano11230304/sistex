@@ -15,6 +15,7 @@ const Login = ({ navigation }) => {
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   // const { state, dispatch } = useAuth();
+  const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: "1099078308735-87979lob5dicr95qfhkas7i0dm5pbpd6.apps.googleusercontent.com", 
@@ -23,54 +24,39 @@ const Login = ({ navigation }) => {
   });
 
   useEffect(() => {
-    console.log(response);
+    handleSingInWithGoogle();
   }, [response])
-  
-  async function Sigin() {
-    console.log("login");
-    promptAsync();
-    /*const users = true;
-      if (users) {
-        action = {
-          type: "signIn",
-          user: users
-        }
-        dispatch(action)
-      }*/
-  }
 
-  const getUserInfo = async () => {
-    if(response) {
-      switch(response.type){
-        case "error":
-          console.log('Houve um erro!');
-          break;
-        case "cancel":
-          console.log('Login Cancelado!');
-          break;
-        case "success":
-          try {
-            const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-              headers: {
-                Authorization: `Bearer ${response.authentication?.accesstoken}`,
-              },
-            });
+  async function handleSingInWithGoogle(){
+    const user = null;
+    if(!user){
 
-            const userLogin = await res.json();
-            console.log(await userLogin);
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        default:
-          () => {};
+      if(response?.type === 'success'){
+        await getUserInfo(response.authentication.accessToken);
       }
+      
+    } else{
+      setUserInfo(JSON.parse(user));
     }
   }
 
-  useEffect(() => {
-    getUserInfo();
-  }, [response])
+  const getUserInfo = async (token) => {
+    if(!token) return;
+    try{
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}`},
+        }
+      );
+
+      const user = await response.json();
+      console.log(user);
+      setUserInfo(user);
+    }catch (error){
+
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -81,7 +67,7 @@ const Login = ({ navigation }) => {
         </Text>
       </View>
       <View style={styles.form}>
-        <TouchableOpacity onPress={Sigin} style={styles.button}>
+        <TouchableOpacity onPress={() => promptAsync()} style={styles.button}>
             <Image style={styles.image}
               source={require('../../../assets/google.png')}
             />
