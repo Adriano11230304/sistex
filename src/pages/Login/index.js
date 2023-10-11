@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Button, Image } from 'react-native';
 import { styles } from './style';
-// import { useAuth } from '../../store/auth'
+import { useAuth } from '../../store/auth'
 import { AntDesign } from '@expo/vector-icons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri } from 'expo-auth-session';
+import UserController from '../../controllers/UserController';
 
 
 WebBrowser.maybeCompleteAuthSession();
 
 
 const Login = ({ navigation }) => {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const { state, dispatch } = useAuth();
+  const { state } = useAuth();
   const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({

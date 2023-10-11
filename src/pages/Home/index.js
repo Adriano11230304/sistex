@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import SelectHome from '../../components/SelectHome';
 
 export default function Home({ navigation }) {
-    
+
     return (
         <View style={styles.container}>
             <View>

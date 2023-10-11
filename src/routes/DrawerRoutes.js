@@ -11,17 +11,13 @@ import Receber from '../pages/Receber';
 import Relatorios from '../pages/Relatorios';
 import Nfse from '../pages/NFSe';
 
-
 const Drawer = createDrawerNavigator();
 
-export default function DrawerRoutes({ navigation }) {
-    const { state } = useAuth();
-    //const signed = state.signed;
-    const signed = false;
-    
+async function DrawerRoutes({ navigation }) {
+    const signed = true;
     return(
         <Drawer.Navigator screenOptions={{ 
-            headerShown: true, 
+            headerShown: signed, 
             drawerInactiveBackgroundColor: '#fff',
             drawerStyle: { backgroundColor: '#fff' },
             headerStyle: { backgroundColor: '#5d8aa8', height: 0, },
@@ -29,21 +25,26 @@ export default function DrawerRoutes({ navigation }) {
             
             
         }}
-        >   
-            {signed ? (
-                <>
-                    <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} name="Home" component={Home} />
-                    <Drawer.Screen name="Contas a Pagar" component={Pagar} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color="black" />), }} />
-                    <Drawer.Screen name="Contas a Receber" component={Receber} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="attach-money" size={24} color="black" />), }} />
-                    <Drawer.Screen name="Emissão de NFSe" component={Nfse} options={{ drawerIcon: ({ color }) => (<Entypo name="direction" size={24} color="black" />), }} />
-                    <Drawer.Screen name="Relatórios Financeiros" component={Relatorios} options={{ drawerIcon: ({ color }) => (<AntDesign name="areachart" size={24} color="black" />), }} />
-                    <Drawer.Screen name="Notifications" component={Notifications} options={{ drawerIcon: ({ color }) => (<Octicons name="bell" size={24} color="black" />), }} />
-                </>
-            ) : (
-                <>
-                    <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="login" size={24} color={color} />), }} name="Login" component={Login} />
-                </>
-            )}
+        >
+            <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="login" size={24} color={color} />), }} name="Login" component={Login} />
+            
         </Drawer.Navigator>
     )
 }
+
+/*{signed ? (
+    <>
+        <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} name="Home" component={Home} />
+        <Drawer.Screen name="Contas a Pagar" component={Pagar} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
+        <Drawer.Screen name="Contas a Receber" component={Receber} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="attach-money" size={24} color={color} />), }} />
+        <Drawer.Screen name="Emissão de NFSe" component={Nfse} options={{ drawerIcon: ({ color }) => (<Entypo name="direction" size={24} color={color} />), }} />
+        <Drawer.Screen name="Relatórios Financeiros" component={Relatorios} options={{ drawerIcon: ({ color }) => (<AntDesign name="areachart" size={24} color={color} />), }} />
+        <Drawer.Screen name="Notifications" component={Notifications} options={{ drawerIcon: ({ color }) => (<Octicons name="bell" size={24} color={color} />), }} />
+    </>
+) : (
+    <>
+        <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="login" size={24} color={color} />), }} name="Login" component={Login} />
+    </>
+)}*/
+
+export default DrawerRoutes;

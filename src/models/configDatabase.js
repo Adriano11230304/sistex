@@ -3,8 +3,9 @@ import Sequelize from "rn-sequelize";
 
 const sequelize = new Sequelize({
     dialectModule: SQLite,
-    database: "db",
-    logging: false,
+    storage: './src/models/bancoSistex.db',
+    database: 'bancoSistex',
+    // logging: true,
     dialectOptions: {
         version: "1.0",
         description: "Database",

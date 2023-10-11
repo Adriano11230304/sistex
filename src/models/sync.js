@@ -7,5 +7,5 @@ Pagar.belongsTo(User);*/
 console.log('Sync Models');
 
 sequelize.sync({
-    // force: true
+    force: true
 });
