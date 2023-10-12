@@ -6,14 +6,14 @@ import { AntDesign } from '@expo/vector-icons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri } from 'expo-auth-session';
-import UserController from '../../controllers/UserController';
+import User from '../../models/User';
 
 
 WebBrowser.maybeCompleteAuthSession();
 
 
 const Login = ({ navigation }) => {
-  const { state } = useAuth();
+  const { state, dispatch } = useAuth();
   const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -24,7 +24,17 @@ const Login = ({ navigation }) => {
 
   useEffect(() => {
     handleSingInWithGoogle();
-  }, [response])
+  }, [response]);
+
+  useEffect(() => {
+    usersData();
+  });
+
+  async function usersData(){
+    const users = await User.findAll();
+    const d = 1;
+    console.log(users);
+  }
 
   async function handleSingInWithGoogle(){
     const user = null;

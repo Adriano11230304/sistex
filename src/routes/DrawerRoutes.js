@@ -13,7 +13,7 @@ import Nfse from '../pages/NFSe';
 
 const Drawer = createDrawerNavigator();
 
-async function DrawerRoutes({ navigation }) {
+function DrawerRoutes({ navigation }) {
     const signed = true;
     return(
         <Drawer.Navigator screenOptions={{ 
