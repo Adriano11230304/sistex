@@ -6,6 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri } from 'expo-auth-session';
+import UserPersistence from '../../persistence/UserPersistence';
 import User from '../../models/User';
 
 
@@ -31,7 +32,7 @@ const Login = ({ navigation }) => {
   });
 
   async function usersData(){
-    const users = await User.findAll();
+    const users = await UserPersistence.findAll();
     const d = 1;
     console.log(users);
   }
@@ -60,10 +61,19 @@ const Login = ({ navigation }) => {
       );
 
       const user = await response.json();
-      console.log(user);
+      console.log(user.given_name);
+      console.log(user.email);
+      console.log(user.verified_email);
+      console.log(user.picture);
+      console.log(user.id);
+      
+      const userBanco = new User(user.email, user.verified_email, user.given_name, user.picture, user.id_gmail);
+      UserPersistence.create(userBanco)
+        .then(() => console.log('Car created with id: '))
+        .catch(err => console.log(err))
       setUserInfo(user);
     }catch (error){
-
+      console.log(error);
     }
   }
 
