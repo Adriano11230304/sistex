@@ -6,6 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri } from 'expo-auth-session';
+import UserController from '../../controllers/UserController';
 import User from '../../models/User';
 
 
@@ -26,24 +27,34 @@ const Login = ({ navigation }) => {
   }, [response]);
 
   useEffect(() => {
+    async function usersData() {
+      if(!state.signed){
+        const users = await UserController.listAll();
+        const action = {
+          "type": "signIn",
+          "user": users[0]
+        }
+
+        dispatch(action);
+      }
+      
+    }
+
     usersData();
-  });
+  }, []);
 
   async function Sigin(){
-    const users = await User.findAll();
+    const users = await UserController.listAll();
     if(users.length == 0){
       promptAsync();
     }else{
-      console.log("dispatch", users[0]);
+      console.log(state.signed);
       console.log("Você já possui um usuário cadastrado, limpe as credenciais e faça o login novamente!");
     }
     
   }
 
-  async function usersData(){
-    const users = await User.findAll();
-    console.log("login", users);
-  }
+  
 
   async function handleSingInWithGoogle(){
     if(response?.type === 'success'){
@@ -62,12 +73,8 @@ const Login = ({ navigation }) => {
       );
 
       const user = await response.json();
-
-      const userBanco = new User(user.email, user.verified_email, user.given_name, user.picture, user.id_gmail);
-      userBanco.create()
-        .then(() => console.log(`User criado!`))
-        .catch(err => console.log(err))
-      
+      console.log(user);
+      await UserController.add(user.email, user.verified_email, user.given_name, user.picture, user.id);
     }catch (error){
       console.log(error);
     }

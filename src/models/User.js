@@ -38,6 +38,19 @@ class User{
         });
     }
 
+    static findById(id) {
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM users WHERE id = ?;",
+                    [id],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
     create(){
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
@@ -58,10 +71,10 @@ class User{
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "DELETE FROM users WHERE id=?",
+                    "DELETE FROM users WHERE id=?;",
                     [id],
-                    (_, { rows }) => {
-                        resolve(rows);
+                    (_, { rowsAffected }) => {
+                        resolve(rowsAffected);
                     },
                     (_, error) => reject(error)
                 );

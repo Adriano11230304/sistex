@@ -4,14 +4,16 @@ import { styles } from './style';
 import UserController from '../../controllers/UserController';
 import { useEffect } from 'react';
 import SelectHome from '../../components/SelectHome';
+import {useAuth} from '../../store/auth';
 
 export default function Home({ navigation }) {
+    const {state, dispatch} = useAuth();
 
     return (
         <View style={styles.container}>
             <View>
                 <Header/>
-                <Text style={styles.textHome}>Seja Bem-vindo!</Text>
+                <Text style={styles.textHome}>Seja Bem-vindo {state.user.name}!</Text>
             </View>
             <View style={styles.select}>
                 <SelectHome/>
