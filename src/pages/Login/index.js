@@ -6,7 +6,6 @@ import { AntDesign } from '@expo/vector-icons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri } from 'expo-auth-session';
-import UserPersistence from '../../persistence/UserPersistence';
 import User from '../../models/User';
 
 
@@ -15,7 +14,6 @@ WebBrowser.maybeCompleteAuthSession();
 
 const Login = ({ navigation }) => {
   const { state, dispatch } = useAuth();
-  const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: "1099078308735-87979lob5dicr95qfhkas7i0dm5pbpd6.apps.googleusercontent.com", 
@@ -31,22 +29,25 @@ const Login = ({ navigation }) => {
     usersData();
   });
 
+  async function Sigin(){
+    const users = await User.findAll();
+    if(users.length == 0){
+      promptAsync();
+    }else{
+      console.log("dispatch", users[0]);
+      console.log("Você já possui um usuário cadastrado, limpe as credenciais e faça o login novamente!");
+    }
+    
+  }
+
   async function usersData(){
-    const users = await UserPersistence.findAll();
-    const d = 1;
-    console.log(users);
+    const users = await User.findAll();
+    console.log("login", users);
   }
 
   async function handleSingInWithGoogle(){
-    const user = null;
-    if(!user){
-
-      if(response?.type === 'success'){
-        await getUserInfo(response.authentication.accessToken);
-      }
-      
-    } else{
-      setUserInfo(JSON.parse(user));
+    if(response?.type === 'success'){
+      await getUserInfo(response.authentication.accessToken);
     }
   }
 
@@ -61,17 +62,12 @@ const Login = ({ navigation }) => {
       );
 
       const user = await response.json();
-      console.log(user.given_name);
-      console.log(user.email);
-      console.log(user.verified_email);
-      console.log(user.picture);
-      console.log(user.id);
-      
+
       const userBanco = new User(user.email, user.verified_email, user.given_name, user.picture, user.id_gmail);
-      UserPersistence.create(userBanco)
-        .then(() => console.log('Car created with id: '))
+      userBanco.create()
+        .then(() => console.log(`User criado!`))
         .catch(err => console.log(err))
-      setUserInfo(user);
+      
     }catch (error){
       console.log(error);
     }
@@ -86,7 +82,7 @@ const Login = ({ navigation }) => {
         </Text>
       </View>
       <View style={styles.form}>
-        <TouchableOpacity onPress={() => promptAsync()} style={styles.button}>
+        <TouchableOpacity onPress={Sigin} style={styles.button}>
             <Image style={styles.image}
               source={require('../../../assets/google.png')}
             />

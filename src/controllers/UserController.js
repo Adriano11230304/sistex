@@ -3,7 +3,6 @@ import User from '../models/User'
 class UserController{
     async listAll(){
         const users = await User.findAll()
-
         return users;
     }
 
