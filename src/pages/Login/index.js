@@ -7,14 +7,14 @@ import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri } from 'expo-auth-session';
 import UserController from '../../controllers/UserController';
-import User from '../../models/User';
+import Loader from '../../components/Loader';
 
 
 WebBrowser.maybeCompleteAuthSession();
 
 
 const Login = ({ navigation }) => {
-  const [loader, setLoader] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { state, dispatch } = useAuth();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -31,18 +31,23 @@ const Login = ({ navigation }) => {
     async function usersData() {
       if(!state.signed){
         const users = await UserController.listAll();
-        const action = {
-          "type": "signIn",
-          "user": users[0]
-        }
+        console.log(users);
+        if(users.length > 0){
+          const action = {
+            "type": "signIn",
+            "user": users[0]
+          }
 
-        dispatch(action);
+          dispatch(action);
+        }
+        
       }
+
+      setLoading(false);
       
     }
 
     usersData();
-    setLoader(false);
   }, []);
 
   async function Sigin(){
@@ -84,19 +89,27 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Text
-          style={styles.login}>
-          Faça o seu Login
-        </Text>
-      </View>
-      <View style={styles.form}>
-        <TouchableOpacity onPress={Sigin} style={styles.button}>
-            <Image style={styles.image}
-              source={require('../../../assets/google.png')}
-            />
-        </TouchableOpacity>
-      </View>
+      {loading ? (
+        <>
+          <Loader />
+        </>
+        ) : (
+          <>
+            <View style={styles.content}>
+                <Text
+                  style={styles.login}>
+                  Faça o seu Login
+                </Text>
+            </View>
+            <View style={styles.form}>
+              <TouchableOpacity onPress={Sigin} style={styles.button}>
+                <Image style={styles.image}
+                  source={require('../../../assets/google.png')}
+                />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
     </View>
   );
 };

@@ -6,17 +6,6 @@ class UserController{
         return users;
     }
 
-    async findUser(email){
-        const user = await User.findOne({
-            where: {
-                email: email,
-                password: password
-            }
-        })
-
-        return user;
-    }
-
     async add(email, verified_email, given_name, picture, id_gmail){
         const user = new User(email, verified_email, given_name, picture, id_gmail);
         try{
@@ -29,8 +18,6 @@ class UserController{
         }catch(err){
             return err;
         }
-        
-        return userAdd;
     }
 
     async findById(id){

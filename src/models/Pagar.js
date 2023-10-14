@@ -1,29 +1,35 @@
 import db from './configDatabase'
 
-class User{
+db.transaction((tx) => {
+    tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS pagar (id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, fixa BOOLEAN, categoria TEXT, fornecedor_id INTEGER, data_entrada DATE, FOREIGN KEY(fornecedor_id) REFERENCES fornecedores(id));"
+    );
+});
+
+class Pagar {
 
     id;
-    email;
-    verified_email;
-    name;
-    picture;
-    id_gmail;
+    valor;
+    despesa_fixa;
+    categoria;
+    fornecedor_id;
+    data_entrada;
 
-    constructor(email, verified_email, name, picture, id_gmail) {
-        this.email = email;
-        this.verified_email = verified_email;
-        this.name = name;
-        this.picture = picture;
-        this.id_gmail = id_gmail;
-        console.log("constructor");
+    constructor(valor, despesa_fixa, categoria, fornecedor_id, data_entrada) {
+        this.valor = valor;
+        this.despesa_fixa = despesa_fixa;
+        this.categoria = categoria;
+        this.fornecedor_id = fornecedor_id;
+        this.data_entrada = data_entrada;
+        console.log("constructor pagar");
     }
 
 
-    static findAll(){
+    static findAll() {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM users;",
+                    "SELECT * FROM pagar;",
                     [],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
@@ -36,7 +42,7 @@ class User{
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM users WHERE id = ?;",
+                    "SELECT * FROM pagar WHERE id = ?;",
                     [id],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
@@ -45,12 +51,12 @@ class User{
         });
     }
 
-    create(){
+    create() {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO users (email, verified_email, name, picture, id_gmail) values (?, ?, ?, ?, ?);",
-                    [this.email, this.verified_email, this.name, this.picture, this.id_gmail],
+                    "INSERT INTO pagar (valor, fixa, categoria, fornecedor_id, data_entrada) values (?, ?, ?, ?, ?);",
+                    [this.valor, this.despesa_fixa, this.categoria, this.fornecedor_id, this.data_entrada],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));
@@ -61,11 +67,11 @@ class User{
         });
     }
 
-    static delete(id){
+    static delete(id) {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "DELETE FROM users WHERE id=?;",
+                    "DELETE FROM pagar WHERE id=?;",
                     [id],
                     (_, { rowsAffected }) => {
                         resolve(rowsAffected);
@@ -78,4 +84,4 @@ class User{
 }
 
 
-export default User;
+export default Pagar;

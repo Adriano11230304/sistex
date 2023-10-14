@@ -8,6 +8,7 @@ import {useAuth} from '../../store/auth';
 
 export default function Home({ navigation }) {
     const {state, dispatch} = useAuth();
+    console.log(state);
 
     return (
         <View style={styles.container}>

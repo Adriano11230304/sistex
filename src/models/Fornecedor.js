@@ -1,29 +1,25 @@
 import db from './configDatabase'
 
-class User{
+class Fornecedor {
 
     id;
+    name
     email;
-    verified_email;
-    name;
-    picture;
-    id_gmail;
+    cnpj
 
-    constructor(email, verified_email, name, picture, id_gmail) {
-        this.email = email;
-        this.verified_email = verified_email;
+    constructor(name, email, cnpj) {
         this.name = name;
-        this.picture = picture;
-        this.id_gmail = id_gmail;
-        console.log("constructor");
+        this.email = email;
+        this.cnpj = cnpj;
+        console.log("constructor fornecedor");
     }
 
 
-    static findAll(){
+    static findAll() {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM users;",
+                    "SELECT * FROM fornecedores;",
                     [],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
@@ -36,7 +32,7 @@ class User{
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM users WHERE id = ?;",
+                    "SELECT * FROM fornecedores WHERE id = ?;",
                     [id],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
@@ -45,12 +41,12 @@ class User{
         });
     }
 
-    create(){
+    create() {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO users (email, verified_email, name, picture, id_gmail) values (?, ?, ?, ?, ?);",
-                    [this.email, this.verified_email, this.name, this.picture, this.id_gmail],
+                    "INSERT INTO fornecedores (name, email, cnpj) values (?, ?, ?);",
+                    [this.name, this.email, this.cnpj],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));
@@ -61,11 +57,11 @@ class User{
         });
     }
 
-    static delete(id){
+    static delete(id) {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "DELETE FROM users WHERE id=?;",
+                    "DELETE FROM fornecedores WHERE id=?;",
                     [id],
                     (_, { rowsAffected }) => {
                         resolve(rowsAffected);
@@ -78,4 +74,4 @@ class User{
 }
 
 
-export default User;
+export default Fornecedor;

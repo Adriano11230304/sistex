@@ -20,6 +20,7 @@ const Drawer = createDrawerNavigator();
 function DrawerRoutes({ navigation }) {
     const { state, dispatch } = useAuth();
     const signed = state.signed;
+
     return(
         <Drawer.Navigator screenOptions={{ 
             headerShown: signed, 
