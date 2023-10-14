@@ -14,6 +14,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 
 const Login = ({ navigation }) => {
+  const [loader, setLoader] = useState(true);
   const { state, dispatch } = useAuth();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -41,6 +42,7 @@ const Login = ({ navigation }) => {
     }
 
     usersData();
+    setLoader(false);
   }, []);
 
   async function Sigin(){
