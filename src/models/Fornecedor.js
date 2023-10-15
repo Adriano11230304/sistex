@@ -41,6 +41,19 @@ class Fornecedor {
         });
     }
 
+    static findByNameorEmail(name) {
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM fornecedores WHERE name LIKE ?;",
+                    [name],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
     create() {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {

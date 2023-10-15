@@ -1,7 +1,6 @@
 import { Text, View, Button, Alert, TouchableOpacity, SafeAreaView } from 'react-native';
 import Header from '../../components/Header';
 import { styles } from './style';
-import UserController from '../../controllers/UserController';
 import { useEffect } from 'react';
 import SelectHome from '../../components/SelectHome';
 import {useAuth} from '../../store/auth';

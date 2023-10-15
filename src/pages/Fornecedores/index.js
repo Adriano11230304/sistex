@@ -4,17 +4,15 @@ import Header from '../../components/Header'
 import { styles } from './style'
 import { useEffect, useState } from 'react';
 import FornecedorController from '../../controllers/FornecedorController';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
 export default function Fornecedores() {
     const [fornecedores, setFornecedores] = useState(null);
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState(null);
     useEffect(() => {
         async function listFornecedores(){
             const fornec = await FornecedorController.listAll();
             setFornecedores(fornec);
-            console.log("fornecedor", fornecedores);
-
         }
 
         listFornecedores();
@@ -26,12 +24,12 @@ export default function Fornecedores() {
         handleOrderClick();
     }, [searchText])
 
-    const handleOrderClick = () => {
+    const handleOrderClick = async () => {
         let newList = null;
-
-        //newList.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
-
-        //setFornecedores(newList);
+        if(searchText){
+            newList = await FornecedorController.findNameorEmail(searchText);
+            setFornecedores(newList);
+        }
     };
 
 
@@ -56,10 +54,17 @@ export default function Fornecedores() {
             <FlatList
                 data={fornecedores}
                 renderItem={({ item }) => 
-                    <View style={styles.list}>
+                    <View style={styles.itemList}>
+                        <View style={styles.list}>
                         <Text style={styles.textList}>{item.name}</Text>
                         <Text style={styles.textList}>{item.email}</Text>
+                        </View>
+                        <View style={styles.buttons}>
+                            <TouchableOpacity><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
+                            <TouchableOpacity><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
+                        </View>
                     </View>
+                    
                 }
                 keyExtractor={(item) => item.id}
             />

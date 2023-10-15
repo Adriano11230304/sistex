@@ -18,11 +18,7 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     list: {
-        backgroundColor: '#d3d3d3',
         flex: 1,
-        height: 80,
-        margin: 10,
-        borderRadius: 10
     },
     textList: {
         fontSize: 20,
@@ -33,16 +29,28 @@ export const styles = StyleSheet.create({
     input: {
         flex: 1,
         height: 50,
-        backgroundColor: '#363636',
+        backgroundColor: '#dcdcdc',
         margin: 30,
         borderRadius: 5,
         fontSize: 19,
         paddingLeft: 15,
         paddingRight: 15,
-        color: '#FFFFFF',
+        color: '#111111'
     },
     searchArea: {
         flexDirection: 'row',
         alignItems: 'center',
     },
+    itemList: {
+        backgroundColor: '#d3d3d3',
+        flex: 1,
+        height: 90,
+        margin: 10,
+        borderRadius: 10,
+        flexDirection: 'row'
+    },
+    buttonText: {
+        paddingRight: '5%',
+        paddingTop: '4%'
+    }
 });

@@ -25,6 +25,13 @@ class FornecedorController {
         }
     }
 
+    async findNameorEmail(name){
+        const search = `%${name}%`
+        const fornecedor = await Fornecedor.findByNameorEmail(search);
+        console.log('fornecedor', fornecedor);
+        return fornecedor;
+    }
+
     async remove(id) {
         const fornecedordeleted = await Fornecedor.delete(id)
         if (fornecedordeleted == 1) {
