@@ -52,5 +52,10 @@ export const styles = StyleSheet.create({
     buttonText: {
         paddingRight: '5%',
         paddingTop: '4%'
+    },
+    buttonAdd: {
+        paddingBottom: '10%',
+        alignSelf: 'flex-end',
+        paddingEnd: '10%'
     }
 });

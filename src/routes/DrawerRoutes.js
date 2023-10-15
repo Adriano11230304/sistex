@@ -14,6 +14,7 @@ import Clientes from '../pages/Clientes';
 import Fornecedores from '../pages/Fornecedores';
 import CredenciaisGoogle from '../pages/CredenciaisGoogle';
 import Backups from '../pages/Backups';
+import AuthStack from './Routes';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,7 +32,7 @@ function DrawerRoutes({ navigation }) {
         }}>
             {signed ? (
                 <>
-                    <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} name="Home" component={Home} />
+                    <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} name="Home" component={AuthStack} />
                     <Drawer.Screen name="Contas a Pagar" component={Pagar} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
                     <Drawer.Screen name="Contas a Receber" component={Receber} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="attach-money" size={24} color={color} />), }} />
                     <Drawer.Screen name="Emissão de NFSe" component={Nfse} options={{ drawerIcon: ({ color }) => (<Entypo name="direction" size={24} color={color} />), }} />

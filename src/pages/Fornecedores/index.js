@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react';
 import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
-export default function Fornecedores() {
+export default function Fornecedores({ navigation }) {
     const [fornecedores, setFornecedores] = useState(null);
     const [searchText, setSearchText] = useState(null);
     useEffect(() => {
-        async function listFornecedores(){
+        const listFornecedores = async () => {
             const fornec = await FornecedorController.listAll();
             setFornecedores(fornec);
         }
@@ -31,6 +31,14 @@ export default function Fornecedores() {
             setFornecedores(newList);
         }
     };
+
+    const deleteFornecedor = async (id) => {
+        console.log(`excluir o fornenecedor de id ${id}`);
+    }
+
+    const editFornecedor = async (id) => {
+        console.log(`editar o fornenecedor de id ${id}`);
+    }
 
 
     return (
@@ -60,14 +68,20 @@ export default function Fornecedores() {
                         <Text style={styles.textList}>{item.email}</Text>
                         </View>
                         <View style={styles.buttons}>
-                            <TouchableOpacity><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
-                            <TouchableOpacity><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => editFornecedor(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => deleteFornecedor(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
                         </View>
                     </View>
                     
                 }
                 keyExtractor={(item) => item.id}
             />
+
+            <View style={styles.buttonAdd}>
+                <TouchableOpacity onPress={() => navigation.navigate('AddFornecedor')}>
+                    <AntDesign name="pluscircleo" size={50} color="black" />
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     );
 }
