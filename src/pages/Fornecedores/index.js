@@ -65,8 +65,8 @@ export default function Fornecedores({ navigation }) {
                 renderItem={({ item }) => 
                     <View style={styles.itemList}>
                         <View style={styles.list}>
-                        <Text style={styles.textList}>Nome: {item.name}</Text>
-                        <Text style={styles.textList}>CNPJ/CPF: {item.cnpj}</Text>
+                        <Text style={styles.textList}>{item.name}</Text>
+                        <Text style={styles.textList}>{item.cnpj}</Text>
                         </View>
                         <View style={styles.buttons}>
                             <TouchableOpacity onPress={() => editFornecedor(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>

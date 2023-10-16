@@ -57,9 +57,9 @@ export const styles = StyleSheet.create({
         paddingTop: '2%'
     },
     buttonAdd: {
-        paddingBottom: '10%',
+        paddingBottom: '5%',
         alignSelf: 'flex-end',
-        paddingEnd: '10%'
+        paddingEnd: '7%'
     },
     form: {
         paddingTop: '5%'
