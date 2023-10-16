@@ -21,18 +21,18 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
     textList: {
-        fontSize: 20,
+        fontSize: 18,
         paddingLeft: '7%',
         fontWeight: 'bold',
         marginTop: '1%'
     },
     input: {
         flex: 1,
-        height: 50,
+        height: 40,
         backgroundColor: '#dcdcdc',
-        margin: 30,
-        borderRadius: 5,
-        fontSize: 19,
+        margin: 15,
+        borderRadius: 10,
+        fontSize: 15,
         paddingLeft: 15,
         paddingRight: 15,
         color: '#111111'
@@ -42,16 +42,17 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     itemList: {
-        backgroundColor: '#d3d3d3',
         flex: 1,
-        height: 90,
+        height: 70,
         margin: 10,
         borderRadius: 10,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: 'gray'
     },
     buttonText: {
         paddingRight: '5%',
-        paddingTop: '4%'
+        paddingTop: '2%'
     },
     buttonAdd: {
         paddingBottom: '10%',
