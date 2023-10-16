@@ -6,19 +6,16 @@ import Notifications from '../pages/Notifications';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { useAuth } from '../store/auth';
 import AddFornecedores from '../pages/Fornecedores/add';
+import Fornecedores from '../pages/Fornecedores';
 
 
 const Stack = createNativeStackNavigator();
 
-const AuthStack = () => {
+export const FornecedorStack = () => {
   return (
-    <Stack.Navigator initialRouteName='HomeStack' screenOptions={{headerShown: false}}>
-        <Stack.Screen  name="HomeStack" component={Home} />
-        <Stack.Screen name="Notifications" component={Notifications} />
-        <Stack.Screen name="Login" component={Login} />
+    <Stack.Navigator initialRouteName='FornecedoresStack' screenOptions={{headerShown: false}}>
+        <Stack.Screen name="FornecedoresStack" component={Fornecedores} />
       <Stack.Screen name="AddFornecedor" component={AddFornecedores} />
     </Stack.Navigator>
   );
 };
-
-export default AuthStack;

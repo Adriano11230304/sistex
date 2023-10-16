@@ -30,16 +30,18 @@ export const styles = StyleSheet.create({
         flex: 1,
         height: 40,
         backgroundColor: '#dcdcdc',
-        margin: 15,
-        borderRadius: 10,
         fontSize: 15,
-        paddingLeft: 15,
-        paddingRight: 15,
         color: '#111111'
     },
     searchArea: {
+        paddingLeft: 15,
+        paddingRight: 15,
+        margin: '3%',
+        borderRadius: 10,
+        backgroundColor: '#dcdcdc',
         flexDirection: 'row',
         alignItems: 'center',
+
     },
     itemList: {
         flex: 1,
@@ -58,5 +60,40 @@ export const styles = StyleSheet.create({
         paddingBottom: '10%',
         alignSelf: 'flex-end',
         paddingEnd: '10%'
+    },
+    form: {
+        paddingTop: '5%'
+    },
+    label: {
+        fontSize: 20,
+    },
+    inputadd: {
+        fontSize: 18,
+        paddingRight: '5%',
+        paddingLeft: '5%',
+        borderRadius: 10,
+        borderWidth: 1,
+        marginRight: '5%',
+        paddingTop: '2%'
+    },
+    labelinput: {
+        paddingLeft: '5%',
+        flexDirection: 'column',
+        paddingBottom: '5%'
+    },
+    salvar: {
+        backgroundColor: '#5d8aa8',
+        borderRadius: 20,
+        width: 120,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '5%'
+    },
+    salvarText: {
+        paddingTop: '5%',
+        alignSelf: 'center',
+        fontSize: 20,
+        color: '#fff',
+        fontWeight: 'bold'
     }
 });

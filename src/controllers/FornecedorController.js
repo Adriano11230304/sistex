@@ -28,7 +28,6 @@ class FornecedorController {
     async findNameorEmail(name){
         const search = `%${name}%`
         const fornecedor = await Fornecedor.findByNameorEmail(search);
-        console.log('fornecedor', fornecedor);
         return fornecedor;
     }
 

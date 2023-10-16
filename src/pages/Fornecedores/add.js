@@ -7,9 +7,16 @@ import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
 export default function AddFornecedores({ navigation }) {
+    const [ nome, setNome ] = useState(null);
+    const [ email, setEmail ] = useState(null);
+    const [ cnpj, setCnpj ] = useState(null);
     const addFornecedor = async () => {
-        console.log("Usuário adicionado!");
-        navigation.navigate('Fornecedores');
+        console.log(nome);
+        console.log(email);
+        console.log(cnpj);
+        const forn = await FornecedorController.add(nome, email, cnpj);
+        console.log(forn);
+        navigation.navigate('FornecedoresStack');
     }
 
     return (
@@ -19,20 +26,20 @@ export default function AddFornecedores({ navigation }) {
                 <Text style={styles.text}>Adicionar um novo fornecedor</Text>
             </View>
             <View style={styles.form}>
-                <View>
-                    <Text>Nome:</Text>
-                    <TextInput placeholder='Adicione o nome do fornecedor'></TextInput>
+                <View style={styles.labelinput}>
+                    <Text style={styles.label}>Nome:</Text>
+                    <TextInput style={styles.inputadd} placeholder='Adicione o nome' placeholderTextColor="#888" onChangeText={(t) => setNome(t)}></TextInput>
                 </View>
-                <View>
-                    <Text>E-mail:</Text>
-                    <TextInput placeholder='Adicione o nome do fornecedor'></TextInput>
+                <View style={styles.labelinput}>
+                    <Text style={styles.label}>E-mail:</Text>
+                    <TextInput style={styles.inputadd} placeholder='Adicione o e-mail' placeholderTextColor="#888" onChangeText={(t) => setEmail(t)}></TextInput>
                 </View>
-                <View>
-                    <Text>CNPJ/CPF:</Text>
-                    <TextInput placeholder='Adicione o cnpj ou CPF do fornecedor'></TextInput>
+                <View style={styles.labelinput}>
+                    <Text style={styles.label}>CNPJ/CPF:</Text>
+                    <TextInput style={styles.inputadd} placeholder='Adicione o cnpj ou CPF' placeholderTextColor="#888" onChangeText={(t) => setCnpj(t)}></TextInput>
                 </View>
-                <TouchableOpacity onPress={addFornecedor}>
-                    <Text>Salvar</Text>
+                <TouchableOpacity style={styles.salvar} onPress={addFornecedor}>
+                    <Text style={styles.salvarText}>Salvar</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

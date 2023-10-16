@@ -4,21 +4,22 @@ import Header from '../../components/Header'
 import { styles } from './style'
 import { useEffect, useState } from 'react';
 import FornecedorController from '../../controllers/FornecedorController';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 
 export default function Fornecedores({ navigation }) {
     const [fornecedores, setFornecedores] = useState(null);
-    const [searchText, setSearchText] = useState(null);
+    const [searchText, setSearchText] = useState("");
     useEffect(() => {
         const listFornecedores = async () => {
-            const fornec = await FornecedorController.listAll();
-            setFornecedores(fornec);
+            if(searchText == ""){
+                const fornec = await FornecedorController.listAll();
+                setFornecedores(fornec);
+            }
         }
 
         listFornecedores();
-
         
-    }, [])
+    }, [fornecedores, searchText])
 
     useEffect(() => {
         handleOrderClick();
@@ -26,8 +27,9 @@ export default function Fornecedores({ navigation }) {
 
     const handleOrderClick = async () => {
         let newList = null;
-        if(searchText){
+        if(searchText != ""){
             newList = await FornecedorController.findNameorEmail(searchText);
+            console.log("new", newList);
             setFornecedores(newList);
         }
     };
@@ -55,17 +57,16 @@ export default function Fornecedores({ navigation }) {
                     value={searchText}
                     onChangeText={(t) => setSearchText(t)}
                 />
-                <TouchableOpacity onPress={handleOrderClick} style={styles.orderButton}>
-                    
-                </TouchableOpacity>
+                <FontAwesome name="search" size={24} color="black" />
             </View>
             <FlatList
+                showsVerticalScrollIndicator={false}
                 data={fornecedores}
                 renderItem={({ item }) => 
                     <View style={styles.itemList}>
                         <View style={styles.list}>
-                        <Text style={styles.textList}>{item.name}</Text>
-                        <Text style={styles.textList}>{item.email}</Text>
+                        <Text style={styles.textList}>Nome: {item.name}</Text>
+                        <Text style={styles.textList}>CNPJ/CPF: {item.cnpj}</Text>
                         </View>
                         <View style={styles.buttons}>
                             <TouchableOpacity onPress={() => editFornecedor(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
