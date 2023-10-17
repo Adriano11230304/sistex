@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
 import { useEffect, useState } from 'react';
@@ -9,14 +9,19 @@ import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 export default function AddFornecedores({ navigation }) {
     const [ nome, setNome ] = useState(null);
     const [ email, setEmail ] = useState(null);
-    const [ cnpj, setCnpj ] = useState(null);
+    const [ cnpj, setCnpj ] = useState("CPF/CNPJ não informado");
     const addFornecedor = async () => {
-        console.log(nome);
-        console.log(email);
-        console.log(cnpj);
-        const forn = await FornecedorController.add(nome, email, cnpj);
-        console.log(forn);
-        navigation.navigate('FornecedoresStack');
+        if(nome == null){
+            ToastAndroid.show("Nome ou Razão Social não foi adicionado!", ToastAndroid.SHORT);
+        }else if(email == null){
+            ToastAndroid.show("E-mail não foi adicionado!", ToastAndroid.SHORT);
+        }else if(!email.includes("@")){
+            ToastAndroid.show("E-mail inválido foi adicionado!", ToastAndroid.SHORT);
+        }else{
+            const forn = await FornecedorController.add(nome, email, cnpj);
+            ToastAndroid.show("Fornecedor adicionado com sucesso!", ToastAndroid.SHORT);
+            navigation.navigate('FornecedoresStack', {paramKey: 1});
+        }
     }
 
     return (
@@ -36,7 +41,7 @@ export default function AddFornecedores({ navigation }) {
                 </View>
                 <View style={styles.labelinput}>
                     <Text style={styles.label}>CNPJ/CPF:</Text>
-                    <TextInput style={styles.inputadd} placeholder='Adicione o cnpj ou CPF' placeholderTextColor="#888" onChangeText={(t) => setCnpj(t)}></TextInput>
+                    <TextInput keyboardType='numeric' style={styles.inputadd} placeholder='Adicione o cnpj ou CPF' placeholderTextColor="#888" onChangeText={(t) => setCnpj(t)}></TextInput>
                 </View>
                 <TouchableOpacity style={styles.salvar} onPress={addFornecedor}>
                     <Text style={styles.salvarText}>Salvar</Text>
