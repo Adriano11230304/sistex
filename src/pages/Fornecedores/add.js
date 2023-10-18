@@ -6,10 +6,11 @@ import { useEffect, useState } from 'react';
 import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
-export default function AddFornecedores({ navigation }) {
+export default function AddFornecedores({ navigation, route }) {
     const [ nome, setNome ] = useState(null);
     const [ email, setEmail ] = useState(null);
     const [ cnpj, setCnpj ] = useState("CPF/CNPJ não informado");
+
     const addFornecedor = async () => {
         if(nome == null){
             ToastAndroid.show("Nome ou Razão Social não foi adicionado!", ToastAndroid.SHORT);
@@ -20,7 +21,7 @@ export default function AddFornecedores({ navigation }) {
         }else{
             const forn = await FornecedorController.add(nome, email, cnpj);
             ToastAndroid.show("Fornecedor adicionado com sucesso!", ToastAndroid.SHORT);
-            navigation.navigate('FornecedoresStack', {paramKey: 1});
+            navigation.navigate('FornecedoresStack', '1');
         }
     }
 

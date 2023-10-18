@@ -7,11 +7,12 @@ import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
 
-export default function Fornecedores({ navigation }) {
+export default function Fornecedores({ navigation, route }) {
     const [loading, setLoading] = useState(true);
     const [fornecedores, setFornecedores] = useState(null);
     const [searchText, setSearchText] = useState("");
-    
+    const [ atualizar, setAtualizar ] = useState(false);
+
     useEffect(() => {
         const listFornecedores = async () => {
             if(searchText == ""){
@@ -24,7 +25,8 @@ export default function Fornecedores({ navigation }) {
         listFornecedores();
         console.log("fornecedoresAdd");
         setLoading(false);
-    }, [])
+        console.log("route", route.params);
+    }, [route.params])
 
     useEffect(() => {
         handleOrderClick();
@@ -51,6 +53,7 @@ export default function Fornecedores({ navigation }) {
     }
 
     const addFornecedores = async () => {
+        setAtualizar(false);
         navigation.navigate('AddFornecedor');
     }
 
