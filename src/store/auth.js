@@ -8,7 +8,10 @@ function authReducer(state, action) {
             return { ...state, signed: true, user: action.user };
         }
         case 'signOut': {
-            return { ...state, signed: false, user: action.user };
+            return { ...state, signed: false, user: null, fornecedores: null };
+        }
+        case 'atualizarFornecedores': {
+            return {...state, fornecedores: action.fornecedores}
         }
         default: {
             throw new Error(`action.type não tratada: ${action.type}`);
@@ -18,7 +21,8 @@ function authReducer(state, action) {
 
 const initialState = {
     signed: false,
-    user: null
+    user: null,
+    fornecedores: null
 }
 
 function AuthProvider({ children }) {

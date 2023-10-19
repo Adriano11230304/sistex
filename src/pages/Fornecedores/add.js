@@ -3,10 +3,12 @@ import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpa
 import Header from '../../components/Header'
 import { styles } from './style'
 import { useEffect, useState } from 'react';
+import { useAuth } from '../../store/auth';
 import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
 export default function AddFornecedores({ navigation, route }) {
+    const { state, dispatch } = useAuth();
     const [ nome, setNome ] = useState(null);
     const [ email, setEmail ] = useState(null);
     const [ cnpj, setCnpj ] = useState("CPF/CNPJ não informado");
@@ -21,6 +23,12 @@ export default function AddFornecedores({ navigation, route }) {
         }else{
             const forn = await FornecedorController.add(nome, email, cnpj);
             ToastAndroid.show("Fornecedor adicionado com sucesso!", ToastAndroid.SHORT);
+            const action = {
+                "type": "atualizarFornecedores",
+                "fornecedores": await FornecedorController.listAll()
+              }
+    
+              dispatch(action);
             navigation.navigate('FornecedoresStack', '1');
         }
     }

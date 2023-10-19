@@ -19,7 +19,6 @@ export default function Header() {
                     <Ionicons name="options" size={24} color="black" />
                 </TouchableOpacity>
             </View>
-
         </View>
     );
 }

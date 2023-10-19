@@ -2,31 +2,36 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
+import { useAuth } from '../../store/auth';
 import { useEffect, useState } from 'react';
 import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
+import List from '../../components/List'
 
 export default function Fornecedores({ navigation, route }) {
+    const { state, dispatch } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [fornecedores, setFornecedores] = useState(null);
     const [searchText, setSearchText] = useState("");
-    const [ atualizar, setAtualizar ] = useState(false);
 
     useEffect(() => {
         const listFornecedores = async () => {
             if(searchText == ""){
                 const fornec = await FornecedorController.listAll();
-                setFornecedores(fornec);
-                console.log("teste");
+                const action = {
+                    "type": "atualizarFornecedores",
+                    "fornecedores": fornec
+                  }
+        
+                  dispatch(action);
+
+                console.log("dispatch", state);
             }
         }
 
         listFornecedores();
         console.log("fornecedoresAdd");
-        setLoading(false);
-        console.log("route", route.params);
-    }, [route.params])
+    }, [])
 
     useEffect(() => {
         handleOrderClick();
@@ -37,15 +42,24 @@ export default function Fornecedores({ navigation, route }) {
             setLoading(true);
             let newList = null;
             newList = await FornecedorController.findNameorEmail(searchText);
-            console.log("new", newList);
-            setFornecedores(newList);
-            setLoading(false);
+            const action = {
+                "type": "atualizarFornecedores",
+                "fornecedores": newList
+              }
+    
+              dispatch(action);
+              setLoading(false);
     };
 
     const deleteFornecedor = async (id) => {
         const deleteForn = await FornecedorController.remove(id);
         ToastAndroid.show(deleteForn, ToastAndroid.SHORT);
-        setFornecedores(await FornecedorController.listAll());
+        const action = {
+            "type": "atualizarFornecedores",
+            "fornecedores": await FornecedorController.listAll()
+          }
+
+          dispatch(action);
     }
 
     const editFornecedor = async (id) => {
@@ -53,7 +67,6 @@ export default function Fornecedores({ navigation, route }) {
     }
 
     const addFornecedores = async () => {
-        setAtualizar(false);
         navigation.navigate('AddFornecedor');
     }
 
@@ -82,7 +95,7 @@ export default function Fornecedores({ navigation, route }) {
                 <>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={fornecedores}
+                        data={state.fornecedores}
                         renderItem={({ item }) => 
                             <View style={styles.itemList}>
                                 <View style={styles.list}>
