@@ -5,20 +5,20 @@ import { styles } from './style'
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
 
-export default function List({list, edit, del, add, loading, searchText, setText}) {
+export default function List({list, edit, del, add, loading, searchText, setText, textInput, title}) {
     return (
         <SafeAreaView style={styles.container}>
             <Header />
             <View style={styles.title}>
-                <Text style={styles.text}>Fornecedores</Text>
+                <Text style={styles.text}>{title}</Text>
             </View>
             <View style={styles.searchArea}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Pesquise por um fornecedor"
+                    placeholder={textInput}
                     placeholderTextColor="#888"
                     value={searchText}
-                    onChangeText={setText}
+                    onChangeText={(t) => setText(t)}
                 />
                 <FontAwesome name="search" size={24} color="black" />
             </View>

@@ -15,6 +15,7 @@ export default function Fornecedores({ navigation, route }) {
     const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
+        setLoading(true);
         const listFornecedores = async () => {
             if(searchText == ""){
                 const fornec = await FornecedorController.listAll();
@@ -31,6 +32,7 @@ export default function Fornecedores({ navigation, route }) {
 
         listFornecedores();
         console.log("fornecedoresAdd");
+        setLoading(false)
     }, [])
 
     useEffect(() => {
@@ -52,6 +54,7 @@ export default function Fornecedores({ navigation, route }) {
     };
 
     const deleteFornecedor = async (id) => {
+        setLoading(true);
         const deleteForn = await FornecedorController.remove(id);
         ToastAndroid.show(deleteForn, ToastAndroid.SHORT);
         const action = {
@@ -60,6 +63,8 @@ export default function Fornecedores({ navigation, route }) {
           }
 
           dispatch(action);
+
+          setLoading(false);
     }
 
     const editFornecedor = async (id) => {
@@ -70,12 +75,13 @@ export default function Fornecedores({ navigation, route }) {
         navigation.navigate('AddFornecedor');
     }
 
-    const setText = () => {
-        console.log("csdcsdcsd");
+    const setText = (t) => {
+        console.log("setText");
+        setSearchText(t)
     }
 
 
     return (
-        <List list={state.fornecedores} edit={editFornecedor} del={deleteFornecedor} add={addFornecedores} loading={loading} searchText={searchText} />
+        <List list={state.fornecedores} edit={editFornecedor} del={deleteFornecedor} add={addFornecedores} loading={loading} searchText={searchText} setText={setText} textInput={"Digite nome, email ou CNPJ/CPF"} title={"Fornecedores"} />
     );
 }

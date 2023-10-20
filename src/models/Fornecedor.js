@@ -45,8 +45,8 @@ class Fornecedor {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM fornecedores WHERE name LIKE ?;",
-                    [name],
+                    "SELECT * FROM fornecedores WHERE name LIKE ? OR email LIKE ? OR cnpj LIKE ?;",
+                    [name, name, name],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
                 );
