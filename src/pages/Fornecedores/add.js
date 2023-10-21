@@ -7,7 +7,7 @@ import { useAuth } from '../../store/auth';
 import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
-import { validateFornecedor } from '../../controllers/utils/validators';
+import { fornecedorValidate } from '../../controllers/utils/validators';
 
 export default function AddFornecedores({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -18,11 +18,13 @@ export default function AddFornecedores({ navigation, route }) {
 
     const addFornecedor = async () => {
         setLoading(true);
-        let userSchema = object({
-            name: string().required("Nome é obrigatório!"),
-            email: string().email("E-mail inválido!").required("E-mail é obrigatório!"),
-          });
-          console.log(nome, email, cnpj);
+        const validateforn = {
+            "name": "csdcsdcds",
+            "email": "adrian@gmail.com"
+        }
+        const teste = await fornecedorValidate(validateforn);
+        console.log("teste", teste);
+        console.log(nome, email, cnpj);
           // implementar a validação
           
         
