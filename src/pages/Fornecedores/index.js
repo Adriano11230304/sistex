@@ -80,8 +80,12 @@ export default function Fornecedores({ navigation, route }) {
         setSearchText(t)
     }
 
+    function visualizar(){
+        console.log("visualizar");
+    }
+
 
     return (
-        <List list={state.fornecedores} edit={editFornecedor} del={deleteFornecedor} add={addFornecedores} loading={loading} searchText={searchText} setText={setText} textInput={"Digite nome, email ou CNPJ/CPF"} title={"Fornecedores"} />
+        <List list={state.fornecedores} edit={editFornecedor} del={deleteFornecedor} add={addFornecedores} loading={loading} searchText={searchText} setText={setText} textInput={"Digite nome, email ou CNPJ/CPF"} title={"Fornecedores"} visualizar={visualizar} />
     );
 }

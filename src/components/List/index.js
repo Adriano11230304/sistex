@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
-import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
 
-export default function List({list, edit, del, add, loading, searchText, setText, textInput, title}) {
+export default function List({list, edit, del, add, loading, searchText, setText, textInput, title, visualizar}) {
     return (
         <SafeAreaView style={styles.container}>
             <Header />
@@ -35,9 +35,10 @@ export default function List({list, edit, del, add, loading, searchText, setText
                             <View style={styles.itemList}>
                                 <View style={styles.list}>
                                     <Text style={styles.textList}>{item.name}</Text>
-                                    <Text style={styles.textList}>{item.cnpj}</Text>
+                                    <Text style={styles.textList}>{item.cnpj ? item.cnpj : "CNPJ/CPF não informado"}</Text>
                                 </View>
-                                <View style={styles.buttons}>
+                                <View>
+                                    <TouchableOpacity onPress={() => visualizar(item.id)}><Text style={styles.buttonText}><Ionicons name="eye-outline" size={24} color="black" /></Text></TouchableOpacity>
                                     <TouchableOpacity onPress={() => edit(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
                                     <TouchableOpacity onPress={() => del(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
                                 </View>

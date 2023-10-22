@@ -95,5 +95,47 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         color: '#fff',
         fontWeight: 'bold'
-    }
+    },
+    /*modalCenteredView: {
+        position: 'absolute',
+        flex: 1,
+        paddingTop: 270,
+        paddingLeft: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalView: {
+        backgroundColor: '#D3D3D3',
+        borderRadius: 20,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalText:{
+        fontSize: 20,
+        paddingLeft: 20,
+        paddingRight: 15,
+    },
+    viewTextModal: {
+        
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        padding: 15,
+        paddingLeft: '10%',
+        paddingRight: '10%',
+        textAlign: 'center',
+    },
+    modalSalvar:{
+        backgroundColor: '#5d8aa8',
+        borderRadius: 20,
+        width: 120,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '5%',
+        marginBottom: '5%'
+    }*/
 });

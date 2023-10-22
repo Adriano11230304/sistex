@@ -45,8 +45,8 @@ export const styles = StyleSheet.create({
     },
     itemList: {
         flex: 1,
-        height: 70,
-        margin: 10,
+        height: 100,
+        marginTop: 5,
         borderRadius: 10,
         flexDirection: 'row',
         borderBottomWidth: 1,
@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
     },
     buttonText: {
         paddingRight: '5%',
-        paddingTop: '2%'
+        paddingTop: '1%'
     },
     buttonAdd: {
         paddingBottom: '5%',
