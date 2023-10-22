@@ -15,16 +15,22 @@ export default function AddFornecedores({ navigation, route }) {
     const [ email, setEmail ] = useState(null);
     const [ cnpj, setCnpj ] = useState("CPF/CNPJ não informado");
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState(null);
 
     const addFornecedor = async () => {
         setLoading(true);
         const validateforn = {
-            "name": "csdcsdcds",
-            "email": "adrian@gmail.com"
+            "name": nome,
+            "email": email
         }
         const teste = await fornecedorValidate(validateforn);
-        console.log("teste", teste);
-        console.log(nome, email, cnpj);
+        if(teste.isValid){
+            console.log("salvar o fornecedor");
+        }else{
+            console.log("false", teste.validate);
+            setErrors(teste.validate);
+        }
+
           // implementar a validação
           
         
@@ -69,6 +75,17 @@ export default function AddFornecedores({ navigation, route }) {
                         <TouchableOpacity style={styles.salvar} onPress={addFornecedor}>
                             <Text style={styles.salvarText}>Salvar</Text>
                         </TouchableOpacity>
+                            <FlatList
+                                showsVerticalScrollIndicator={false}
+                                data={errors}
+                                renderItem={({ item }) =>
+                                    <View>
+                                        <View>
+                                            <Text>{item}</Text>
+                                        </View>
+                                    </View>
+                                }
+                            />
                     </View>
                 </>
             )}
