@@ -80,8 +80,8 @@ export default function Fornecedores({ navigation, route }) {
         setSearchText(t)
     }
 
-    function visualizar(){
-        console.log("visualizar");
+    async function visualizar(id){
+        console.log(`visualizar ${id}`);
     }
 
 
