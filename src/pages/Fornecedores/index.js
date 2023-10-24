@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
-import List from '../../components/List'
 
 export default function Fornecedores({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -86,6 +85,53 @@ export default function Fornecedores({ navigation, route }) {
 
 
     return (
-        <List list={state.fornecedores} edit={editFornecedor} del={deleteFornecedor} add={addFornecedores} loading={loading} searchText={searchText} setText={setText} textInput={"Digite nome, email ou CNPJ/CPF"} title={"Fornecedores"} visualizar={visualizar} />
+        <SafeAreaView style={styles.container}>
+            <Header />
+            <View style={styles.title}>
+                <Text style={styles.text}>Fornecedores</Text>
+            </View>
+            <View style={styles.searchArea}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Pesquise pelo nome, cpf/cnpj ou email"
+                    placeholderTextColor="#888"
+                    value={searchText}
+                    onChangeText={(t) => setText(t)}
+                />
+                <FontAwesome name="search" size={24} color="black" />
+            </View>
+            {loading ? (
+                <>
+                    <LoaderSimple />
+                </>
+            ) : (
+                <>
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                            data={state.fornecedores}
+                        renderItem={({ item }) =>
+                            <TouchableOpacity style={styles.itemList} onPress={() => visualizar(item.id)}>
+                                <View style={styles.list}>
+                                    <Text style={styles.textList}>{item.name}</Text>
+                                    <Text style={styles.textList}>{item.cnpj ? item.cnpj : "CNPJ/CPF não informado"}</Text>
+                                </View>
+                                <View>
+                                    <TouchableOpacity onPress={() => editFornecedor(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
+                                    <TouchableOpacity onPress={() => deleteFornecedor(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
+                                </View>
+                            </TouchableOpacity>
+                        }
+                        keyExtractor={(item) => item.id}
+                    />
+
+                    <View style={styles.buttonAdd}>
+                            <TouchableOpacity onPress={addFornecedores}>
+                            <AntDesign name="pluscircleo" size={50} color="black" />
+                        </TouchableOpacity>
+                    </View>
+                </>
+            )}
+
+        </SafeAreaView>
     );
 }
