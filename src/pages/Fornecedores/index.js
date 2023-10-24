@@ -12,12 +12,14 @@ export default function Fornecedores({ navigation, route }) {
     const { state, dispatch } = useAuth();
     const [loading, setLoading] = useState(true);
     const [searchText, setSearchText] = useState("");
+    const [limit, setLimit] = useState(10);
+    const [offset, setOffset] = useState(0);
 
     useEffect(() => {
         setLoading(true);
         const listFornecedores = async () => {
             if(searchText == ""){
-                const fornec = await FornecedorController.listAll();
+                const fornec = await FornecedorController.listAll(limit, offset);
                 const action = {
                     "type": "atualizarFornecedores",
                     "fornecedores": fornec
@@ -35,14 +37,17 @@ export default function Fornecedores({ navigation, route }) {
     }, [])
 
     useEffect(() => {
-        handleOrderClick();
+        setLoading(true);
+        handleOrderClick(limit);
         console.log(searchText);
+        setLoading(false);
     }, [searchText])
 
-    const handleOrderClick = async () => {
-            setLoading(true);
+    const handleOrderClick = async (limit) => {
+            if(searchText != ""){
+                setLoading(true);
             let newList = null;
-            newList = await FornecedorController.findNameorEmail(searchText);
+            newList = await FornecedorController.findNameorEmail(searchText, limit);
             const action = {
                 "type": "atualizarFornecedores",
                 "fornecedores": newList
@@ -50,6 +55,7 @@ export default function Fornecedores({ navigation, route }) {
     
               dispatch(action);
               setLoading(false);
+            }
     };
 
     const deleteFornecedor = async (id) => {
@@ -58,7 +64,7 @@ export default function Fornecedores({ navigation, route }) {
         ToastAndroid.show(deleteForn, ToastAndroid.SHORT);
         const action = {
             "type": "atualizarFornecedores",
-            "fornecedores": await FornecedorController.listAll()
+            "fornecedores": await FornecedorController.listAll(2)
           }
 
           dispatch(action);
@@ -108,6 +114,9 @@ export default function Fornecedores({ navigation, route }) {
                 <>
                     <FlatList
                         showsVerticalScrollIndicator={false}
+                        onEndReached={() => {
+                            console.log("fim da lista")}}
+                        onEndReachedThreshold={0.1}
                             data={state.fornecedores}
                         renderItem={({ item }) =>
                             <TouchableOpacity style={styles.itemList} onPress={() => visualizar(item.id)}>

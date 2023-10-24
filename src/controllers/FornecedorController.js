@@ -1,8 +1,8 @@
 import Fornecedor from '../models/Fornecedor'
 
 class FornecedorController {
-    async listAll() {
-        const fornecedores = await Fornecedor.findAll()
+    async listAll(page, offset) {
+        const fornecedores = await Fornecedor.findAll(page, offset)
         return fornecedores;
     }
 
@@ -25,9 +25,9 @@ class FornecedorController {
         }
     }
 
-    async findNameorEmail(name){
+    async findNameorEmail(name, limit){
         const search = `%${name}%`
-        const fornecedor = await Fornecedor.findByNameorEmail(search);
+        const fornecedor = await Fornecedor.findByNameorEmail(search, limit);
         return fornecedor;
     }
 

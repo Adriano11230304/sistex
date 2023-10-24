@@ -15,12 +15,12 @@ class Fornecedor {
     }
 
 
-    static findAll() {
+    static findAll(page, offset) {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM fornecedores;",
-                    [],
+                    "SELECT * FROM fornecedores limit ? offset ?;",
+                    [page, offset],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
                 );
@@ -41,12 +41,12 @@ class Fornecedor {
         });
     }
 
-    static findByNameorEmail(name) {
+    static findByNameorEmail(name, limit) {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM fornecedores WHERE name LIKE ? OR email LIKE ? OR cnpj LIKE ?;",
-                    [name, name, name],
+                    "SELECT * FROM fornecedores WHERE name LIKE ? OR email LIKE ? OR cnpj LIKE ? LIMIT ?;",
+                    [name, name, name, limit],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
                 );
