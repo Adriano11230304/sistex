@@ -19,7 +19,7 @@ class Fornecedor {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM fornecedores limit ? offset ?;",
+                    "SELECT * FROM fornecedores ORDER BY name asc LIMIT ? OFFSET ?;",
                     [page, offset],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
@@ -45,7 +45,7 @@ class Fornecedor {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM fornecedores WHERE name LIKE ? OR email LIKE ? OR cnpj LIKE ? LIMIT ?;",
+                    "SELECT * FROM fornecedores WHERE name LIKE ? OR email LIKE ? OR cnpj LIKE ? ORDER BY name asc LIMIT ?;",
                     [name, name, name, limit],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
