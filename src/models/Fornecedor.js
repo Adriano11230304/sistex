@@ -28,6 +28,19 @@ class Fornecedor {
         });
     }
 
+    static findAllAll() {
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM fornecedores ORDER BY name asc;",
+                    [],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
     static findById(id) {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {

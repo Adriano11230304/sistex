@@ -6,6 +6,11 @@ class FornecedorController {
         return fornecedores;
     }
 
+    async listAllAll() {
+        const fornecedores = await Fornecedor.findAllAll()
+        return fornecedores;
+    }
+
     async add(name, email, cnpj) {
         const fornecedor = new Fornecedor(name, email, cnpj);
         try {    

@@ -18,48 +18,48 @@ export default function Fornecedores({ navigation, route }) {
 
     useEffect(() => {
         setLoading(true);
-        const listFornecedores = async () => {
-            if(searchText == ""){
-                const action = {
-                    "type": "atualizarFornecedores",
-                    "fornecedores": await FornecedorController.listAll(limit, 0)
-                  }
-        
-                  dispatch(action);
-
-                  setList(state.fornecedores);
-
-                console.log("dispatch", state);
-            }
-        }
-
         listFornecedores();
         console.log("fornecedoresAdd");
-        setLoading(false)
+        setLoading(false);
     }, [])
 
     useEffect(() => {
-        setLoading(true);
         handleOrderClick(limit);
         console.log(searchText);
-        setLoading(false);
     }, [searchText])
 
-    const handleOrderClick = async (limit) => {
-            if(searchText != ""){
-                setLoading(true);
-                let newList = null;
-                newList = await FornecedorController.findNameorEmail(searchText, limit);
-                const action = {
-                    "type": "atualizarFornecedores",
-                    "fornecedores": newList
-                }
+    const listFornecedores = async () => {
+        if(searchText == ""){
+            const forn = await FornecedorController.listAll(limit, 0)
+            const action = {
+                "type": "atualizarFornecedores",
+                "fornecedores": forn
+              }
     
-                dispatch(action);
-                setList(state.fornecedores);
-                console.log("entrou");
-                setLoading(false);
-            }
+              dispatch(action);
+
+              setList(forn);
+
+            console.log("dispatch", state);
+        }
+    }
+
+    const handleOrderClick = async (limit) => {
+                if(searchText != ""){
+                    setLoading(true);
+                    let newList = null;
+                    newList = await FornecedorController.findNameorEmail(searchText, limit);
+                    const action = {
+                        "type": "atualizarFornecedores",
+                        "fornecedores": newList
+                    }
+    
+                    dispatch(action);
+                    setList(state.fornecedores);
+                    console.log("entrou");
+                    setLoading(false);
+                }
+                
     };
 
     const deleteFornecedor = async (id) => {
@@ -94,9 +94,18 @@ export default function Fornecedores({ navigation, route }) {
     }
 
     async function atualizar(){
+        if(list.length < 10){
+            setOffset(0);    
+        }else{
+            setOffset(offset + 10);
+        }
+        
         const teste = await FornecedorController.listAll(limit, offset);
+        const total = await FornecedorController.listAllAll();
         console.log("offset", offset);
         console.log("teste", teste);
+        console.log("list", list.length);
+        console.log("total", total.length);
     }
 
 
@@ -124,9 +133,7 @@ export default function Fornecedores({ navigation, route }) {
                 <>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        onEndReached={async () => {
-                            await atualizar()
-                            console.log("fim da lista")}}
+                        onEndReached={async () => {await atualizar()}}
                         onEndReachedThreshold={0.1}
                             data={list}
                         renderItem={({ item }) =>
