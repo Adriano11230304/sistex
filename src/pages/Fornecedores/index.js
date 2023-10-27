@@ -7,14 +7,15 @@ import { useEffect, useState } from 'react';
 import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
+import FornecedorCard from '../../components/ListFornecedor'
 
-export default function Fornecedores({ navigation, route }) {
+export default function Fornecedores({ navigation, route, props }) {
     const { state, dispatch } = useAuth();
     const [loading, setLoading] = useState(true);
     const [searchText, setSearchText] = useState("");
     const [limit, setLimit] = useState(10);
     const [offset, setOffset] = useState(0);
-    const [list, setList] = useState(null);
+    const [ list, setList ] = useState(null);
 
     useEffect(() => {
         setLoading(true);
@@ -38,8 +39,6 @@ export default function Fornecedores({ navigation, route }) {
     
               dispatch(action);
 
-              setList(forn);
-
             console.log("dispatch", state);
         }
     }
@@ -55,7 +54,6 @@ export default function Fornecedores({ navigation, route }) {
                     }
     
                     dispatch(action);
-                    setList(state.fornecedores);
                     console.log("entrou");
                     setLoading(false);
                 }
@@ -68,7 +66,7 @@ export default function Fornecedores({ navigation, route }) {
         ToastAndroid.show(deleteForn, ToastAndroid.SHORT);
         const action = {
             "type": "atualizarFornecedores",
-            "fornecedores": await FornecedorController.listAll(10, 0)
+            "fornecedores": await FornecedorController.listAll(limit, 0)
           }
 
           dispatch(action);
@@ -94,18 +92,18 @@ export default function Fornecedores({ navigation, route }) {
     }
 
     async function atualizar(){
-        if(list.length < 10){
-            setOffset(0);    
+        if(state.fornecedores.length < 300){
+            await FornecedorController.listAll(limit, state.fornecedores.length)
+            .then(res => {
+                dispatch({
+                    "type": "atualizarFornecedores",
+                    "fornecedores": [...state.fornecedores, ...res]
+                })
+            })
         }else{
-            setOffset(offset + 10);
+            console.log("refina sua busca!");
         }
         
-        const teste = await FornecedorController.listAll(limit, offset);
-        const total = await FornecedorController.listAllAll();
-        console.log("offset", offset);
-        console.log("teste", teste);
-        console.log("list", list.length);
-        console.log("total", total.length);
     }
 
 
@@ -135,19 +133,8 @@ export default function Fornecedores({ navigation, route }) {
                         showsVerticalScrollIndicator={false}
                         onEndReached={async () => {await atualizar()}}
                         onEndReachedThreshold={0.1}
-                            data={list}
-                        renderItem={({ item }) =>
-                            <TouchableOpacity style={styles.itemList} onPress={() => visualizar(item.id)}>
-                                <View style={styles.list}>
-                                    <Text style={styles.textList}>{item.name}</Text>
-                                    <Text style={styles.textList}>{item.cnpj ? item.cnpj : "CNPJ/CPF não informado"}</Text>
-                                </View>
-                                <View>
-                                    <TouchableOpacity onPress={() => editFornecedor(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
-                                    <TouchableOpacity onPress={() => deleteFornecedor(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
-                                </View>
-                            </TouchableOpacity>
-                        }
+                            data={state.fornecedores}
+                        renderItem={_renderitem}
                         keyExtractor={(item) => item.id}
                     />
 
@@ -162,3 +149,5 @@ export default function Fornecedores({ navigation, route }) {
         </SafeAreaView>
     );
 }
+
+const _renderitem = ({item}) => <FornecedorCard item={item} />;
