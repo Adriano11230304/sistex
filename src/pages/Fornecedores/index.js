@@ -8,6 +8,7 @@ import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
 import FornecedorCard from '../../components/ListFornecedor'
+import RenderFooter from '../../components/RenderFooter';
 
 export default function Fornecedores({ navigation, route, props }) {
     const { state, dispatch } = useAuth();
@@ -16,6 +17,7 @@ export default function Fornecedores({ navigation, route, props }) {
     const [limit, setLimit] = useState(10);
     const [offset, setOffset] = useState(0);
     const [ list, setList ] = useState(null);
+    const [loadingList, setLoadingList] = useState(null);
 
     useEffect(() => {
         setLoading(true);
@@ -92,6 +94,7 @@ export default function Fornecedores({ navigation, route, props }) {
     }
 
     async function atualizar(){
+        setLoadingList(true);
         if(state.fornecedores.length < 300){
             await FornecedorController.listAll(limit, state.fornecedores.length)
             .then(res => {
@@ -103,6 +106,8 @@ export default function Fornecedores({ navigation, route, props }) {
         }else{
             console.log("refina sua busca!");
         }
+
+        setLoadingList(false)
         
     }
 
@@ -136,6 +141,7 @@ export default function Fornecedores({ navigation, route, props }) {
                             data={state.fornecedores}
                         renderItem={_renderitem}
                         keyExtractor={(item) => item.id}
+                        ListFooterComponent={<RenderFooter loading={loadingList}/>}
                     />
 
                     <View style={styles.buttonAdd}>
