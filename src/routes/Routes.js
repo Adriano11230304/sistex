@@ -7,6 +7,7 @@ import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-nat
 import { useAuth } from '../store/auth';
 import AddFornecedores from '../pages/Fornecedores/add';
 import Fornecedores from '../pages/Fornecedores';
+import VisFornecedor from '../pages/Fornecedores/visualizar';
 
 
 const Stack = createNativeStackNavigator();
@@ -16,6 +17,7 @@ export const FornecedorStack = () => {
     <Stack.Navigator initialRouteName='FornecedoresStack' screenOptions={{headerShown: false}}>
         <Stack.Screen name="FornecedoresStack" component={Fornecedores} />
       <Stack.Screen name="AddFornecedor" component={AddFornecedores} />
+      <Stack.Screen name="VisFornecedor" component={VisFornecedor} />
     </Stack.Navigator>
   );
 };

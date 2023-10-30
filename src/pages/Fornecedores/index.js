@@ -10,7 +10,7 @@ import LoaderSimple from '../../components/LoaderSimple';
 import FornecedorCard from '../../components/ListFornecedor'
 import RenderFooter from '../../components/RenderFooter';
 
-export default function Fornecedores({ navigation, route, props }) {
+export default function Fornecedores({ navigation, route }) {
     const { state, dispatch } = useAuth();
     const [searchText, setSearchText] = useState("");
     const [limit, setLimit] = useState(10);
@@ -84,7 +84,7 @@ export default function Fornecedores({ navigation, route, props }) {
         
     }
 
-    const _renderitem = ({item}) => <FornecedorCard item={item}/>;
+    const _renderitem = ({item, navigation}) => <FornecedorCard item={item} navigation={navigation}/>;
 
 
     return (
