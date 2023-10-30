@@ -13,7 +13,12 @@ function authReducer(state, action) {
         case 'atualizarFornecedores': {
             return {...state, fornecedores: action.fornecedores}
         }
-        default: {
+        case 'loading':{
+            return {...state, loading: true}
+        }
+        case 'loadingfalse':{
+            return {...state, loading: false}
+        }default: {
             throw new Error(`action.type não tratada: ${action.type}`);
         }
     }
@@ -22,7 +27,8 @@ function authReducer(state, action) {
 const initialState = {
     signed: false,
     user: null,
-    fornecedores: null
+    fornecedores: null,
+    loading: false
 }
 
 function AuthProvider({ children }) {

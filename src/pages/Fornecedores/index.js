@@ -12,7 +12,6 @@ import RenderFooter from '../../components/RenderFooter';
 
 export default function Fornecedores({ navigation, route, props }) {
     const { state, dispatch } = useAuth();
-    const [loading, setLoading] = useState(true);
     const [searchText, setSearchText] = useState("");
     const [limit, setLimit] = useState(10);
     const [offset, setOffset] = useState(0);
@@ -20,10 +19,10 @@ export default function Fornecedores({ navigation, route, props }) {
     const [loadingList, setLoadingList] = useState(null);
 
     useEffect(() => {
-        setLoading(true);
+        dispatch({"type": "loading"})
         listFornecedores();
         console.log("fornecedoresAdd");
-        setLoading(false);
+        dispatch({"type": "loadingfalse"})
     }, [])
 
     useEffect(() => {
@@ -47,7 +46,7 @@ export default function Fornecedores({ navigation, route, props }) {
 
     const handleOrderClick = async (limit) => {
                 if(searchText != ""){
-                    setLoading(true);
+                    dispatch({"type": "loading"})
                     let newList = null;
                     newList = await FornecedorController.findNameorEmail(searchText, limit);
                     const action = {
@@ -57,28 +56,10 @@ export default function Fornecedores({ navigation, route, props }) {
     
                     dispatch(action);
                     console.log("entrou");
-                    setLoading(false);
+                    dispatch({"type": "loadingfalse"})
                 }
                 
     };
-
-    const deleteFornecedor = async (id) => {
-        setLoading(true);
-        const deleteForn = await FornecedorController.remove(id);
-        ToastAndroid.show(deleteForn, ToastAndroid.SHORT);
-        const action = {
-            "type": "atualizarFornecedores",
-            "fornecedores": await FornecedorController.listAll(limit, 0)
-          }
-
-          dispatch(action);
-
-          setLoading(false);
-    }
-
-    const editFornecedor = async (id) => {
-        console.log(`editar o fornenecedor de id ${id}`);
-    }
 
     const addFornecedores = async () => {
         navigation.navigate('AddFornecedor');
@@ -89,27 +70,21 @@ export default function Fornecedores({ navigation, route, props }) {
         setSearchText(t)
     }
 
-    async function visualizar(id){
-        console.log(`visualizar ${id}`);
-    }
-
     async function atualizar(){
         setLoadingList(true);
-        if(state.fornecedores.length < 300){
-            await FornecedorController.listAll(limit, state.fornecedores.length)
+        await FornecedorController.listAll(limit, state.fornecedores.length)
             .then(res => {
                 dispatch({
                     "type": "atualizarFornecedores",
                     "fornecedores": [...state.fornecedores, ...res]
                 })
             })
-        }else{
-            console.log("refina sua busca!");
-        }
 
         setLoadingList(false)
         
     }
+
+    const _renderitem = ({item}) => <FornecedorCard item={item}/>;
 
 
     return (
@@ -128,7 +103,7 @@ export default function Fornecedores({ navigation, route, props }) {
                 />
                 <FontAwesome name="search" size={24} color="black" />
             </View>
-            {loading ? (
+            {state.loading ? (
                 <>
                     <LoaderSimple />
                 </>
@@ -138,7 +113,7 @@ export default function Fornecedores({ navigation, route, props }) {
                         showsVerticalScrollIndicator={false}
                         onEndReached={async () => {await atualizar()}}
                         onEndReachedThreshold={0.1}
-                            data={state.fornecedores}
+                        data={state.fornecedores}
                         renderItem={_renderitem}
                         keyExtractor={(item) => item.id}
                         ListFooterComponent={<RenderFooter loading={loadingList}/>}
@@ -155,5 +130,3 @@ export default function Fornecedores({ navigation, route, props }) {
         </SafeAreaView>
     );
 }
-
-const _renderitem = ({item}) => <FornecedorCard item={item} />;
