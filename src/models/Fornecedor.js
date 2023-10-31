@@ -7,21 +7,27 @@ class Fornecedor {
     email;
     cnpj
 
-    constructor(name, email, cnpj) {
+    constructor(name, email, cnpj, id = 1) {
         this.name = name;
         this.email = email;
         this.cnpj = cnpj;
+        this.id = id;
         console.log("constructor fornecedor");
     }
 
 
     static findAll(page) {
-        const offset = (page - 1) * 10;
+        if(page < 1){
+            const vazio = []
+            return vazio;
+        }
+        const offset = (page - 1) * 25;
+        const limit = 25;
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM fornecedores ORDER BY name asc LIMIT ? OFFSET ?;",
-                    [page, offset],
+                    [limit, offset],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
                 );
@@ -74,6 +80,22 @@ class Fornecedor {
                 tx.executeSql(
                     "INSERT INTO fornecedores (name, email, cnpj) values (?, ?, ?);",
                     [this.name, this.email, this.cnpj],
+                    (_, { rowsAffected, insertId }) => {
+                        if (rowsAffected > 0) resolve(insertId);
+                        else reject("Error inserting obj: " + JSON.stringify(obj));
+                    },
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
+    update() {
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "UPDATE fornecedores SET name = ?, email = ?, cnpj = ? WHERE id = ?;",
+                    [this.name, this.email, this.cnpj, this.id],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));

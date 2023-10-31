@@ -1,8 +1,8 @@
 import Fornecedor from '../models/Fornecedor'
 
 class FornecedorController {
-    async listAll(page, offset) {
-        const fornecedores = await Fornecedor.findAll(page, offset)
+    async listAll(page) {
+        const fornecedores = await Fornecedor.findAll(page)
         return fornecedores;
     }
 
@@ -16,6 +16,16 @@ class FornecedorController {
         try {    
             await fornecedor.create();
             return "Fornecedor adicionado com sucesso!";
+        } catch (err) {
+            return err;
+        }
+    }
+
+    async update(name, email, cnpj, id) {
+        const fornecedor = new Fornecedor(name, email, cnpj, id);
+        try {    
+            await fornecedor.update();
+            return "Fornecedor alterado com sucesso!";
         } catch (err) {
             return err;
         }

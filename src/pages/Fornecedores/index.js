@@ -14,47 +14,65 @@ export default function Fornecedores({ navigation, route }) {
     const { state, dispatch } = useAuth();
     const [searchText, setSearchText] = useState("");
     const [page, setPage] = useState(1);
-    const [ list, setList ] = useState(null);
     const [loadingList, setLoadingList] = useState(null);
+    const [prevPage, setPrevPage] = useState(false);
+    const [nexPage, setNexPage] = useState(false);
 
     useEffect(() => {
-        dispatch({"type": "loading"})
         listFornecedores();
-        console.log("fornecedoresAdd");
-        dispatch({"type": "loadingfalse"})
-    }, [])
+    }, [page])
 
     useEffect(() => {
-        handleOrderClick(limit);
+        handleOrderClick();
         console.log(searchText);
     }, [searchText])
 
     const listFornecedores = async () => {
         if(searchText == ""){
+            dispatch({"type": "loading"})
             const forn = await FornecedorController.listAll(page)
             const action = {
                 "type": "atualizarFornecedores",
                 "fornecedores": forn
-              }
+            }
+            console.log("page", page);
     
-              dispatch(action);
+            dispatch(action);
+            const fornNext = await FornecedorController.listAll(page + 1);
+            const fornPrev = await FornecedorController.listAll(page - 1);
+            if(fornNext.length > 0){
+                setNexPage(true);
+            }else{
+                setNexPage(false);
+            }
+
+            if(fornPrev.length > 0){
+                setPrevPage(true);
+            }else{
+                setPrevPage(false);
+            }
+            dispatch({"type": "loadingfalse"})
         }
     }
 
-    const handleOrderClick = async (limit) => {
+    const handleOrderClick = async () => {
                 if(searchText != ""){
                     dispatch({"type": "loading"})
                     let newList = null;
-                    newList = await FornecedorController.findNameorEmail(searchText, limit);
+                    newList = await FornecedorController.findNameorEmail(searchText, 25);
                     const action = {
                         "type": "atualizarFornecedores",
                         "fornecedores": newList
                     }
     
                     dispatch(action);
-                    console.log("entrou");
+                    setNexPage(false);
+                    setPrevPage(false);
                     dispatch({"type": "loadingfalse"})
+                }else{
+                    await listFornecedores();
                 }
+                console.log('search');
                 
     };
 
@@ -74,7 +92,9 @@ export default function Fornecedores({ navigation, route }) {
     }
 
     async function visualizar(id) {
-        navigation.navigate('VisFornecedor')
+        navigation.navigate('VisFornecedor', {
+            "paramskey": id
+        })
     }
 
     async function editFornecedor(id) {
@@ -89,7 +109,7 @@ export default function Fornecedores({ navigation, route }) {
         ToastAndroid.show(deleteForn, ToastAndroid.SHORT);
         const action = {
             "type": "atualizarFornecedores",
-            "fornecedores": await FornecedorController.listAll(50, 0)
+            "fornecedores": await FornecedorController.listAll(page)
         }
 
         dispatch(action);
@@ -97,6 +117,20 @@ export default function Fornecedores({ navigation, route }) {
         dispatch({ "type": "loadingfalse" })
 
 
+    }
+
+    const nextPage = async () => {
+        dispatch({ "type": "loading" })
+        const total = await FornecedorController.listAllAll();
+        console.log("total", total.length);
+        setPage(page + 1);
+    }
+
+    const previousPage = async () => {
+        dispatch({ "type": "loading" })
+        const total = await FornecedorController.listAllAll();
+        console.log("total", total.length);
+        setPage(page - 1);
     }
 
     const _renderitem = ({ item }) => <FornecedorCard item={item} visualizar={() => visualizar(item.id)} del={() => deleteFornecedor(item.id)} edit={() => {editFornecedor(item.id)}} />;
@@ -140,16 +174,23 @@ export default function Fornecedores({ navigation, route }) {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.pagesNext}>
-                            <View style={styles.buttonAdd}>
-                                <TouchableOpacity onPress={addFornecedores}>
-                                    <AntDesign name="leftcircleo" size={40} color="black" />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.buttonAdd}>
-                                <TouchableOpacity onPress={addFornecedores}>
-                                    <AntDesign name="rightcircleo" size={40} color="black" />
-                                </TouchableOpacity>
-                            </View>
+                            {prevPage && 
+                                <>
+                                    <View style={styles.buttonAdd}>
+                                        <TouchableOpacity onPress={async () => {await previousPage()}}>
+                                            <AntDesign name="leftcircleo" size={40} color="black" />
+                                        </TouchableOpacity>
+                                    </View>
+                                </>
+                            }
+
+                            {nexPage && 
+                                <View style={styles.buttonAdd}>
+                                    <TouchableOpacity onPress={async () => {await nextPage()}}>
+                                        <AntDesign name="rightcircleo" size={40} color="black" />
+                                    </TouchableOpacity>
+                                </View>
+                            }
                         </View>
                     </View>
                 </>

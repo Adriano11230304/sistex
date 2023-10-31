@@ -131,7 +131,18 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingBottom: '5%',
         paddingRight: '40%'
-    }
+    },
+    visualizarFornecedor: {
+        flexDirection: 'column',
+        paddingTop: '5%',
+        paddingLeft: '5%'
+
+    },
+    visualizarFornecedorText:{
+        fontSize: 20,
+        paddingTop: '5%',
+        fontWeight: 'bold'
+    },
 
     /*modalCenteredView: {
         position: 'absolute',

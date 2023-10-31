@@ -35,15 +35,16 @@ export default function EditFornecedores({ navigation, route }) {
         }
         const teste = await fornecedorValidate(validateforn);
         if (teste.isValid) {
-            // Fazer o update no model e controller
+            const fornecedor = await FornecedorController.findById(route.params.paramskey);
+            const forn = await FornecedorController.update(nome, email, cnpj, fornecedor.id);
             ToastAndroid.show("Fornecedor atualizado com sucesso!", ToastAndroid.SHORT);
             const action = {
                 "type": "atualizarFornecedores",
-                "fornecedores": await FornecedorController.listAll(10, 0)
+                "fornecedores": await FornecedorController.listAll(1)
             }
             dispatch(action);
             setLoading(false);
-            navigation.navigate('FornecedoresStack', '1');
+            navigation.navigate('FornecedoresStack');
         } else {
             ToastAndroid.show(teste.validate, ToastAndroid.SHORT);
             setLoading(false);
