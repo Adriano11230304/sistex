@@ -16,16 +16,27 @@ export default function EditFornecedores({ navigation, route }) {
     const [cnpj, setCnpj] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        syncForn();
+    }, []);
+
+    async function syncForn(){
+        const forn = await FornecedorController.findById(route.params.paramskey);
+        setNome(forn.name);
+        setEmail(forn.email);
+        setCnpj(forn.cnpj);
+    }
+
     const addFornecedor = async () => {
         setLoading(true);
-        console.log(route.params.paramskey);
         const validateforn = {
             "name": nome,
             "email": email
         }
         const teste = await fornecedorValidate(validateforn);
-        /*if (teste.isValid) {
-            ToastAndroid.show("Fornecedor adicionado com sucesso!", ToastAndroid.SHORT);
+        if (teste.isValid) {
+            // Fazer o update no model e controller
+            ToastAndroid.show("Fornecedor atualizado com sucesso!", ToastAndroid.SHORT);
             const action = {
                 "type": "atualizarFornecedores",
                 "fornecedores": await FornecedorController.listAll(10, 0)
@@ -36,7 +47,7 @@ export default function EditFornecedores({ navigation, route }) {
         } else {
             ToastAndroid.show(teste.validate, ToastAndroid.SHORT);
             setLoading(false);
-        }*/
+        }
         setLoading(false);
 
     }
@@ -70,7 +81,7 @@ export default function EditFornecedores({ navigation, route }) {
                             <TouchableOpacity style={styles.salvarUpdate} onPress={addFornecedor}>
                                 <Text style={styles.salvarTextUpdate}>Atualizar</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.salvarUpdate2} onPress={addFornecedor}>
+                                <TouchableOpacity style={styles.salvarUpdate2} onPress={() => { navigation.navigate("FornecedoresStack")}}>
                                 <Text style={styles.salvarTextUpdate}>Voltar</Text>
                             </TouchableOpacity>
                         </View>

@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
         marginTop: '5%',
     },
     salvarUpdate2: {
-        backgroundColor: 'red',
+        backgroundColor: 'gray',
         borderRadius: 20,
         width: 130,
         height: 40,
