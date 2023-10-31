@@ -15,7 +15,8 @@ class Fornecedor {
     }
 
 
-    static findAll(page, offset) {
+    static findAll(page) {
+        const offset = (page - 1) * 10;
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid, VirtualizedList } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
 import { useAuth } from '../../store/auth';
@@ -13,8 +13,7 @@ import RenderFooter from '../../components/RenderFooter';
 export default function Fornecedores({ navigation, route }) {
     const { state, dispatch } = useAuth();
     const [searchText, setSearchText] = useState("");
-    const [limit, setLimit] = useState(10);
-    const [offset, setOffset] = useState(0);
+    const [page, setPage] = useState(1);
     const [ list, setList ] = useState(null);
     const [loadingList, setLoadingList] = useState(null);
 
@@ -32,18 +31,14 @@ export default function Fornecedores({ navigation, route }) {
 
     const listFornecedores = async () => {
         if(searchText == ""){
-            const forn = await FornecedorController.listAll(limit, 0)
+            const forn = await FornecedorController.listAll(page)
             const action = {
                 "type": "atualizarFornecedores",
                 "fornecedores": forn
               }
     
               dispatch(action);
-
-            console.log("dispatch", state);
         }
-
-        console.log(navigation);
     }
 
     const handleOrderClick = async (limit) => {
@@ -73,16 +68,8 @@ export default function Fornecedores({ navigation, route }) {
     }
 
     async function atualizar(){
-        setLoadingList(true);
-        await FornecedorController.listAll(limit, state.fornecedores.length)
-            .then(res => {
-                dispatch({
-                    "type": "atualizarFornecedores",
-                    "fornecedores": [...state.fornecedores, ...res]
-                })
-            })
-
-        setLoadingList(false)
+        // setLoadingList(true);
+        // setLoadingList(false)
         
     }
 
@@ -102,7 +89,7 @@ export default function Fornecedores({ navigation, route }) {
         ToastAndroid.show(deleteForn, ToastAndroid.SHORT);
         const action = {
             "type": "atualizarFornecedores",
-            "fornecedores": await FornecedorController.listAll(10, 0)
+            "fornecedores": await FornecedorController.listAll(50, 0)
         }
 
         dispatch(action);
@@ -116,7 +103,7 @@ export default function Fornecedores({ navigation, route }) {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Header />
             <View style={styles.title}>
                 <Text style={styles.text}>Fornecedores</Text>
@@ -146,15 +133,28 @@ export default function Fornecedores({ navigation, route }) {
                         keyExtractor={(item) => item.id}
                         ListFooterComponent={<RenderFooter loading={loadingList}/>}
                     />
-
-                    <View style={styles.buttonAdd}>
+                    <View style={styles.buttons}>
+                        <View style={styles.buttonAdd}>
                             <TouchableOpacity onPress={addFornecedores}>
-                            <AntDesign name="pluscircleo" size={50} color="black" />
-                        </TouchableOpacity>
+                                <AntDesign name="pluscircleo" size={50} color="black" />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.pagesNext}>
+                            <View style={styles.buttonAdd}>
+                                <TouchableOpacity onPress={addFornecedores}>
+                                    <AntDesign name="leftcircleo" size={40} color="black" />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.buttonAdd}>
+                                <TouchableOpacity onPress={addFornecedores}>
+                                    <AntDesign name="rightcircleo" size={40} color="black" />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </>
             )}
 
-        </View>
+        </SafeAreaView>
     );
 }

@@ -124,6 +124,14 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center',
     },
+    buttons:{
+        flexDirection: 'row-reverse'
+    },
+    pagesNext: {
+        flexDirection: 'row',
+        paddingBottom: '5%',
+        paddingRight: '40%'
+    }
 
     /*modalCenteredView: {
         position: 'absolute',
