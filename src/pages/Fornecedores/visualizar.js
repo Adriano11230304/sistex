@@ -5,6 +5,7 @@ import { styles } from './style';
 import { useAuth } from '../../store/auth';
 
 export default function VisFornecedor({navigation, route}){
+    const { state, dispatch } = useAuth();
 
 return (
     <SafeAreaView style={styles.container}>

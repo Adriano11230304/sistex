@@ -42,6 +42,8 @@ export default function Fornecedores({ navigation, route }) {
 
             console.log("dispatch", state);
         }
+
+        console.log(navigation);
     }
 
     const handleOrderClick = async (limit) => {
@@ -84,7 +86,33 @@ export default function Fornecedores({ navigation, route }) {
         
     }
 
-    const _renderitem = ({item, navigation}) => <FornecedorCard item={item} navigation={navigation}/>;
+    async function visualizar(id) {
+        navigation.navigate('VisFornecedor')
+    }
+
+    async function editFornecedor(id) {
+        navigation.navigate('EditFornecedores', {
+            "paramskey": id
+        })
+    }
+
+    const deleteFornecedor = async (id) => {
+        dispatch({ "type": "loading" })
+        const deleteForn = await FornecedorController.remove(id);
+        ToastAndroid.show(deleteForn, ToastAndroid.SHORT);
+        const action = {
+            "type": "atualizarFornecedores",
+            "fornecedores": await FornecedorController.listAll(10, 0)
+        }
+
+        dispatch(action);
+
+        dispatch({ "type": "loadingfalse" })
+
+
+    }
+
+    const _renderitem = ({ item }) => <FornecedorCard item={item} visualizar={() => visualizar(item.id)} del={() => deleteFornecedor(item.id)} edit={() => {editFornecedor(item.id)}} />;
 
 
     return (

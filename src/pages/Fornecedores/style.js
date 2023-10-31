@@ -89,6 +89,23 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: '5%'
     },
+    salvarUpdate: {
+        backgroundColor: '#5d8aa8',
+        borderRadius: 20,
+        width: 130,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '5%',
+    },
+    salvarUpdate2: {
+        backgroundColor: 'red',
+        borderRadius: 20,
+        width: 130,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '5%',
+        marginLeft: '5%'
+    },
     salvarText: {
         paddingTop: '5%',
         alignSelf: 'center',
@@ -96,6 +113,18 @@ export const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold'
     },
+    salvarTextUpdate: {
+        paddingTop: '5%',
+        alignSelf: 'center',
+        fontSize: 20,
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    buttonupdatevoltar: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+    },
+
     /*modalCenteredView: {
         position: 'absolute',
         flex: 1,

@@ -8,6 +8,7 @@ import { useAuth } from '../store/auth';
 import AddFornecedores from '../pages/Fornecedores/add';
 import Fornecedores from '../pages/Fornecedores';
 import VisFornecedor from '../pages/Fornecedores/visualizar';
+import EditFornecedores from '../pages/Fornecedores/editar';
 
 
 const Stack = createNativeStackNavigator();
@@ -18,6 +19,7 @@ export const FornecedorStack = () => {
         <Stack.Screen name="FornecedoresStack" component={Fornecedores} />
       <Stack.Screen name="AddFornecedor" component={AddFornecedores} />
       <Stack.Screen name="VisFornecedor" component={VisFornecedor} />
+      <Stack.Screen name="EditFornecedores" component={EditFornecedores} />
     </Stack.Navigator>
   );
 };
