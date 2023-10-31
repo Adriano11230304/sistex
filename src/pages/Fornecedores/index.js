@@ -116,7 +116,7 @@ export default function Fornecedores({ navigation, route }) {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Header />
             <View style={styles.title}>
                 <Text style={styles.text}>Fornecedores</Text>
@@ -155,6 +155,6 @@ export default function Fornecedores({ navigation, route }) {
                 </>
             )}
 
-        </SafeAreaView>
+        </View>
     );
 }
