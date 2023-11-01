@@ -143,6 +143,15 @@ export const styles = StyleSheet.create({
         paddingTop: '5%',
         fontWeight: 'bold'
     },
+    salvarUpdate3: {
+        backgroundColor: 'gray',
+        borderRadius: 20,
+        width: 130,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '10%',
+        marginLeft: '5%'
+    },
 
     /*modalCenteredView: {
         position: 'absolute',

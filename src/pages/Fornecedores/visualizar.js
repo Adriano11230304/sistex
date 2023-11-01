@@ -8,18 +8,21 @@ import FornecedorController from '../../controllers/FornecedorController';
 
 export default function VisFornecedor({navigation, route}){
     const { state, dispatch } = useAuth();
-    const [fornecedor, setFornecedor] = useState(null);
-
+    const [name, setName] = useState(null);
+    const [cnpj, setCnpj] = useState(null);
+    const [email, setEmail] = useState(null);
     useEffect(() => {
-        visualizarForn();
-    }, [fornecedor])
-    
+        async function visualizarForn(){
+            await FornecedorController.findById(route.params.paramskey)
+            .then(res => {
+                setName(res.name);
+                setCnpj(res.cnpj);
+                setEmail(res.email);
+            })
+        }
 
-    async function visualizarForn(){
-        setFornecedor(await FornecedorController.findById(route.params.paramskey));
-        console.log(route.params.paramskey);
-        console.log(fornecedor);
-    }
+        visualizarForn();
+    }, [])
 
     function voltar(){
         navigation.navigate("FornecedoresStack");
@@ -38,11 +41,11 @@ return (
         ) : (
             <>
                 <View style={styles.visualizarFornecedor}>
-                    <Text style={styles.visualizarFornecedorText}>Nome: {/*fornecedor.name*/}</Text>
-                    <Text style={styles.visualizarFornecedorText}>E-mail: {/*fornecedor.email*/}</Text>
-                    <Text style={styles.visualizarFornecedorText}>CNPJ: {/*fornecedor.cnpj*/}</Text>
+                    <Text style={styles.visualizarFornecedorText}>Nome: {name}</Text>
+                    <Text style={styles.visualizarFornecedorText}>E-mail: {email}</Text>
+                    <Text style={styles.visualizarFornecedorText}>CNPJ: {cnpj}</Text>
                </View>
-               <TouchableOpacity style={styles.salvarUpdate2} onPress={voltar}>
+               <TouchableOpacity style={styles.salvarUpdate3} onPress={voltar}>
                     <Text style={styles.salvarTextUpdate}>Voltar</Text>
                 </TouchableOpacity>
             </>

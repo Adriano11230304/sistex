@@ -81,7 +81,6 @@ export default function Fornecedores({ navigation, route }) {
     }
 
     const setText = (t) => {
-        console.log("setText");
         setSearchText(t)
     }
 
