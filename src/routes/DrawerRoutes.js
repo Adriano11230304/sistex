@@ -6,7 +6,7 @@ import { useAuth } from '../store/auth'
 import TabRoutes from './TabRoutes';
 import { TabRoutesReceber } from './TabRoutes';
 import { AntDesign, MaterialIcons, Entypo, Octicons } from '@expo/vector-icons';
-import Pagar from '../pages/Pagar';
+import ContasPagar from '../pages/Pagar';
 import Receber from '../pages/Receber';
 import Relatorios from '../pages/Relatorios';
 import Nfse from '../pages/NFSe';
@@ -33,7 +33,7 @@ function DrawerRoutes({ navigation }) {
             {signed ? (
                 <>
                     <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} name="Home" component={Home} />
-                    <Drawer.Screen name="Contas a Pagar" component={Pagar} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
+                    <Drawer.Screen name="Contas a Pagar" component={ContasPagar} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
                     <Drawer.Screen name="Contas a Receber" component={Receber} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="attach-money" size={24} color={color} />), }} />
                     <Drawer.Screen name="Emissão de NFSe" component={Nfse} options={{ drawerIcon: ({ color }) => (<Entypo name="direction" size={24} color={color} />), }} />
                     <Drawer.Screen name="Relatórios Financeiros" component={Relatorios} options={{ drawerIcon: ({ color }) => (<AntDesign name="areachart" size={24} color={color} />), }} />

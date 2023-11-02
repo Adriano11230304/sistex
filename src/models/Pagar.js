@@ -1,31 +1,43 @@
 import db from './configDatabase'
 
-db.transaction((tx) => {
-    tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS pagar (id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, fixa BOOLEAN, categoria TEXT, fornecedor_id INTEGER, data_entrada DATE, FOREIGN KEY(fornecedor_id) REFERENCES fornecedores(id));"
-    );
-});
-
 class Pagar {
 
     id;
     valor;
-    despesa_fixa;
+    observacoes;
+    parcelas;
+    fixa;
     categoria;
     fornecedor_id;
+    created_at;
     data_entrada;
+    pago;
+    data_pagamento;
 
-    constructor(valor, despesa_fixa, categoria, fornecedor_id, data_entrada) {
+    constructor(valor, observacoes, parcelas, fixa, categoria, fornecedor_id, created_at, data_entrada, pago, data_pagamento, id = 1) {
+        this.id = id;
         this.valor = valor;
-        this.despesa_fixa = despesa_fixa;
+        this.observacoes = observacoes;
+        this.parcelas = parcelas;
+        this.fixa = fixa;
         this.categoria = categoria;
         this.fornecedor_id = fornecedor_id;
+        this.created_at = created_at;
         this.data_entrada = data_entrada;
+        this.pago = pago;
+        this.data_pagamento = data_pagamento;
+
         console.log("constructor pagar");
     }
 
 
-    static findAll() {
+    static findAll(page) {
+        if (page < 1) {
+            const vazio = []
+            return vazio;
+        }
+        const offset = (page - 1) * 25;
+        const limit = 25;
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
@@ -55,8 +67,8 @@ class Pagar {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO pagar (valor, fixa, categoria, fornecedor_id, data_entrada) values (?, ?, ?, ?, ?);",
-                    [this.valor, this.despesa_fixa, this.categoria, this.fornecedor_id, this.data_entrada],
+                    "INSERT INTO pagar (valor, observacoes, parcelas, fixa, categoria, fornecedor_id, created_at, data_entrada, pago, data_pagamento) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                    [this.valor, this.observacoes, this.parcelas, this.fixa, this.categoria, this.fornecedor_id, this.created_at, this.data_entrada, this.pago, this.data_pagamento],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));

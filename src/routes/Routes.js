@@ -23,3 +23,11 @@ export const FornecedorStack = () => {
     </Stack.Navigator>
   );
 };
+
+/*export const PagarStack = () => {
+  return (
+    <Stack.Navigator initialRouteName='PagarStack' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="FornecedoresStack" component={Fornecedores} />
+    </Stack.Navigator>
+  );
+};*/
