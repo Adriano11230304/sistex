@@ -13,6 +13,9 @@ function authReducer(state, action) {
         case 'atualizarFornecedores': {
             return {...state, fornecedores: action.fornecedores}
         }
+        case 'atualizarDespesas': {
+            return{...state, despesas: action.despesas}
+        }
         case 'loading':{
             return {...state, loading: true}
         }
@@ -28,7 +31,8 @@ const initialState = {
     signed: false,
     user: null,
     fornecedores: null,
-    loading: false
+    loading: false,
+    despesas: null
 }
 
 function AuthProvider({ children }) {

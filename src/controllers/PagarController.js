@@ -16,6 +16,16 @@ class PagarController{
         }
 
     }
+
+    async findById(id) {
+        console.log(id);
+        const conta = await Pagar.findById(id);
+        if (conta.length > 0) {
+            return conta[0];
+        } else {
+            return "despesa com esse id não encontrado!";
+        }
+    }
 }
 
 export default new PagarController();
