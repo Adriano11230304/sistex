@@ -19,10 +19,10 @@ export const styles = StyleSheet.create({
     },
     list: {
         flex: 1,
+        flexDirection: 'row'
     },
     textList: {
         fontSize: 18,
-        paddingLeft: '7%',
         fontWeight: 'bold',
         marginTop: '1%'
     },
@@ -52,4 +52,16 @@ export const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'gray'
     },
+    iconeCategoria: {
+        paddingLeft: '5%'
+    },
+    buttonText: {
+        paddingRight: '5%',
+        paddingTop: '2%'
+    },
+    textListPagar:{
+        paddingLeft: '10%',
+        width: 250,
+        height: 65
+    }
 });

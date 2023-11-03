@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
         paddingTop: '2%'
     },
     buttonAdd: {
-        paddingBottom: '5%',
+        paddingBottom: '3%',
         alignSelf: 'flex-end',
         paddingEnd: '7%'
     },
@@ -129,7 +129,7 @@ export const styles = StyleSheet.create({
     },
     pagesNext: {
         flexDirection: 'row',
-        paddingBottom: '5%',
+        paddingBottom: '3%',
         paddingRight: '40%'
     },
     visualizarFornecedor: {

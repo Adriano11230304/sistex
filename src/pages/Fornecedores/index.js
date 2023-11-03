@@ -159,17 +159,14 @@ export default function Fornecedores({ navigation, route }) {
                 <>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        onEndReached={async () => {await atualizar()}}
-                        onEndReachedThreshold={0.1}
                         data={state.fornecedores}
                         renderItem={_renderitem}
                         keyExtractor={(item) => item.id}
-                        ListFooterComponent={<RenderFooter loading={loadingList}/>}
                     />
                     <View style={styles.buttons}>
                         <View style={styles.buttonAdd}>
                             <TouchableOpacity onPress={addFornecedores}>
-                                <AntDesign name="pluscircleo" size={50} color="black" />
+                                <AntDesign name="pluscircleo" size={40} color="black" />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.pagesNext}>

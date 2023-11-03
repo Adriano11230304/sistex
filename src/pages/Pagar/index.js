@@ -37,13 +37,19 @@ export default function ContasPagar() {
     }
 
     const Item = ({item}) => (
-        <TouchableOpacity style={styles.itemList} onPress={() => visualizar(item.id)}>
+        <TouchableOpacity style={styles.itemList}>
             <View style={styles.list}>
-                <Text style={styles.textList}>{item.valor}</Text>
+                <View>
+                    <AntDesign style={styles.iconeCategoria} name="shoppingcart" size={35} color="black" />
+                </View>
+                <View style={styles.textListPagar}>
+                    <Text style={styles.textList}>Ronaldo Munhoz</Text>
+                    <Text style={styles.textList}>R$ {item.valor}</Text>
+                </View>
             </View>
             <View>
-                {/*<TouchableOpacity onPress={() => edit(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => del(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>*/}
+                <TouchableOpacity><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
+                <TouchableOpacity><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
             </View>
         </TouchableOpacity>
     );
