@@ -31,6 +31,8 @@ export default function Fornecedores({ navigation, route }) {
         if(searchText == ""){
             dispatch({"type": "loading"})
             const forn = await FornecedorController.listAll(page)
+            const fornAll = await FornecedorController.listAllAll();
+            setLoadingList(fornAll);
             const action = {
                 "type": "atualizarFornecedores",
                 "fornecedores": forn
@@ -84,12 +86,6 @@ export default function Fornecedores({ navigation, route }) {
         setSearchText(t)
     }
 
-    async function atualizar(){
-        // setLoadingList(true);
-        // setLoadingList(false)
-        
-    }
-
     async function visualizar(id) {
         navigation.navigate('VisFornecedor', {
             "paramskey": id
@@ -132,7 +128,16 @@ export default function Fornecedores({ navigation, route }) {
         setPage(page - 1);
     }
 
-    const _renderitem = ({ item }) => <FornecedorCard item={item} visualizar={() => visualizar(item.id)} del={() => deleteFornecedor(item.id)} edit={() => {editFornecedor(item.id)}} />;
+    function _renderitem ({ item }){
+        return(
+            <FornecedorCard 
+                item={item} 
+                visualizar={() => visualizar(item.id)} 
+                del={() => deleteFornecedor(item.id)} 
+                edit={() => { editFornecedor(item.id) }} 
+            />
+        )
+    } 
 
 
     return (
@@ -159,7 +164,7 @@ export default function Fornecedores({ navigation, route }) {
                 <>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={state.fornecedores}
+                        data={loadingList}
                         renderItem={_renderitem}
                         keyExtractor={(item) => item.id}
                     />
@@ -169,6 +174,7 @@ export default function Fornecedores({ navigation, route }) {
                                 <AntDesign name="pluscircleo" size={40} color="black" />
                             </TouchableOpacity>
                         </View>
+                        {/*
                         <View style={styles.pagesNext}>
                             {prevPage && 
                                 <>
@@ -187,7 +193,7 @@ export default function Fornecedores({ navigation, route }) {
                                     </TouchableOpacity>
                                 </View>
                             }
-                        </View>
+                        </View>*/}
                     </View>
                 </>
             )}

@@ -23,4 +23,4 @@ const FornecedorCard = ({item, visualizar, edit, del}) => {
         );
     };
     
- export default memo(FornecedorCard);
+ export default FornecedorCard;
