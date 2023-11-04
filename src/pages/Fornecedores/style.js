@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         flexDirection: 'row',
-        borderBottomColor: 'gray'
+        borderBottomColor: 'gray',
     },
     buttonText: {
         paddingRight: '5%',

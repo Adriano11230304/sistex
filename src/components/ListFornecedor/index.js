@@ -6,21 +6,20 @@ import { useAuth } from '../../store/auth';
 import FornecedorController from '../../controllers/FornecedorController';
 import VisFornecedor from '../../pages/Fornecedores/visualizar';
 
-const FornecedorCard = ({item, visualizar, edit, del}) => {
-    const { state, dispatch } = useAuth();
+const FornecedorCard = ({name, cnpj, id, visualizar, edit, del}) => {
 
         return (
-            <TouchableOpacity style={styles.itemList} onPress={() => visualizar(item.id)}>
+            <TouchableOpacity style={styles.itemList} onPress={() => visualizar(id)}>
                 <View style={styles.list}>
-                    <Text style={styles.textList}>{item.name}</Text>
-                    <Text style={styles.textList}>{item.cnpj ? item.cnpj : "CNPJ/CPF não informado"}</Text>
+                    <Text style={styles.textList}>{name}</Text>
+                    <Text style={styles.textList}>{cnpj ? cnpj : "CNPJ/CPF não informado"}</Text>
                 </View>
                 <View>
-                    <TouchableOpacity onPress={() => edit(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => del(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => edit(id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => del(id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
                 </View>
             </TouchableOpacity>
         );
     };
     
- export default FornecedorCard;
+ export default memo(FornecedorCard);

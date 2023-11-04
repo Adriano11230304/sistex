@@ -49,7 +49,6 @@ export const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         flexDirection: 'row',
-        borderBottomWidth: 1,
         borderBottomColor: 'gray'
     },
     iconeCategoria: {

@@ -21,8 +21,8 @@ class Fornecedor {
             const vazio = []
             return vazio;
         }
-        const offset = (page - 1) * 25;
-        const limit = 25;
+        const offset = (page - 1) * 30;
+        const limit = 30;
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(

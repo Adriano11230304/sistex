@@ -8,13 +8,12 @@ import FornecedorController from '../../controllers/FornecedorController';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
 import FornecedorCard from '../../components/ListFornecedor'
-import RenderFooter from '../../components/RenderFooter';
+import { SeparatorItem } from '../../components/SeparatorItem'
 
 export default function Fornecedores({ navigation, route }) {
     const { state, dispatch } = useAuth();
     const [searchText, setSearchText] = useState("");
     const [page, setPage] = useState(1);
-    const [loadingList, setLoadingList] = useState(null);
     const [prevPage, setPrevPage] = useState(false);
     const [nexPage, setNexPage] = useState(false);
 
@@ -31,8 +30,6 @@ export default function Fornecedores({ navigation, route }) {
         if(searchText == ""){
             dispatch({"type": "loading"})
             const forn = await FornecedorController.listAll(page)
-            const fornAll = await FornecedorController.listAllAll();
-            setLoadingList(fornAll);
             const action = {
                 "type": "atualizarFornecedores",
                 "fornecedores": forn
@@ -61,7 +58,7 @@ export default function Fornecedores({ navigation, route }) {
                 if(searchText != ""){
                     dispatch({"type": "loading"})
                     let newList = null;
-                    newList = await FornecedorController.findNameorEmail(searchText, 25);
+                    newList = await FornecedorController.findNameorEmail(searchText, 50);
                     const action = {
                         "type": "atualizarFornecedores",
                         "fornecedores": newList
@@ -79,6 +76,7 @@ export default function Fornecedores({ navigation, route }) {
     };
 
     const addFornecedores = async () => {
+        setPage(1);
         navigation.navigate('AddFornecedor');
     }
 
@@ -131,7 +129,9 @@ export default function Fornecedores({ navigation, route }) {
     function _renderitem ({ item }){
         return(
             <FornecedorCard 
-                item={item} 
+                name={item.name}
+                cnpj={item.cnpj}
+                id={item.id} 
                 visualizar={() => visualizar(item.id)} 
                 del={() => deleteFornecedor(item.id)} 
                 edit={() => { editFornecedor(item.id) }} 
@@ -163,8 +163,11 @@ export default function Fornecedores({ navigation, route }) {
             ) : (
                 <>
                     <FlatList
+                        ItemSeparatorComponent={SeparatorItem}
+                        maxToRenderPerBatch={50}
+                        initialNumToRender={50}
                         showsVerticalScrollIndicator={false}
-                        data={loadingList}
+                        data={state.fornecedores}
                         renderItem={_renderitem}
                         keyExtractor={(item) => item.id}
                     />
@@ -174,7 +177,7 @@ export default function Fornecedores({ navigation, route }) {
                                 <AntDesign name="pluscircleo" size={40} color="black" />
                             </TouchableOpacity>
                         </View>
-                        {/*
+                        
                         <View style={styles.pagesNext}>
                             {prevPage && 
                                 <>
@@ -193,7 +196,7 @@ export default function Fornecedores({ navigation, route }) {
                                     </TouchableOpacity>
                                 </View>
                             }
-                        </View>*/}
+                        </View>
                     </View>
                 </>
             )}

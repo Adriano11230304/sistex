@@ -28,7 +28,7 @@ export default function AddFornecedores({ navigation, route }) {
             ToastAndroid.show("Fornecedor adicionado com sucesso!", ToastAndroid.SHORT);
             const action = {
                 "type": "atualizarFornecedores",
-                "fornecedores": await FornecedorController.listAll(10, 0)
+                "fornecedores": await FornecedorController.listAll(1)
             }
             dispatch(action);
             setLoading(false);

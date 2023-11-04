@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
 import { useAuth } from '../../store/auth';
+import { SeparatorItem } from '../../components/SeparatorItem';
 
 export default function ContasPagar() {
     const { state, dispatch } = useAuth();
@@ -77,6 +78,9 @@ export default function ContasPagar() {
             ) : (
                 <>
                     <FlatList
+                        ItemSeparatorComponent={SeparatorItem}
+                        initialNumToRender={50}
+                        maxToRenderPerBatch={50}
                         showsVerticalScrollIndicator={false}
                         data={state.despesas}
                         renderItem={({ item }) => <Item item={item} />}
