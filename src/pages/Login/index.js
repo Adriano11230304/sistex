@@ -50,6 +50,19 @@ const Login = ({ navigation }) => {
     usersData();
   }, []);
 
+  function entrar(){
+    const user = {
+      "email": "teste@gmail.com",
+      "name": "José",
+      "verified_email": true,
+
+    }
+    dispatch({
+      "type": "signIn",
+        "user": user
+    })
+  }
+
   async function Sigin(){
     const users = await UserController.listAll();
     if(users.length == 0){
@@ -106,6 +119,9 @@ const Login = ({ navigation }) => {
                 <Image style={styles.image}
                   source={require('../../../assets/google.png')}
                 />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={entrar} style={styles.button}>
+                <Text>Entrar sem login</Text>
               </TouchableOpacity>
             </View>
           </>
