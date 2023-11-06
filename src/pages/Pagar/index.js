@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid, Image } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
 import PagarController from '../../controllers/PagarController';
@@ -9,6 +9,7 @@ import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-ico
 import LoaderSimple from '../../components/LoaderSimple';
 import { useAuth } from '../../store/auth';
 import { SeparatorItem } from '../../components/SeparatorItem';
+
 
 export default function ContasPagar() {
     const { state, dispatch } = useAuth();
@@ -24,15 +25,18 @@ export default function ContasPagar() {
     }, [])
 
     async function listDespesas(){
-        // const conta = await PagarController.add(5.56, "teste", 0, false, "aluguel", 1, Date.now(), new Date("2023-10-05T00:00:00").getTime(), false, new Date("2023-10-25T00:00:00").getTime())
+        // const conta = await PagarController.add(5.56, "teste", 0, false, '../../../assets/carrinho.png', 1, Date.now(), new Date("2023-10-05T00:00:00").getTime(), false, new Date("2023-10-25T00:00:00").getTime())
         dispatch({'type': 'loading'});
         const despesas = await PagarController.listAll(page);
+        let json;
+        const despesasFinal = [];
+
         dispatch({
             "type": "atualizarDespesas",
             "despesas": despesas
         })
 
-        console.log(state.despesas);
+        console.log("despesas", despesas);
 
         dispatch({'type': 'loadingfalse'})
     }
@@ -41,7 +45,7 @@ export default function ContasPagar() {
         <TouchableOpacity style={styles.itemList}>
             <View style={styles.list}>
                 <View>
-                    <AntDesign style={styles.iconeCategoria} name="shoppingcart" size={35} color="black" />
+                    <Text>{item.categoria}</Text>
                 </View>
                 <View style={styles.textListPagar}>
                     <Text style={styles.textList}>Ronaldo Munhoz</Text>

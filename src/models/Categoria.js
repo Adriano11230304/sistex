@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
+
 
 export async function saveCategorias(){
     const categorias = [
@@ -15,24 +14,8 @@ export async function saveCategorias(){
             
         }
     ]
-    try{
-        const jsonCategorias = JSON.stringify(categorias)
-        await AsyncStorage.setItem('categorias', jsonCategorias)
-    }catch(e){
-        console.log(e);
-    }
 }
 
 export async function getCategorias(){
-    try{
-        const value =  await AsyncStorage.getItem('categorias');
-        if(value != null){
-            return value;
-        }else{
-            return 'Não existem categorias salvas!';
-        }
-
-    }catch(e){
-        return e;
-    }
+    
 }

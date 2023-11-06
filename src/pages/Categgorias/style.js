@@ -5,4 +5,9 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    image: {
+        width: 50,
+        height: 50,
+        borderRadius: 28,
+    }
 });

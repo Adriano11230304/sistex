@@ -62,5 +62,11 @@ export const styles = StyleSheet.create({
         paddingLeft: '10%',
         width: 250,
         height: 65
+    },
+    image: {
+        width: 50,
+        height: 50,
+        borderRadius: 28,
     }
+
 });
