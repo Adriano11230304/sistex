@@ -26,6 +26,15 @@ class PagarController{
             return "despesa com esse id não encontrado!";
         }
     }
+
+    async remove(id) {
+        const pagardeleted = await Pagar.delete(id)
+        if (pagardeleted == 1) {
+            return "Conta deletada com sucesso!"
+        } else {
+            return "Conta com esse id não encontrado!";
+        }
+    }
 }
 
 export default new PagarController();

@@ -9,12 +9,14 @@ import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-ico
 import LoaderSimple from '../../components/LoaderSimple';
 import { useAuth } from '../../store/auth';
 import { SeparatorItem } from '../../components/SeparatorItem';
+import { categorias } from '../Categgorias/index'
 
 
 export default function ContasPagar() {
     const { state, dispatch } = useAuth();
     const [searchText, setSearchText] = useState("");
     const [page, setPage] = useState(1);
+    const [despesas, setDespesas] = useState();
 
 
     useEffect(() => {
@@ -25,15 +27,40 @@ export default function ContasPagar() {
     }, [])
 
     async function listDespesas(){
-        // const conta = await PagarController.add(5.56, "teste", 0, false, '../../../assets/carrinho.png', 1, Date.now(), new Date("2023-10-05T00:00:00").getTime(), false, new Date("2023-10-25T00:00:00").getTime())
+        // const conta = await PagarController.add(5.56, "teste", 0, false, 'supermercado', 1, Date.now(), new Date("2023-10-05T00:00:00").getTime(), false, new Date("2023-10-25T00:00:00").getTime())
         dispatch({'type': 'loading'});
+        // const del = await PagarController.remove(8);
+        // console.log(del);
         const despesas = await PagarController.listAll(page);
+        const despesasTotais = [];
         let json;
-        const despesasFinal = [];
+        despesas.map(async des => {
+            const forn = await FornecedorController.findById(des.fornecedor_id);
+            const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
+            let dataPagamento = "";
+            if(des.data_pagamento){
+                dataPagamento = new Date(des.data_pagamento).toLocaleString().substring(0, 10);
+            }else{
+                dataPagamento = "";
+            }
+            
+            json = {
+                "id": des.id,
+                "valor": des.valor,
+                "categoria": des.categoria,
+                "fornecedor_id": des.fornecedor_id,
+                "fornecedor": forn.name,
+                "data_entrada": data,
+                "data_pagamento": dataPagamento
+            }
+            console.log(json);
+            despesasTotais.push(json);
+        })
+        
 
         dispatch({
             "type": "atualizarDespesas",
-            "despesas": despesas
+            "despesas": despesasTotais
         })
 
         console.log("despesas", despesas);
@@ -44,12 +71,14 @@ export default function ContasPagar() {
     const Item = ({item}) => (
         <TouchableOpacity style={styles.itemList}>
             <View style={styles.list}>
-                <View>
-                    <Text>{item.categoria}</Text>
+                <View style={styles.iconeCategoria}>
+                    <Text style={styles.textCategoria}>{item.data_entrada}</Text>
+                    <Text style={styles.textCategoria}>{item.categoria}</Text>
                 </View>
                 <View style={styles.textListPagar}>
-                    <Text style={styles.textList}>Ronaldo Munhoz</Text>
+                    <Text style={styles.textList}>{item.fornecedor}</Text>
                     <Text style={styles.textList}>R$ {item.valor}</Text>
+                    <Text>{item.data_pagamento}</Text>
                 </View>
             </View>
             <View>

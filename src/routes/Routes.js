@@ -9,6 +9,7 @@ import AddFornecedores from '../pages/Fornecedores/add';
 import Fornecedores from '../pages/Fornecedores';
 import VisFornecedor from '../pages/Fornecedores/visualizar';
 import EditFornecedores from '../pages/Fornecedores/editar';
+import ContasPagar from '../pages/Pagar';
 
 
 const Stack = createNativeStackNavigator();
@@ -24,10 +25,10 @@ export const FornecedorStack = () => {
   );
 };
 
-/*export const PagarStack = () => {
+export const PagarStack = () => {
   return (
     <Stack.Navigator initialRouteName='PagarStack' screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="FornecedoresStack" component={Fornecedores} />
+      <Stack.Screen name="PagarStack" component={ContasPagar} />
     </Stack.Navigator>
   );
-};*/
+};

@@ -52,14 +52,24 @@ export const styles = StyleSheet.create({
         borderBottomColor: 'gray'
     },
     iconeCategoria: {
-        paddingLeft: '5%'
+        marginTop: '5%',
+        paddingLeft: '2%',
+        paddingRight: '2%',
+        borderRadius: 30,
+        height: 45,
+        width: 125,
     },
+    textCategoria: {
+        fontSize: 12,
+        alignSelf: 'center',
+        verticalAlign: 'middle'
+    },  
     buttonText: {
         paddingRight: '5%',
         paddingTop: '2%'
     },
     textListPagar:{
-        paddingLeft: '10%',
+        paddingLeft: '5%',
         width: 250,
         height: 65
     },
