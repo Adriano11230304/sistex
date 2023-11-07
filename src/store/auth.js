@@ -6,20 +6,15 @@ function authReducer(state, action) {
     switch (action.type) {
         case 'signIn': {
             return { ...state, signed: true, user: action.user, fornecedores: null };
-        }
-        case 'signOut': {
+        }case 'signOut': {
             return { ...state, signed: false, user: null, fornecedores: null };
-        }
-        case 'atualizarFornecedores': {
+        }case 'atualizarFornecedores': {
             return {...state, fornecedores: action.fornecedores}
-        }
-        case 'atualizarDespesas': {
+        }case 'atualizarDespesas': {
             return{...state, despesas: action.despesas}
-        }
-        case 'loading':{
+        }case 'loading':{
             return {...state, loading: true}
-        }
-        case 'loadingfalse':{
+        }case 'loadingfalse':{
             return {...state, loading: false}
         }default: {
             throw new Error(`action.type não tratada: ${action.type}`);

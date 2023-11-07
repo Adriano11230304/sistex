@@ -31,7 +31,7 @@ class Pagar {
     }
 
 
-    static findAll(page) {
+    static findAll(page, datainicio, datafim) {
         if (page < 1) {
             const vazio = []
             return vazio;
@@ -41,8 +41,8 @@ class Pagar {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM pagar;",
-                    [],
+                    "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ?;",
+                    [datainicio, datafim],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
                 );

@@ -1,8 +1,8 @@
 import Pagar from '../models/Pagar';
 
 class PagarController{
-    async listAll(page){
-        const contas = Pagar.findAll(page);
+    async listAll(page, datainicio, datafim){
+        const contas = Pagar.findAll(page, datainicio, datafim);
         return contas;
     }
 

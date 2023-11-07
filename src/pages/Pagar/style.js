@@ -74,9 +74,41 @@ export const styles = StyleSheet.create({
         height: 65
     },
     image: {
-        width: 50,
-        height: 50,
+        width: 12,
+        height: 12,
+        marginLeft: 7
+    },
+    select: {
+        justifyContent: 'center',
+        flexDirection: 'row',
+        paddingLeft: '5%',
+        paddingTop: '1%',
+    },
+    checkbox: {
+        flexDirection: 'row',
+        marginTop: 5,
+        marginRight: 5
+    },
+    checkboxs: {
+        width: 200
+    },
+    selectHome:{
+        paddingTop: '7%'
+    },
+    checkbox3: {
+        marginLeft: 32
+    },
+    checkbox2: {
+        marginLeft: 3
+    },
+    checkbox1: {
+        marginLeft: 38
+    },
+    selected: {
         borderRadius: 28,
+        height: 30,
+        width: 120,
+        paddingTop: 2
     }
 
 });
