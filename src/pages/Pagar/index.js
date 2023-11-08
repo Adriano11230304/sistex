@@ -33,27 +33,9 @@ export default function ContasPagar() {
     const [searchText, setSearchText] = useState("");
     const [page, setPage] = useState(1);
 
-
-    useEffect(() => {
-        // console.log(conta);
-        // const testando = await Pagar.findById(1);
-        // console.log(new Date(testando[0].data_pagamento).toLocaleString());
-        listDespesas();
-    }, [selected])
-
-    async function listDespesas(){
-        // const conta = await PagarController.add(5.56, "teste", 0, false, 'supermercado', 18, Date.now(), new Date("2023-10-05T00:00:00").getTime(), true, new Date("2023-10-25T00:00:00").getTime())
-        dispatch({'type': 'loading'});
-        // const del = await PagarController.remove(8);
-        // console.log(del);
-        // CRIAR TIMESTAMP DE INICIO E FIM
-
+    async function atualizarDespesas(){
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
-        console.log(datafim);
-        const teste = new Date("2023-10-01T00:00:00").getTime();
-        const teste1 = new Date("2023-10-31T00:00:00").getTime();
-        console.log(teste1);
         const despesas = await PagarController.listAll(page, datainicio, datafim);
         console.log("despesas", despesas);
         const despesasTotais = [];
@@ -62,12 +44,12 @@ export default function ContasPagar() {
             const forn = await FornecedorController.findById(des.fornecedor_id);
             const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
             let dataPagamento = "";
-            if(des.data_pagamento){
+            if (des.data_pagamento) {
                 dataPagamento = new Date(des.data_pagamento).toLocaleString().substring(0, 10);
-            }else{
+            } else {
                 dataPagamento = "";
             }
-            
+
             json = {
                 "id": des.id,
                 "valor": des.valor,
@@ -81,15 +63,31 @@ export default function ContasPagar() {
 
             despesasTotais.push(json);
         })
-        
+
 
         dispatch({
             "type": "atualizarDespesas",
             "despesas": despesasTotais
         })
+    }
 
 
+    useEffect(() => {
+        listDespesas();
+    }, [selected])
+
+    async function listDespesas(){
+        // const conta = await PagarController.add(5.56, "teste", 0, false, 'supermercado', 18, Date.now(), new Date("2023-10-05T00:00:00").getTime(), true, new Date("2023-10-28T00:00:00").getTime())
+        dispatch({'type': 'loading'});
+        await atualizarDespesas();
         dispatch({'type': 'loadingfalse'})
+    }
+
+    async function removeDespesa(id){
+        const desp = await PagarController.remove(id);
+        dispatch({ 'type': 'loading' });
+        await atualizarDespesas();
+        dispatch({ 'type': 'loadingfalse' })
     }
 
     const Item = ({item}) => (
@@ -116,7 +114,7 @@ export default function ContasPagar() {
                     </>
                 )}
                 <TouchableOpacity><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
-                <TouchableOpacity><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => {removeDespesa(item.id)}}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
             </View>
         </TouchableOpacity>
     );
