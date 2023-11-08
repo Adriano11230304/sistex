@@ -47,14 +47,14 @@ export default function ContasPagar() {
         // const del = await PagarController.remove(8);
         // console.log(del);
         // CRIAR TIMESTAMP DE INICIO E FIM
-        const datainicio = "01/" + selected + "T00:00:00";
-        const datafim = "31/" + selected+"T00:00:00";
-        console.log(datainicio);
+
+        const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
+        const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
         console.log(datafim);
         const teste = new Date("2023-10-01T00:00:00").getTime();
         const teste1 = new Date("2023-10-31T00:00:00").getTime();
         console.log(teste1);
-        const despesas = await PagarController.listAll(page, teste, teste1);
+        const despesas = await PagarController.listAll(page, datainicio, datafim);
         console.log("despesas", despesas);
         const despesasTotais = [];
         let json;
