@@ -113,6 +113,27 @@ export const styles = StyleSheet.create({
         height: 30,
         width: 120,
         paddingTop: 2
-    }
-
+    },
+    inputadd: {
+        fontSize: 18,
+        paddingRight: '5%',
+        paddingLeft: '5%',
+        borderRadius: 10,
+        borderWidth: 1,
+        marginRight: '5%',
+        paddingTop: '2%'
+    },
+    buttons: {
+        flexDirection: 'row-reverse'
+    },
+    pagesNext: {
+        flexDirection: 'row',
+        paddingBottom: '3%',
+        paddingRight: '40%'
+    },
+    buttonAdd: {
+        paddingBottom: '3%',
+        alignSelf: 'flex-end',
+        paddingEnd: '7%'
+    },
 });

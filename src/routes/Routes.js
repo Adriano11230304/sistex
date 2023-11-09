@@ -12,6 +12,7 @@ import VisFornecedor from '../pages/Fornecedores/visualizar';
 import EditFornecedores from '../pages/Fornecedores/editar';
 import ContasPagar from '../pages/Pagar';
 import AddCategoria from '../pages/Categorias/add';
+import AddDespesas from '../pages/Pagar/add';
 
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +32,7 @@ export const PagarStack = () => {
   return (
     <Stack.Navigator initialRouteName='PagarStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PagarStack" component={ContasPagar} />
+      <Stack.Screen name="AddDespesa" component={AddDespesas}/>
     </Stack.Navigator>
   );
 };

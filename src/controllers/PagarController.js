@@ -1,8 +1,8 @@
 import Pagar from '../models/Pagar';
 
 class PagarController{
-    async listAll(page, datainicio, datafim){
-        const contas = Pagar.findAll(page, datainicio, datafim);
+    async listAll(page, datainicio, datafim, fixa = false, variavel = false, pagas = false, naoPagas = false){
+        const contas = Pagar.findAll(page, datainicio, datafim, fixa, variavel, pagas, naoPagas);
         return contas;
     }
 
@@ -34,6 +34,12 @@ class PagarController{
         } else {
             return "Conta com esse id não encontrado!";
         }
+    }
+
+    async findFornecedororCategoria(text, limit, datainicio, datafim){
+        const search = `%${text}%`
+        const despesas = Pagar.findFornecedororCategoria(search, limit, datainicio, datafim);
+        return despesas;
     }
 }
 

@@ -12,11 +12,12 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import CategoriaController from '../../controllers/CategoriaController';
+import Vazio from '../../components/Vazio';
 
 
 
 
-export default function ContasPagar() {
+export default function ContasPagar({ navigation, route }) {
     const date = Date.now();
     const dataatual = new Date(date).toLocaleString().substring(3, 10);
     const countries = ["01/2023", "02/2023", "03/2023", "04/2023", "05/2023", "06/2023", "07/2023", "08/2023", "09/2023", "10/2023", "11/2023", "12/2023", "01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024", "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024", "01/2025", "02/2025", "03/2025", "04/2025", "05/2025", "06/2025", "07/2025", "08/2025", "09/2025", "10/2025", "11/2025", "12/2025"]
@@ -34,15 +35,13 @@ export default function ContasPagar() {
     const { state, dispatch } = useAuth();
     const [searchText, setSearchText] = useState("");
     const [page, setPage] = useState(1);
+    const [prevPage, setPrevPage] = useState(false);
+    const [nexPage, setNexPage] = useState(false);
 
-    async function atualizarDespesas(){
-        const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-        const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
-        const despesas = await PagarController.listAll(page, datainicio, datafim);
-        console.log("despesas", despesas);
+    async function despTodosDados(despesas){
         const despesasTotais = [];
         let json;
-        despesas.map(async des => {
+        for(des of despesas){
             const forn = await FornecedorController.findById(des.fornecedor_id);
             const categoria = await CategoriaController.findById(des.categoria_id);
             const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
@@ -66,26 +65,77 @@ export default function ContasPagar() {
             }
 
             despesasTotais.push(json);
-        })
+        }
 
+        return despesasTotais;
+    }
+
+    async function atualizarDespesas(){
+        dispatch({ 'type': 'loading' });
+        const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
+        const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+        const despesas = await PagarController.listAll(page, datainicio, datafim, fixa, variavel, pagas, naoPagas);
+        const despNext = await PagarController.listAll(page + 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
+        const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
+        if (despNext.length > 0) {
+            setNexPage(true);
+        } else {
+            setNexPage(false);
+        }
+
+        if (despPrev.length > 0) {
+            setPrevPage(true);
+        } else {
+            setPrevPage(false);
+        }
 
         dispatch({
             "type": "atualizarDespesas",
-            "despesas": despesasTotais
+            "despesas": await despTodosDados(despesas)
         })
+
+        dispatch({ 'type': 'loadingfalse' })
     }
 
 
     useEffect(() => {
         listDespesas();
-    }, [selected])
+    }, [selected, fixa, pagas, naoPagas, variavel, page])
+    
+    useEffect(() => {
+        handleOrderClick();
+        console.log("searchText", searchText);
+    }, [searchText])
 
     async function listDespesas(){
-        // const conta = await PagarController.add(5.56, "teste", 0, false, 1, 1, Date.now(), new Date("2023-11-05T00:00:00").getTime(), true, new Date("2023-11-28T00:00:00").getTime())
-        // console.log(conta);
-        dispatch({'type': 'loading'});
-        await atualizarDespesas();
-        dispatch({'type': 'loadingfalse'})
+        if(searchText == ""){
+            await atualizarDespesas();
+        }
+    }
+
+    async function handleOrderClick(){
+        if (searchText != "") {
+            console.log("entrou");
+            dispatch({ "type": "loading" })
+            const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
+            const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+            let newList = null;
+            newList = await PagarController.findFornecedororCategoria(searchText, 50, datainicio, datafim);
+            const despesasTotais = await despTodosDados(newList);
+            const action = {
+                "type": "atualizarDespesas",
+                "despesas": despesasTotais
+            }
+
+            dispatch(action);
+            setNexPage(false);
+            setPrevPage(false);
+            dispatch({ "type": "loadingfalse" })
+        }else{
+            console.log("entrou1");
+            await listDespesas();
+        }
+        console.log('search');
     }
 
     async function removeDespesa(id){
@@ -95,12 +145,25 @@ export default function ContasPagar() {
         dispatch({ 'type': 'loadingfalse' })
     }
 
+    async function nextPage(){
+        setPage(page + 1);
+    }
+
+    async function previousPage(){
+        setPage(page - 1);
+    }
+
+    async function addDespesa(){
+        navigation.navigate("AddDespesa");
+    }
+
     const Item = ({item}) => (
         <TouchableOpacity style={styles.itemList}>
             <View style={styles.list}>
                 <View style={styles.iconeCategoria}>
                     <Text style={styles.textCategoria}>{item.data_entrada}</Text>
                     <Text style={styles.textCategoria}>{item.categoria}</Text>
+                    <Text style={styles.textCategoria}>Despesa {item.fixa ? "fixa" : "variável"}</Text>
                 </View>
                 <View style={styles.textListPagar}>
                     <Text style={styles.textList}>{item.fornecedor}</Text>
@@ -189,7 +252,7 @@ export default function ContasPagar() {
                     placeholder="Pesquise pelo fornecedor ou categoria"
                     placeholderTextColor="#888"
                     value={searchText}
-                    onChangeText={(t) => setText(t)}
+                    onChangeText={(t) => setSearchText(t)}
                 />
                 <FontAwesome name="search" size={24} color="black" />
             </View>
@@ -205,13 +268,14 @@ export default function ContasPagar() {
                         maxToRenderPerBatch={50}
                         showsVerticalScrollIndicator={false}
                         data={state.despesas}
+                        ListEmptyComponent={<Vazio text={"Nenhuma despesa encontrada!"}/>}
                         renderItem={({ item }) => <Item item={item} />}
                         keyExtractor={(item) => item.id}
                         
                     />
-                    {/*<View style={styles.buttons}>
+                    <View style={styles.buttons}>
                         <View style={styles.buttonAdd}>
-                            <TouchableOpacity onPress={addFornecedores}>
+                            <TouchableOpacity onPress={addDespesa}>
                                 <AntDesign name="pluscircleo" size={50} color="black" />
                             </TouchableOpacity>
                         </View>
@@ -234,7 +298,7 @@ export default function ContasPagar() {
                                 </View>
                             }
                         </View>
-                        </View>*/}
+                        </View>
                 </>
             )}
 

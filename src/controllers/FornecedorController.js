@@ -32,7 +32,6 @@ class FornecedorController {
     }
 
     async findById(id) {
-        console.log(id);
         const fornecedor = await Fornecedor.findById(id);
         if (fornecedor.length > 0) {
             return fornecedor[0];

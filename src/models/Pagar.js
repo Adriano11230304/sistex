@@ -31,7 +31,7 @@ class Pagar {
     }
 
 
-    static findAll(page, datainicio, datafim) {
+    static findAll(page, datainicio, datafim, fixa = false, variavel = false, pagas = false, naoPagas = false) {
         if (page < 1) {
             const vazio = []
             return vazio;
@@ -40,12 +40,42 @@ class Pagar {
         const limit = 25;
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
-                tx.executeSql(
-                    "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ?;",
-                    [datainicio, datafim],
-                    (_, { rows }) => resolve(rows._array),
-                    (_, error) => reject(error)
-                );
+                
+                if (fixa || variavel) {
+                    if(pagas || naoPagas){
+                        tx.executeSql(
+                            "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND fixa == ? AND pago == ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
+                            [datainicio, datafim, fixa, pagas, limit, offset],
+                            (_, { rows }) => resolve(rows._array),
+                            (_, error) => reject(error)
+                        );
+                    }else{
+                        tx.executeSql(
+                            "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND fixa == ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
+                            [datainicio, datafim, fixa, limit, offset],
+                            (_, { rows }) => resolve(rows._array),
+                            (_, error) => reject(error)
+                        );
+                    }
+                }else{
+                    if (pagas || naoPagas) {
+                        tx.executeSql(
+                            "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND pago == ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
+                            [datainicio, datafim, pagas, limit, offset],
+                            (_, { rows }) => resolve(rows._array),
+                            (_, error) => reject(error)
+                        );
+                    } else {
+                        tx.executeSql(
+                            "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
+                            [datainicio, datafim, limit, offset],
+                            (_, { rows }) => resolve(rows._array),
+                            (_, error) => reject(error)
+                        );
+                    }
+                }
+                
+                
             });
         });
     }
@@ -93,6 +123,20 @@ class Pagar {
             })
         })
     };
+
+    static findFornecedororCategoria(text, datainicio, datafim, limit){
+        return new Promise((resolve, reject) => {
+            console.log(text);
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id WHERE pagar.data_entrada >= ? and pagar.data_entrada <= ? AND fornecedores.name LIKE ? ORDER BY pagar.data_entrada asc LIMIT ?",
+                    [datainicio, datafim, text, limit],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
 }
 
 
