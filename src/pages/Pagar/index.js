@@ -11,6 +11,7 @@ import { useAuth } from '../../store/auth';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
+import CategoriaController from '../../controllers/CategoriaController';
 
 
 
@@ -18,7 +19,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 export default function ContasPagar() {
     const date = Date.now();
     const dataatual = new Date(date).toLocaleString().substring(3, 10);
-    const countries = ["01/2023", "02/2023", "03/2023", "04/2023", "05/2023", "06/2023", "07/2023", "08/2023", "09/2023", "10/2023", "11/2023", "12/2023", "01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024", "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024", "01/2025", "02/2025", "03/2025", "04/2025", "05/2025", "06/2025", "07/2025", "08/2025", "09/2025", "10/2025", "11/2025", "12/2025", "01/2026", "02/2026", "03/2026", "04/2026", "05/2026", "06/2026", "07/2026", "08/2026", "09/2026", "10/2026", "11/2026", "12/2026", "01/2027", "02/2027", "03/2027", "04/2027", "05/2027", "06/2027", "07/2027", "08/2027", "09/2027", "10/2027", "11/2027", "12/2027", "01/2028", "02/2028", "03/2028", "04/2028", "05/2028", "06/2028", "07/2028", "08/2028", "09/2028", "10/2028", "11/2028", "12/2028", "01/2029", "02/2029", "03/2029", "04/2029", "05/2029", "06/2029", "07/2029", "08/2029", "09/2029", "10/2029", "11/2029", "12/2029", "01/2030", "02/2030", "03/2030", "04/2030", "05/2030", "06/2030", "07/2030", "08/2030", "09/2030", "10/2030", "11/2030", "12/2030"]
+    const countries = ["01/2023", "02/2023", "03/2023", "04/2023", "05/2023", "06/2023", "07/2023", "08/2023", "09/2023", "10/2023", "11/2023", "12/2023", "01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024", "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024", "01/2025", "02/2025", "03/2025", "04/2025", "05/2025", "06/2025", "07/2025", "08/2025", "09/2025", "10/2025", "11/2025", "12/2025"]
     let defaultValue;
     countries.map(count => {
         if (dataatual == count) {
@@ -27,6 +28,7 @@ export default function ContasPagar() {
     })
     const [selected, setSelected] = useState(dataatual);
     const [fixa, setFixa] = useState(false);
+    const [variavel, setVariavel] = useState(false);
     const [pagas, setPagas] = useState(false);
     const [naoPagas, setNaoPagas] = useState(false);
     const { state, dispatch } = useAuth();
@@ -42,6 +44,7 @@ export default function ContasPagar() {
         let json;
         despesas.map(async des => {
             const forn = await FornecedorController.findById(des.fornecedor_id);
+            const categoria = await CategoriaController.findById(des.categoria_id);
             const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
             let dataPagamento = "";
             if (des.data_pagamento) {
@@ -53,7 +56,8 @@ export default function ContasPagar() {
             json = {
                 "id": des.id,
                 "valor": des.valor,
-                "categoria": des.categoria,
+                "categoria_id": des.categoria_id,
+                "categoria": categoria.titulo,
                 "fornecedor_id": des.fornecedor_id,
                 "fornecedor": forn.name,
                 "data_entrada": data,
@@ -77,7 +81,8 @@ export default function ContasPagar() {
     }, [selected])
 
     async function listDespesas(){
-        // const conta = await PagarController.add(5.56, "teste", 0, false, 'supermercado', 18, Date.now(), new Date("2023-10-05T00:00:00").getTime(), true, new Date("2023-10-28T00:00:00").getTime())
+        // const conta = await PagarController.add(5.56, "teste", 0, false, 1, 1, Date.now(), new Date("2023-11-05T00:00:00").getTime(), true, new Date("2023-11-28T00:00:00").getTime())
+        // console.log(conta);
         dispatch({'type': 'loading'});
         await atualizarDespesas();
         dispatch({'type': 'loadingfalse'})
@@ -127,33 +132,46 @@ export default function ContasPagar() {
             </View>
             <View style={styles.select}>
                 <View style={styles.checkboxs}>
-                <View style={styles.checkbox}>
-                    <Text>Despesas Fixas</Text>
-                    <Checkbox
-                        style={styles.checkbox1}
-                        value={fixa}
-                        onValueChange={setFixa}
-                        color={fixa ? '#4630EB' : undefined}
-                    />
-                </View>
-                <View style={styles.checkbox}>
-                    <Text>Despesas Não pagas</Text>
-                    <Checkbox
-                            style={styles.checkbox2}
-                        value={naoPagas}
-                        onValueChange={setNaoPagas}
-                        color={naoPagas ? '#4630EB' : undefined}
-                    />
-                </View>
-                <View style={styles.checkbox}>
-                    <Text>Despesas Pagas</Text>
-                    <Checkbox
-                        style={styles.checkbox3}
-                        value={pagas}
-                        onValueChange={setPagas}
-                        color={pagas ? '#4630EB' : undefined}
-                    />
-                </View>
+                    <View>
+                        <View style={styles.checkbox}>
+                            <Text>Fixas</Text>
+                            <Checkbox
+                                style={styles.checkbox1}
+                                value={fixa}
+                                onValueChange={setFixa}
+                                color={fixa ? '#4630EB' : undefined}
+                            />
+                        </View>
+                        <View style={styles.checkbox}>
+                            <Text>Variáveis</Text>
+                            <Checkbox
+                                style={styles.checkbox4}
+                                value={variavel}
+                                onValueChange={setVariavel}
+                                color={variavel ? '#4630EB' : undefined}
+                            />
+                        </View>
+                    </View>
+                    <View>
+                        <View style={styles.checkbox}>
+                            <Text>Não pagas</Text>
+                            <Checkbox
+                                style={styles.checkbox2}
+                                value={naoPagas}
+                                onValueChange={setNaoPagas}
+                                color={naoPagas ? '#4630EB' : undefined}
+                            />
+                        </View>
+                        <View style={styles.checkbox}>
+                            <Text>Pagas</Text>
+                            <Checkbox
+                                style={styles.checkbox3}
+                                value={pagas}
+                                onValueChange={setPagas}
+                                color={pagas ? '#4630EB' : undefined}
+                            />
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.selectHome}>
                     <SelectDropdown 

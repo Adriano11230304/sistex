@@ -14,9 +14,7 @@ import Clientes from '../pages/Clientes';
 import Fornecedores from '../pages/Fornecedores';
 import CredenciaisGoogle from '../pages/CredenciaisGoogle';
 import Backups from '../pages/Backups';
-import Categorias from '../pages/Categgorias';
-import { FornecedorStack } from './Routes';
-import { PagarStack } from './Routes';
+import { FornecedorStack, PagarStack, CategoriaStack } from './Routes';
 
 const Drawer = createDrawerNavigator();
 
@@ -43,7 +41,7 @@ function DrawerRoutes({ navigation }) {
                     <Drawer.Screen name="Fornecedores" component={FornecedorStack} options={{ drawerIcon: ({ color }) => (<Entypo name="v-card" size={24} color={color} />), }} />
                     <Drawer.Screen name="Credenciais Google" component={CredenciaisGoogle} options={{ drawerIcon: ({ color }) => (<AntDesign name="google" size={24} color={color} />), }} />
                     <Drawer.Screen name="Histórico de Backups" component={Backups} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="backup" size={24} color={color} />), }} />
-                    <Drawer.Screen name="Categorias" component={Categorias} options={{ drawerIcon: ({ color }) => (<Octicons name="bell" size={24} color={color} />), }} />
+                    <Drawer.Screen name="Categorias" component={CategoriaStack} options={{ drawerIcon: ({ color }) => (<Octicons name="bell" size={24} color={color} />), }} />
                     <Drawer.Screen name="Notifications" component={Notifications} options={{ drawerIcon: ({ color }) => (<Octicons name="bell" size={24} color={color} />), }} />
                 </>
             ) : (

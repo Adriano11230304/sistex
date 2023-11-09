@@ -8,9 +8,6 @@ db.transaction((tx) => {
         "CREATE TABLE IF NOT EXISTS fornecedores (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, cnpj TEXT);"
     );
     tx.executeSql(
-        "DROP TABLE pagar;"
-    );
-    tx.executeSql(
         "CREATE TABLE IF NOT EXISTS categorias (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT);"
     );
     tx.executeSql(

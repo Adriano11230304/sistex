@@ -12,7 +12,6 @@ class Fornecedor {
         this.email = email;
         this.cnpj = cnpj;
         this.id = id;
-        console.log("constructor fornecedor");
     }
 
 

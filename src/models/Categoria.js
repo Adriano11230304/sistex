@@ -1,48 +1,26 @@
 import db from './configDatabase'
 
-class Pagar {
-
+class Categoria{
     id;
-    valor;
-    observacoes;
-    parcelas;
-    fixa;
-    categoria_id;
-    fornecedor_id;
-    created_at;
-    data_entrada;
-    pago;
-    data_pagamento;
+    titulo;
 
-    constructor(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, id = 1) {
+    constructor(titulo, id = 1){
         this.id = id;
-        this.valor = valor;
-        this.observacoes = observacoes;
-        this.parcelas = parcelas;
-        this.fixa = fixa;
-        this.categoria_id = categoria_id;
-        this.fornecedor_id = fornecedor_id;
-        this.created_at = created_at;
-        this.data_entrada = data_entrada;
-        this.pago = pago;
-        this.data_pagamento = data_pagamento;
-
-        console.log("constructor pagar");
+        this.titulo = titulo;
     }
 
-
-    static findAll(page, datainicio, datafim) {
+    static findAll(page){
         if (page < 1) {
             const vazio = []
             return vazio;
         }
-        const offset = (page - 1) * 25;
-        const limit = 25;
+        const offset = (page - 1) * 30;
+        const limit = 30;
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ?;",
-                    [datainicio, datafim],
+                    "SELECT * FROM categorias ORDER BY titulo asc LIMIT ? OFFSET ?;",
+                    [limit, offset],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
                 );
@@ -54,7 +32,7 @@ class Pagar {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM pagar WHERE id = ?;",
+                    "SELECT * FROM categorias WHERE id = ?;",
                     [id],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
@@ -67,8 +45,8 @@ class Pagar {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO pagar (valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                    [this.valor, this.observacoes, this.parcelas, this.fixa, this.categoria_id, this.fornecedor_id, this.created_at, this.data_entrada, this.pago, this.data_pagamento],
+                    "INSERT INTO categorias (titulo) values (?);",
+                    [this.titulo],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));
@@ -79,21 +57,36 @@ class Pagar {
         });
     }
 
-    static delete(id) {
+    update() {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "DELETE FROM pagar WHERE id=?;",
+                    "UPDATE categorias SET titulo = ? WHERE id = ?;",
+                    [this.name, this.email, this.cnpj, this.id],
+                    (_, { rowsAffected, insertId }) => {
+                        if (rowsAffected > 0) resolve(insertId);
+                        else reject("Error inserting obj: " + JSON.stringify(obj));
+                    },
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
+    static delete(id){
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "DELETE FROM categorias WHERE id = ?;",
                     [id],
                     (_, { rowsAffected }) => {
                         resolve(rowsAffected);
                     },
                     (_, error) => reject(error)
-                );
+                )
             })
         })
-    };
+    }
 }
 
-
-export default Pagar;
+export default Categoria;

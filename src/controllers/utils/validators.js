@@ -7,10 +7,10 @@ let fornecedorSchema = Yup.object().shape({
 
 export async function fornecedorValidate(schema){
     try{
-        const teste = await fornecedorSchema.validate(schema, {abortEarly: true});
+        const forn = await fornecedorSchema.validate(schema, {abortEarly: true});
 
         const valid = {
-            "validate": teste,
+            "validate": forn,
             "isValid": true 
         }
         return valid;
@@ -22,6 +22,29 @@ export async function fornecedorValidate(schema){
         return valid;
     }
     
+}
+
+let categoriaSchema = Yup.object().shape({
+    titulo: Yup.string().required("Nome é obrigatório!")
+});
+
+export async function categoriaValidate(schema) {
+    try {
+        const cat = await categoriaSchema.validate(schema, { abortEarly: true });
+
+        const valid = {
+            "validate": cat,
+            "isValid": true
+        }
+        return valid;
+    } catch (e) {
+        const valid = {
+            "validate": e.message,
+            "isValid": false
+        }
+        return valid;
+    }
+
 } 
 
 

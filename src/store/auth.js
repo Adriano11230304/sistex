@@ -12,10 +12,13 @@ function authReducer(state, action) {
             return {...state, fornecedores: action.fornecedores}
         }case 'atualizarDespesas': {
             return{...state, despesas: action.despesas}
+        } case 'atualizarCategorias': {
+            return { ...state, categorias: action.categorias }
         }case 'loading':{
             return {...state, loading: true}
         }case 'loadingfalse':{
             return {...state, loading: false}
+        
         }default: {
             throw new Error(`action.type não tratada: ${action.type}`);
         }
@@ -27,7 +30,8 @@ const initialState = {
     user: null,
     fornecedores: null,
     loading: false,
-    despesas: null
+    despesas: null,
+    categorias: null
 }
 
 function AuthProvider({ children }) {

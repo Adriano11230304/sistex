@@ -81,7 +81,6 @@ export const styles = StyleSheet.create({
     select: {
         justifyContent: 'center',
         flexDirection: 'row',
-        paddingLeft: '5%',
         paddingTop: '1%',
     },
     checkbox: {
@@ -90,19 +89,24 @@ export const styles = StyleSheet.create({
         marginRight: 5
     },
     checkboxs: {
-        width: 200
+        width: 200,
+        flexDirection: 'row'
     },
     selectHome:{
-        paddingTop: '7%'
+        paddingTop: '7%',
+        paddingLeft: '5%'
     },
     checkbox3: {
-        marginLeft: 32
+        marginLeft: 35
     },
     checkbox2: {
-        marginLeft: 3
+        marginLeft: 6
     },
     checkbox1: {
-        marginLeft: 38
+        marginLeft: 41
+    },
+    checkbox4: {
+        marginLeft: 16
     },
     selected: {
         borderRadius: 28,

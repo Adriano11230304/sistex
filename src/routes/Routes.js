@@ -7,9 +7,11 @@ import { SafeAreaView, View, Text, TextInput, TouchableOpacity } from 'react-nat
 import { useAuth } from '../store/auth';
 import AddFornecedores from '../pages/Fornecedores/add';
 import Fornecedores from '../pages/Fornecedores';
+import Categorias from '../pages/Categorias';
 import VisFornecedor from '../pages/Fornecedores/visualizar';
 import EditFornecedores from '../pages/Fornecedores/editar';
 import ContasPagar from '../pages/Pagar';
+import AddCategoria from '../pages/Categorias/add';
 
 
 const Stack = createNativeStackNavigator();
@@ -29,6 +31,15 @@ export const PagarStack = () => {
   return (
     <Stack.Navigator initialRouteName='PagarStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PagarStack" component={ContasPagar} />
+    </Stack.Navigator>
+  );
+};
+
+export const CategoriaStack = () => {
+  return (
+    <Stack.Navigator initialRouteName='CategoriasStack' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="CategoriasStack" component={Categorias} />
+      <Stack.Screen name="AddCategoria" component={AddCategoria} />
     </Stack.Navigator>
   );
 };
