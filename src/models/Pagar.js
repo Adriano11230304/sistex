@@ -31,7 +31,7 @@ class Pagar {
     }
 
 
-    static findAll(page, datainicio, datafim, fixa = false, variavel = false, pagas = false, naoPagas = false) {
+    static findAll(page, datainicio, datafim, pagas = false, naoPagas = false) {
         if (page < 1) {
             const vazio = []
             return vazio;
@@ -40,44 +40,55 @@ class Pagar {
         const limit = 25;
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
-                
-                if (fixa || variavel) {
-                    if(pagas || naoPagas){
-                        tx.executeSql(
-                            "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND fixa == ? AND pago == ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
-                            [datainicio, datafim, fixa, pagas, limit, offset],
-                            (_, { rows }) => resolve(rows._array),
-                            (_, error) => reject(error)
-                        );
-                    }else{
-                        tx.executeSql(
-                            "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND fixa == ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
-                            [datainicio, datafim, fixa, limit, offset],
-                            (_, { rows }) => resolve(rows._array),
-                            (_, error) => reject(error)
-                        );
-                    }
-                }else{
-                    if (pagas || naoPagas) {
-                        tx.executeSql(
-                            "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND pago == ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
-                            [datainicio, datafim, pagas, limit, offset],
-                            (_, { rows }) => resolve(rows._array),
-                            (_, error) => reject(error)
-                        );
-                    } else {
-                        tx.executeSql(
-                            "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
-                            [datainicio, datafim, limit, offset],
-                            (_, { rows }) => resolve(rows._array),
-                            (_, error) => reject(error)
-                        );
-                    }
+                if (pagas || naoPagas) {
+                    tx.executeSql(
+                        "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND pago == ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
+                        [datainicio, datafim, pagas, limit, offset],
+                        (_, { rows }) => resolve(rows._array),
+                        (_, error) => reject(error)
+                    );
+                } else {
+                    tx.executeSql(
+                        "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
+                        [datainicio, datafim, limit, offset],
+                        (_, { rows }) => resolve(rows._array),
+                        (_, error) => reject(error)
+                    );
                 }
-                
-                
             });
         });
+    }
+
+    static findAllFixas(page, datainicio, datafim, pagas = false, naoPagas = false){
+        if (page < 1) {
+            const vazio = []
+            return vazio;
+        }
+        const offset = (page - 1) * 25;
+        const limit = 25;
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                if (pagas || naoPagas) {
+                    tx.executeSql(
+                        "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND pago == ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
+                        [datainicio, datafim, pagas, true, limit, offset],
+                        (_, { rows }) => resolve(rows._array),
+                        (_, error) => reject(error)
+                    );
+                } else {
+                    tx.executeSql(
+                        "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
+                        [datainicio, datafim, true, limit, offset],
+                        (_, { rows }) => resolve(rows._array),
+                        (_, error) => reject(error)
+                    );
+                }
+            });
+        });
+    }
+
+    static findAllVariaveis(page, datainicio, datafim){
+
     }
 
     static findById(id) {

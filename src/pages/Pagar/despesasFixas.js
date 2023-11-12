@@ -37,10 +37,10 @@ export default function ContasPagar({ navigation, route }) {
     const [prevPage, setPrevPage] = useState(false);
     const [nexPage, setNexPage] = useState(false);
 
-    async function despTodosDados(despesas){
+    async function despTodosDados(despesas) {
         const despesasTotais = [];
         let json;
-        for(des of despesas){
+        for (des of despesas) {
             const forn = await FornecedorController.findById(des.fornecedor_id);
             const categoria = await CategoriaController.findById(des.categoria_id);
             const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
@@ -69,13 +69,13 @@ export default function ContasPagar({ navigation, route }) {
         return despesasTotais;
     }
 
-    async function atualizarDespesas(){
+    async function atualizarDespesas() {
         dispatch({ 'type': 'loading' });
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
-        const despesas = await PagarController.listAll(page, datainicio, datafim, fixa, variavel, pagas, naoPagas);
-        const despNext = await PagarController.listAll(page + 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
-        const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
+        const despesas = await PagarController.listAllFixas(page, datainicio, datafim, fixa, variavel, pagas, naoPagas);
+        const despNext = await PagarController.listAllFixas(page + 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
+        const despPrev = await PagarController.listAllFixas(page - 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
         if (despNext.length > 0) {
             setNexPage(true);
         } else {
@@ -100,19 +100,19 @@ export default function ContasPagar({ navigation, route }) {
     useEffect(() => {
         listDespesas();
     }, [selected, fixa, pagas, naoPagas, variavel, page])
-    
+
     useEffect(() => {
         handleOrderClick();
         console.log("searchText", searchText);
     }, [searchText])
 
-    async function listDespesas(){
-        if(searchText == ""){
+    async function listDespesas() {
+        if (searchText == "") {
             await atualizarDespesas();
         }
     }
 
-    async function handleOrderClick(){
+    async function handleOrderClick() {
         if (searchText != "") {
             console.log("entrou");
             dispatch({ "type": "loading" })
@@ -130,33 +130,33 @@ export default function ContasPagar({ navigation, route }) {
             setNexPage(false);
             setPrevPage(false);
             dispatch({ "type": "loadingfalse" })
-        }else{
+        } else {
             console.log("entrou1");
             await listDespesas();
         }
         console.log('search');
     }
 
-    async function removeDespesa(id){
+    async function removeDespesa(id) {
         const desp = await PagarController.remove(id);
         dispatch({ 'type': 'loading' });
         await atualizarDespesas();
         dispatch({ 'type': 'loadingfalse' })
     }
 
-    async function nextPage(){
+    async function nextPage() {
         setPage(page + 1);
     }
 
-    async function previousPage(){
+    async function previousPage() {
         setPage(page - 1);
     }
 
-    async function addDespesa(){
+    async function addDespesa() {
         navigation.navigate("AddDespesa");
     }
 
-    const Item = ({item}) => (
+    const Item = ({ item }) => (
         <TouchableOpacity style={styles.itemList}>
             <View style={styles.list}>
                 <View style={styles.iconeCategoria}>
@@ -173,15 +173,15 @@ export default function ContasPagar({ navigation, route }) {
             <View>
                 {item.pago ? (
                     <>
-                        <Image style={styles.image} source={require('../../../assets/verde.png')} resizeMode='contain'/>
+                        <Image style={styles.image} source={require('../../../assets/verde.png')} resizeMode='contain' />
                     </>
-                ): (
+                ) : (
                     <>
-                            <Image style={styles.image} source={require('../../../assets/vermelho.png')} resizeMode='contain' />
+                        <Image style={styles.image} source={require('../../../assets/vermelho.png')} resizeMode='contain' />
                     </>
                 )}
                 <TouchableOpacity><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => {removeDespesa(item.id)}}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => { removeDespesa(item.id) }}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
             </View>
         </TouchableOpacity>
     );
@@ -236,11 +236,11 @@ export default function ContasPagar({ navigation, route }) {
                     </View>
                 </View>
                 <View style={styles.selectHome}>
-                    <SelectDropdown 
-                        buttonStyle={styles.selected} 
+                    <SelectDropdown
+                        buttonStyle={styles.selected}
                         defaultValue={defaultValue}
                         data={countries}
-                        onSelect={(selectedItem, index) => {setSelected(selectedItem);}}
+                        onSelect={(selectedItem, index) => { setSelected(selectedItem); }}
                     />
                 </View>
 
@@ -267,10 +267,10 @@ export default function ContasPagar({ navigation, route }) {
                         maxToRenderPerBatch={50}
                         showsVerticalScrollIndicator={false}
                         data={state.despesas}
-                        ListEmptyComponent={<Vazio text={"Nenhuma despesa encontrada!"}/>}
+                        ListEmptyComponent={<Vazio text={"Nenhuma despesa encontrada!"} />}
                         renderItem={({ item }) => <Item item={item} />}
                         keyExtractor={(item) => item.id}
-                        
+
                     />
                     <View style={styles.buttons}>
                         <View style={styles.buttonAdd}>
@@ -297,7 +297,7 @@ export default function ContasPagar({ navigation, route }) {
                                 </View>
                             }
                         </View>
-                        </View>
+                    </View>
                 </>
             )}
 
