@@ -16,7 +16,7 @@ import Vazio from '../../components/Vazio';
 
 
 
-export default function ContasPagar({ navigation, route }) {
+export default function ContasPagarVariaveis({ navigation, route }) {
     const date = Date.now();
     const dataatual = new Date(date).toLocaleString().substring(3, 10);
     const countries = ["01/2023", "02/2023", "03/2023", "04/2023", "05/2023", "06/2023", "07/2023", "08/2023", "09/2023", "10/2023", "11/2023", "12/2023", "01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024", "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024", "01/2025", "02/2025", "03/2025", "04/2025", "05/2025", "06/2025", "07/2025", "08/2025", "09/2025", "10/2025", "11/2025", "12/2025"]
@@ -188,7 +188,7 @@ export default function ContasPagar({ navigation, route }) {
         <SafeAreaView style={styles.container}>
             <Header />
             <View style={styles.title}>
-                <Text style={styles.text}>Despesas</Text>
+                <Text style={styles.text}>Despesas Variáveis</Text>
             </View>
             <View style={styles.select}>
                 <View style={styles.checkboxs}>

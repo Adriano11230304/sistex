@@ -73,9 +73,9 @@ export default function ContasPagar({ navigation, route }) {
         dispatch({ 'type': 'loading' });
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
-        const despesas = await PagarController.listAll(page, datainicio, datafim, fixa, variavel, pagas, naoPagas);
-        const despNext = await PagarController.listAll(page + 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
-        const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
+        const despesas = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
+        const despNext = await PagarController.listAll(page + 1, datainicio, datafim, pagas, naoPagas);
+        const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
             setNexPage(true);
         } else {
@@ -99,7 +99,7 @@ export default function ContasPagar({ navigation, route }) {
 
     useEffect(() => {
         listDespesas();
-    }, [selected, fixa, pagas, naoPagas, variavel, page])
+    }, [selected, pagas, naoPagas, page])
     
     useEffect(() => {
         handleOrderClick();
@@ -194,26 +194,6 @@ export default function ContasPagar({ navigation, route }) {
             </View>
             <View style={styles.select}>
                 <View style={styles.checkboxs}>
-                    <View>
-                        <View style={styles.checkbox}>
-                            <Text>Fixas</Text>
-                            <Checkbox
-                                style={styles.checkbox1}
-                                value={fixa}
-                                onValueChange={setFixa}
-                                color={fixa ? '#4630EB' : undefined}
-                            />
-                        </View>
-                        <View style={styles.checkbox}>
-                            <Text>Variáveis</Text>
-                            <Checkbox
-                                style={styles.checkbox4}
-                                value={variavel}
-                                onValueChange={setVariavel}
-                                color={variavel ? '#4630EB' : undefined}
-                            />
-                        </View>
-                    </View>
                     <View>
                         <View style={styles.checkbox}>
                             <Text>Não pagas</Text>

@@ -70,14 +70,14 @@ class Pagar {
             db.transaction((tx) => {
                 if (pagas || naoPagas) {
                     tx.executeSql(
-                        "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND pago == ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
-                        [datainicio, datafim, pagas, true, limit, offset],
+                        "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND pago == ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
+                        [datainicio, datafim, true, limit, offset],
                         (_, { rows }) => resolve(rows._array),
                         (_, error) => reject(error)
                     );
                 } else {
                     tx.executeSql(
-                        "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;;",
+                        "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
                         [datainicio, datafim, true, limit, offset],
                         (_, { rows }) => resolve(rows._array),
                         (_, error) => reject(error)

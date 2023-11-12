@@ -16,7 +16,7 @@ import Vazio from '../../components/Vazio';
 
 
 
-export default function ContasPagar({ navigation, route }) {
+export default function ContasPagarFixas({ navigation, route }) {
     const date = Date.now();
     const dataatual = new Date(date).toLocaleString().substring(3, 10);
     const countries = ["01/2023", "02/2023", "03/2023", "04/2023", "05/2023", "06/2023", "07/2023", "08/2023", "09/2023", "10/2023", "11/2023", "12/2023", "01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024", "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024", "01/2025", "02/2025", "03/2025", "04/2025", "05/2025", "06/2025", "07/2025", "08/2025", "09/2025", "10/2025", "11/2025", "12/2025"]
@@ -27,8 +27,6 @@ export default function ContasPagar({ navigation, route }) {
         }
     })
     const [selected, setSelected] = useState(dataatual);
-    const [fixa, setFixa] = useState(false);
-    const [variavel, setVariavel] = useState(false);
     const [pagas, setPagas] = useState(false);
     const [naoPagas, setNaoPagas] = useState(false);
     const { state, dispatch } = useAuth();
@@ -73,9 +71,10 @@ export default function ContasPagar({ navigation, route }) {
         dispatch({ 'type': 'loading' });
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
-        const despesas = await PagarController.listAllFixas(page, datainicio, datafim, fixa, variavel, pagas, naoPagas);
-        const despNext = await PagarController.listAllFixas(page + 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
-        const despPrev = await PagarController.listAllFixas(page - 1, datainicio, datafim, fixa, variavel, pagas, naoPagas);
+        const despesas = await PagarController.listAllFixas(page, datainicio, datafim, pagas, naoPagas);
+        console.log(despesas);
+        const despNext = await PagarController.listAllFixas(page + 1, datainicio, datafim, pagas, naoPagas);
+        const despPrev = await PagarController.listAllFixas(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
             setNexPage(true);
         } else {
@@ -89,8 +88,8 @@ export default function ContasPagar({ navigation, route }) {
         }
 
         dispatch({
-            "type": "atualizarDespesas",
-            "despesas": await despTodosDados(despesas)
+            "type": "atualizarDespesasFixas",
+            "despesasFixas": await despTodosDados(despesas)
         })
 
         dispatch({ 'type': 'loadingfalse' })
@@ -99,7 +98,7 @@ export default function ContasPagar({ navigation, route }) {
 
     useEffect(() => {
         listDespesas();
-    }, [selected, fixa, pagas, naoPagas, variavel, page])
+    }, [selected, pagas, naoPagas, page])
 
     useEffect(() => {
         handleOrderClick();
@@ -131,10 +130,8 @@ export default function ContasPagar({ navigation, route }) {
             setPrevPage(false);
             dispatch({ "type": "loadingfalse" })
         } else {
-            console.log("entrou1");
             await listDespesas();
         }
-        console.log('search');
     }
 
     async function removeDespesa(id) {
@@ -190,30 +187,10 @@ export default function ContasPagar({ navigation, route }) {
         <SafeAreaView style={styles.container}>
             <Header />
             <View style={styles.title}>
-                <Text style={styles.text}>Despesas</Text>
+                <Text style={styles.text}>Despesas Fixas</Text>
             </View>
             <View style={styles.select}>
                 <View style={styles.checkboxs}>
-                    <View>
-                        <View style={styles.checkbox}>
-                            <Text>Fixas</Text>
-                            <Checkbox
-                                style={styles.checkbox1}
-                                value={fixa}
-                                onValueChange={setFixa}
-                                color={fixa ? '#4630EB' : undefined}
-                            />
-                        </View>
-                        <View style={styles.checkbox}>
-                            <Text>Variáveis</Text>
-                            <Checkbox
-                                style={styles.checkbox4}
-                                value={variavel}
-                                onValueChange={setVariavel}
-                                color={variavel ? '#4630EB' : undefined}
-                            />
-                        </View>
-                    </View>
                     <View>
                         <View style={styles.checkbox}>
                             <Text>Não pagas</Text>
@@ -266,7 +243,7 @@ export default function ContasPagar({ navigation, route }) {
                         initialNumToRender={50}
                         maxToRenderPerBatch={50}
                         showsVerticalScrollIndicator={false}
-                        data={state.despesas}
+                        data={state.despesasFixas}
                         ListEmptyComponent={<Vazio text={"Nenhuma despesa encontrada!"} />}
                         renderItem={({ item }) => <Item item={item} />}
                         keyExtractor={(item) => item.id}

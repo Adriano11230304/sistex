@@ -7,7 +7,7 @@ class PagarController{
     }
 
     async listAllFixas(page, datainicio, datafim, pagas = false, naoPagas = false) {
-        const contas = Pagar.findAll(page, datainicio, datafim, pagas, naoPagas);
+        const contas = Pagar.findAllFixas(page, datainicio, datafim, pagas, naoPagas);
         return contas;
     }
 
