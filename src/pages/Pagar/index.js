@@ -153,7 +153,7 @@ export default function ContasPagar({ navigation, route }) {
     }
 
     async function addDespesa(){
-        navigation.navigate("AddDespesa");
+        navigation.navigate("AddDespesaIcons");
     }
 
     const Item = ({item}) => (

@@ -144,15 +144,25 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: '5%'
     },
+    salvarManualmente: {
+        backgroundColor: '#5d8aa8',
+        borderRadius: 20,
+        width: 250,
+        height: 80,
+        alignSelf: 'center',
+        marginTop: '5%'
+    },
     salvarText: {
         paddingTop: '5%',
         alignSelf: 'center',
+        textAlign: 'center',
         fontSize: 20,
         color: '#fff',
         fontWeight: 'bold'
     },
     label: {
         fontSize: 20,
+        paddingRight: '5%'
     },
     form: {
         paddingTop: '5%'
@@ -160,6 +170,39 @@ export const styles = StyleSheet.create({
     labelinput: {
         paddingLeft: '5%',
         flexDirection: 'column',
-        paddingBottom: '5%'
+        paddingTop: '5%'
     },
+    labelinputdate: {
+        flexDirection: 'row',
+        paddingLeft: '5%',
+        paddingTop: '5%'
+    },
+    labelDate: {
+        fontSize: 20,
+    },
+    datapicker: {
+        marginTop: 150
+    },
+    modalDataEntrada: {
+        backgroundColor: '#808080'
+    },
+    labelinputFixa: {
+        flexDirection: 'row',
+        paddingLeft: '5%',
+        paddingTop: '5%'
+    },
+    selectedFixa: {
+        borderRadius: 28,
+        height: 30,
+        width: 100,
+        paddingTop: 2
+    },
+    modalSalvar: {
+        backgroundColor: '#5d8aa8',
+        borderRadius: 20,
+        width: 120,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '5%'
+    }
 });

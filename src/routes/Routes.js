@@ -13,6 +13,8 @@ import EditFornecedores from '../pages/Fornecedores/editar';
 import ContasPagar from '../pages/Pagar';
 import AddCategoria from '../pages/Categorias/add';
 import AddDespesas from '../pages/Pagar/add';
+import Receber from '../pages/Receber';
+import AddDespesasIcons from '../pages/Pagar/addIcons';
 
 
 const Stack = createNativeStackNavigator();
@@ -33,6 +35,15 @@ export const PagarStack = () => {
     <Stack.Navigator initialRouteName='PagarStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PagarStack" component={ContasPagar} />
       <Stack.Screen name="AddDespesa" component={AddDespesas}/>
+      <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
+    </Stack.Navigator>
+  );
+};
+
+export const ReceitasStack = () => {
+  return (
+    <Stack.Navigator initialRouteName='ReceitaStack' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ReceitaStack" component={Receber} />
     </Stack.Navigator>
   );
 };

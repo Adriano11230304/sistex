@@ -30,26 +30,40 @@ export const styles = StyleSheet.create({
         paddingTop: '5%',
     },
     contasPagar: {
-        fontSize: 25,
+        fontSize: 15,
         fontWeight: 'bold',
         color: 'red'
     },
     contasReceber: {
-        fontSize: 25,
+        fontSize: 15,
         fontWeight: 'bold',
         color: 'green'
     },
-    viewPagar: {
-        alignItems: 'center'
+    contasReceber: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'green'
     },
-    viewReceber: {
-        alignItems: 'center'
+    viewdespesas: {
+        flexDirection: 'row'
+    },  
+    contasPagarTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'red'
+    },
+    contasReceberTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'green'
     },
     valorPagar:{
-        fontSize: 20
+        fontSize: 15,
+        paddingLeft: '5%'
+
     },
     valorReceber:{
-        fontSize: 20
+        fontSize: 15,
     },
     select: {
         alignItems: 'center',
@@ -73,6 +87,17 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: 'center',
         paddingBottom: 100
+    },
+    balanco: {
+        paddingLeft: '5%',
+        paddingTop: '5%',
+        paddingBottom: '5%'
+    },
+    balancoText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        
     }
 });
 

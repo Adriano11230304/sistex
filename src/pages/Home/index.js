@@ -19,14 +19,41 @@ export default function Home({ navigation }) {
             </View>
             <View style={styles.contas}>
                 <View style={styles.viewPagar}>
-                    <Text style={styles.contasPagar}>Pagar</Text>
-                    <Text style={styles.valorPagar}>R$ 345,00</Text>
+                    <Text style={styles.contasPagarTitle}>Despesas</Text>
+                    <View style={styles.viewdespesas}>
+                        <Text style={styles.contasPagar}>Totais</Text>
+                        <Text style={styles.valorPagar}>R$ 345,00</Text>
+                    </View>
+                    <View style={styles.viewdespesas}>
+                        <Text style={styles.contasPagar}>Fixas</Text>
+                        <Text style={styles.valorPagar}>R$ 345,00</Text>
+                    </View>
+                    <View style={styles.viewdespesas}>
+                        <Text style={styles.contasPagar}>Variáveis</Text>
+                        <Text style={styles.valorPagar}>R$ 345,00</Text>
+                    </View>
+                    <View style={styles.viewdespesas}>
+                        <Text style={styles.contasPagar}>Pagas</Text>
+                        <Text style={styles.valorPagar}>R$ 345,00</Text>
+                    </View>
+                    <View style={styles.viewdespesas}>
+                        <Text style={styles.contasPagar}>Não Pagas</Text>
+                        <Text style={styles.valorPagar}>R$ 345,00</Text>
+                    </View>
                 </View>
                 <View style={styles.viewReceber}>
-                    <Text style={styles.contasReceber}>Receber</Text>
-                    <Text style={styles.valorReceber}>R$ 645,00</Text>
+                    <Text style={styles.contasReceberTitle}>Receitas</Text>
+                    <View style={styles.viewdespesas}>
+                        <Text style={styles.contasReceber}>Não rec.</Text>
+                        <Text style={styles.valorPagar}>R$ 645,00</Text>
+                    </View>
+                    <View style={styles.viewdespesas}>
+                        <Text style={styles.contasReceber}>Receb.</Text>
+                        <Text style={styles.valorPagar}>R$ 645,00</Text>
+                    </View>
                 </View>
             </View>
+            <View style={styles.balanco}><Text style={styles.balancoText}>Balanço Mensal R$ 345,00</Text></View>
             <View style={styles.grafico}>
                 <Text style={styles.graficoText}>Gráfico</Text>
             </View>
