@@ -113,16 +113,15 @@ export default function ContasPagarFixas({ navigation, route }) {
 
     async function handleOrderClick() {
         if (searchText != "") {
-            console.log("entrou");
             dispatch({ "type": "loading" })
             const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
             let newList = null;
-            newList = await PagarController.findFornecedororCategoria(searchText, 50, datainicio, datafim);
+            newList = await PagarController.findFornecedororCategoriaFixas(searchText, 50, datainicio, datafim);
             const despesasTotais = await despTodosDados(newList);
             const action = {
-                "type": "atualizarDespesas",
-                "despesas": despesasTotais
+                "type": "atualizarDespesasFixas",
+                "despesasFixas": despesasTotais
             }
 
             dispatch(action);
@@ -190,8 +189,6 @@ export default function ContasPagarFixas({ navigation, route }) {
                 <Text style={styles.text}>Despesas Fixas</Text>
             </View>
             <View style={styles.select}>
-                <View style={styles.checkboxs}>
-                    <View>
                         <View style={styles.checkbox}>
                             <Text>Não pagas</Text>
                             <Checkbox
@@ -210,8 +207,6 @@ export default function ContasPagarFixas({ navigation, route }) {
                                 color={pagas ? '#4630EB' : undefined}
                             />
                         </View>
-                    </View>
-                </View>
                 <View style={styles.selectHome}>
                     <SelectDropdown
                         buttonStyle={styles.selected}

@@ -71,9 +71,9 @@ export default function ContasPagarVariaveis({ navigation, route }) {
         dispatch({ 'type': 'loading' });
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
-        const despesas = await PagarController.listAll(page, datainicio, datafim, fixa, variavel, pagas, naoPagas);
-        const despNext = await PagarController.listAll(page + 1, datainicio, datafim, pagas, naoPagas);
-        const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, pagas, naoPagas);
+        const despesas = await PagarController.listAllVariaveis(page, datainicio, datafim, pagas, naoPagas);
+        const despNext = await PagarController.listAllVariaveis(page + 1, datainicio, datafim, pagas, naoPagas);
+        const despPrev = await PagarController.listAllVariaveis(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
             setNexPage(true);
         } else {
@@ -87,8 +87,8 @@ export default function ContasPagarVariaveis({ navigation, route }) {
         }
 
         dispatch({
-            "type": "atualizarDespesas",
-            "despesas": await despTodosDados(despesas)
+            "type": "atualizarDespesasVariaveis",
+            "despesasVariaveis": await despTodosDados(despesas)
         })
 
         dispatch({ 'type': 'loadingfalse' })
@@ -97,7 +97,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
 
     useEffect(() => {
         listDespesas();
-    }, [selected, fixa, pagas, naoPagas, variavel, page])
+    }, [selected, pagas, naoPagas, page])
 
     useEffect(() => {
         handleOrderClick();
@@ -117,11 +117,11 @@ export default function ContasPagarVariaveis({ navigation, route }) {
             const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
             let newList = null;
-            newList = await PagarController.findFornecedororCategoria(searchText, 50, datainicio, datafim);
+            newList = await PagarController.findFornecedororCategoriaVariaveis(searchText, 50, datainicio, datafim);
             const despesasTotais = await despTodosDados(newList);
             const action = {
-                "type": "atualizarDespesas",
-                "despesas": despesasTotais
+                "type": "atualizarDespesasVariaveis",
+                "despesasVariaveis": despesasTotais
             }
 
             dispatch(action);
@@ -191,27 +191,23 @@ export default function ContasPagarVariaveis({ navigation, route }) {
                 <Text style={styles.text}>Despesas Variáveis</Text>
             </View>
             <View style={styles.select}>
-                <View style={styles.checkboxs}>
-                    <View>
-                        <View style={styles.checkbox}>
-                            <Text>Não pagas</Text>
-                            <Checkbox
-                                style={styles.checkbox2}
-                                value={naoPagas}
-                                onValueChange={setNaoPagas}
-                                color={naoPagas ? '#4630EB' : undefined}
-                            />
-                        </View>
-                        <View style={styles.checkbox}>
-                            <Text>Pagas</Text>
-                            <Checkbox
-                                style={styles.checkbox3}
-                                value={pagas}
-                                onValueChange={setPagas}
-                                color={pagas ? '#4630EB' : undefined}
-                            />
-                        </View>
-                    </View>
+                <View style={styles.checkbox}>
+                    <Text>Não pagas</Text>
+                    <Checkbox
+                        style={styles.checkbox2}
+                        value={naoPagas}
+                        onValueChange={setNaoPagas}
+                        color={naoPagas ? '#4630EB' : undefined}
+                    />
+                </View>
+                <View style={styles.checkbox}>
+                    <Text>Pagas</Text>
+                    <Checkbox
+                        style={styles.checkbox3}
+                        value={pagas}
+                        onValueChange={setPagas}
+                        color={pagas ? '#4630EB' : undefined}
+                    />
                 </View>
                 <View style={styles.selectHome}>
                     <SelectDropdown
@@ -221,7 +217,6 @@ export default function ContasPagarVariaveis({ navigation, route }) {
                         onSelect={(selectedItem, index) => { setSelected(selectedItem); }}
                     />
                 </View>
-
             </View>
             <View style={styles.searchArea}>
                 <TextInput
@@ -244,7 +239,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
                         initialNumToRender={50}
                         maxToRenderPerBatch={50}
                         showsVerticalScrollIndicator={false}
-                        data={state.despesas}
+                        data={state.despesasVariaveis}
                         ListEmptyComponent={<Vazio text={"Nenhuma despesa encontrada!"} />}
                         renderItem={({ item }) => <Item item={item} />}
                         keyExtractor={(item) => item.id}

@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid, Modal } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid, Modal, Button } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import FornecedorController from '../../controllers/FornecedorController';
 import PagarController from '../../controllers/PagarController';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
+import DatePicker from "react-native-modern-datepicker";
 
 export default function AddDespesas({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -43,8 +44,8 @@ export default function AddDespesas({ navigation, route }) {
             setData_entrada(new Date('2023-11-13T00:00:00').getTime());
             setData_pagamento(new Date('2023-11-23T00:00:00').getTime());
             setPago(false);
-            const desp = await PagarController.add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento);
-            ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
+            // const desp = await PagarController.add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento);
+            // ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
             const action = {
                 "type": "atualizarDespesas",
                 "despesas": await PagarController.listAll(1)
@@ -75,6 +76,37 @@ export default function AddDespesas({ navigation, route }) {
                         <View style={styles.labelinput}>
                             <Text style={styles.label}>Valor:</Text>
                             <TextInput keyboardType='numeric' style={styles.inputadd} value={valor} placeholderTextColor="#888" onChangeText={(t) => setValor(t)}></TextInput>
+                        </View>
+                        <View style={styles.labelinput}>
+                            <Text style={styles.label}>Data de entrada:</Text>
+                            {/* Fazer um modal para abrir o DatePicker*/}
+                                <DatePicker
+                                    onSelectedChange={date => setData_entrada(date)}
+                                />
+                        </View>
+                        <View style={styles.labelinput}>
+                            <Text style={styles.label}>Fornecedor:</Text>
+                            
+                        </View>
+                        <View style={styles.labelinput}>
+                            <Text style={styles.label}>Categoria:</Text>
+                            
+                        </View>
+                        <View style={styles.labelinput}>
+                            <Text style={styles.label}>Data de pagamento:</Text>
+                                <TextInput keyboardType='numeric' style={styles.inputadd} value={data_pagamento} placeholderTextColor="#888" onChangeText={(t) => setData_pagamento(t)}></TextInput>
+                        </View>
+                        <View style={styles.labelinput}>
+                            <Text style={styles.label}>Despesa Fixa:</Text>
+                            
+                        </View>
+                        <View style={styles.labelinput}>
+                            <Text style={styles.label}>Despesa já está paga:</Text>
+
+                        </View>
+                        <View style={styles.labelinput}>
+                            <Text style={styles.label}>Observações:</Text>
+                            <TextInput keyboardType='numeric' style={styles.inputadd} value={observacoes} placeholderTextColor="#888" onChangeText={(t) => setObservacoes(t)}></TextInput>
                         </View>
                         <TouchableOpacity style={styles.salvar} onPress={addPagar}>
                             <Text style={styles.salvarText}>Salvar</Text>

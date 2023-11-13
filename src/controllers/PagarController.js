@@ -11,6 +11,11 @@ class PagarController{
         return contas;
     }
 
+    async listAllVariaveis(page, datainicio, datafim, pagas = false, naoPagas = false) {
+        const contas = Pagar.findAllVariaveis(page, datainicio, datafim, pagas, naoPagas);
+        return contas;
+    }
+
     async add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento){
         const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento);
         try {
@@ -42,6 +47,18 @@ class PagarController{
     }
 
     async findFornecedororCategoria(text, limit, datainicio, datafim){
+        const search = `%${text}%`
+        const despesas = Pagar.findFornecedororCategoria(search, limit, datainicio, datafim);
+        return despesas;
+    }
+
+    async findFornecedororCategoriaFixas(text, limit, datainicio, datafim) {
+        const search = `%${text}%`
+        const despesas = Pagar.findFornecedororCategoria(search, limit, datainicio, datafim);
+        return despesas;
+    }
+
+    async findFornecedororCategoriaVariaveis(text, limit, datainicio, datafim) {
         const search = `%${text}%`
         const despesas = Pagar.findFornecedororCategoria(search, limit, datainicio, datafim);
         return despesas;

@@ -193,27 +193,23 @@ export default function ContasPagar({ navigation, route }) {
                 <Text style={styles.text}>Despesas</Text>
             </View>
             <View style={styles.select}>
-                <View style={styles.checkboxs}>
-                    <View>
-                        <View style={styles.checkbox}>
-                            <Text>Não pagas</Text>
-                            <Checkbox
-                                style={styles.checkbox2}
-                                value={naoPagas}
-                                onValueChange={setNaoPagas}
-                                color={naoPagas ? '#4630EB' : undefined}
-                            />
-                        </View>
-                        <View style={styles.checkbox}>
-                            <Text>Pagas</Text>
-                            <Checkbox
-                                style={styles.checkbox3}
-                                value={pagas}
-                                onValueChange={setPagas}
-                                color={pagas ? '#4630EB' : undefined}
-                            />
-                        </View>
-                    </View>
+                <View style={styles.checkbox}>
+                    <Text>Não pagas</Text>
+                    <Checkbox
+                        style={styles.checkbox2}
+                        value={naoPagas}
+                        onValueChange={setNaoPagas}
+                        color={naoPagas ? '#4630EB' : undefined}
+                    />
+                </View>
+                <View style={styles.checkbox}>
+                    <Text>Pagas</Text>
+                    <Checkbox
+                        style={styles.checkbox3}
+                        value={pagas}
+                        onValueChange={setPagas}
+                        color={pagas ? '#4630EB' : undefined}
+                    />
                 </View>
                 <View style={styles.selectHome}>
                     <SelectDropdown 
@@ -223,7 +219,6 @@ export default function ContasPagar({ navigation, route }) {
                         onSelect={(selectedItem, index) => {setSelected(selectedItem);}}
                     />
                 </View>
-
             </View>
             <View style={styles.searchArea}>
                 <TextInput

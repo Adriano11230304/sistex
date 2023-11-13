@@ -87,8 +87,32 @@ class Pagar {
         });
     }
 
-    static findAllVariaveis(page, datainicio, datafim){
-
+    static findAllVariaveis(page, datainicio, datafim, pagas = false, naoPagas = false) {
+        if (page < 1) {
+            const vazio = []
+            return vazio;
+        }
+        const offset = (page - 1) * 25;
+        const limit = 25;
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                if (pagas || naoPagas) {
+                    tx.executeSql(
+                        "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada <= ? AND pago = ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
+                        [datainicio, datafim, pagas, false, limit, offset],
+                        (_, { rows }) => resolve(rows._array),
+                        (_, error) => reject(error)
+                    );
+                } else {
+                    tx.executeSql(
+                        "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada <= ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
+                        [datainicio, datafim, false, limit, offset],
+                        (_, { rows }) => resolve(rows._array),
+                        (_, error) => reject(error)
+                    );
+                }
+            });
+        });
     }
 
     static findById(id) {
@@ -140,8 +164,36 @@ class Pagar {
             console.log(text);
             db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT * FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id WHERE pagar.data_entrada >= ? and pagar.data_entrada <= ? AND fornecedores.name LIKE ? ORDER BY pagar.data_entrada asc LIMIT ?",
-                    [datainicio, datafim, text, limit],
+                    "SELECT * FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id INNER JOIN categorias ON categorias.id = pagar.categoria_id  WHERE pagar.data_entrada >= ? and pagar.data_entrada <= ? AND (fornecedores.name LIKE ? OR categorias.titulo LIKE ?) ORDER BY pagar.data_entrada asc LIMIT ?",
+                    [datainicio, datafim, text, text, limit],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
+    static findFornecedororCategoriaVariaveis(text, datainicio, datafim, limit) {
+        return new Promise((resolve, reject) => {
+            console.log(text);
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id INNER JOIN categorias ON categorias.id = pagar.categoria_id  WHERE pagar.data_entrada >= ? and pagar.data_entrada <= ? AND pagar.fixa = ? AND (fornecedores.name LIKE ? OR categorias.titulo LIKE ?) ORDER BY pagar.data_entrada asc LIMIT ?",
+                    [datainicio, datafim, false, text, text, limit],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
+    static findFornecedororCategoriaFixas(text, datainicio, datafim, limit) {
+        return new Promise((resolve, reject) => {
+            console.log(text);
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id INNER JOIN categorias ON categorias.id = pagar.categoria_id  WHERE pagar.data_entrada >= ? and pagar.data_entrada <= ? AND pagar.fixa = ? AND (fornecedores.name LIKE ? OR categorias.titulo LIKE ?) ORDER BY pagar.data_entrada asc LIMIT ?",
+                    [datainicio, datafim, true, text, text, limit],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
                 );

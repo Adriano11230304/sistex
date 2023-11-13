@@ -85,19 +85,19 @@ export const styles = StyleSheet.create({
     },
     checkbox: {
         flexDirection: 'row',
-        marginTop: 5,
-        marginRight: 5
+        marginTop: 11,
+        marginRight: 5,
+        marginLeft: 10
     },
     checkboxs: {
-        width: 200,
-        flexDirection: 'row'
+        flexDirection: 'column'
     },
     selectHome:{
-        paddingTop: '7%',
+        paddingTop: '2%',
         paddingLeft: '5%'
     },
     checkbox3: {
-        marginLeft: 35
+        marginLeft: 10
     },
     checkbox2: {
         marginLeft: 6
@@ -135,5 +135,31 @@ export const styles = StyleSheet.create({
         paddingBottom: '3%',
         alignSelf: 'flex-end',
         paddingEnd: '7%'
+    },
+    salvar: {
+        backgroundColor: '#5d8aa8',
+        borderRadius: 20,
+        width: 120,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '5%'
+    },
+    salvarText: {
+        paddingTop: '5%',
+        alignSelf: 'center',
+        fontSize: 20,
+        color: '#fff',
+        fontWeight: 'bold'
+    },
+    label: {
+        fontSize: 20,
+    },
+    form: {
+        paddingTop: '5%'
+    },
+    labelinput: {
+        paddingLeft: '5%',
+        flexDirection: 'column',
+        paddingBottom: '5%'
     },
 });
