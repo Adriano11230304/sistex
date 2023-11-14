@@ -27,8 +27,6 @@ export default function ContasPagar({ navigation, route }) {
         }
     })
     const [selected, setSelected] = useState(dataatual);
-    const [fixa, setFixa] = useState(false);
-    const [variavel, setVariavel] = useState(false);
     const [pagas, setPagas] = useState(false);
     const [naoPagas, setNaoPagas] = useState(false);
     const { state, dispatch } = useAuth();
@@ -41,6 +39,7 @@ export default function ContasPagar({ navigation, route }) {
         const despesasTotais = [];
         let json;
         for(des of despesas){
+            json = {};
             const forn = await FornecedorController.findById(des.fornecedor_id);
             const categoria = await CategoriaController.findById(des.categoria_id);
             const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
@@ -60,7 +59,9 @@ export default function ContasPagar({ navigation, route }) {
                 "fornecedor": forn.name,
                 "data_entrada": data,
                 "data_pagamento": dataPagamento,
-                "pago": des.pago
+                "pago": des.pago,
+                "forma_pagamento": des.forma_pagamento,
+                "fixa": des.fixa
             }
 
             despesasTotais.push(json);
@@ -71,9 +72,13 @@ export default function ContasPagar({ navigation, route }) {
 
     async function atualizarDespesas(){
         dispatch({ 'type': 'loading' });
+        // const pagar = await PagarController.add(3.45, "nada", 1, true, 5, 1, Date.now(), Date.now(), false, null, "credito");
+        // console.log(pagar);
+        // const apagar = await PagarController.remove(2);
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
         const despesas = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
+        const teste = await despTodosDados(despesas);
         const despNext = await PagarController.listAll(page + 1, datainicio, datafim, pagas, naoPagas);
         const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
@@ -100,11 +105,6 @@ export default function ContasPagar({ navigation, route }) {
     useEffect(() => {
         listDespesas();
     }, [selected, pagas, naoPagas, page])
-    
-    useEffect(() => {
-        handleOrderClick();
-        console.log("searchText", searchText);
-    }, [searchText])
 
     async function listDespesas(){
         if(searchText == ""){
@@ -114,12 +114,11 @@ export default function ContasPagar({ navigation, route }) {
 
     async function handleOrderClick(){
         if (searchText != "") {
-            console.log("entrou");
             dispatch({ "type": "loading" })
             const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
             let newList = null;
-            newList = await PagarController.findFornecedororCategoria(searchText, 50, datainicio, datafim);
+            newList = await PagarController.findFornecedororCategoria(searchText, datainicio, datafim, 50);
             const despesasTotais = await despTodosDados(newList);
             const action = {
                 "type": "atualizarDespesas",
@@ -131,10 +130,8 @@ export default function ContasPagar({ navigation, route }) {
             setPrevPage(false);
             dispatch({ "type": "loadingfalse" })
         }else{
-            console.log("entrou1");
             await listDespesas();
         }
-        console.log('search');
     }
 
     async function removeDespesa(id){
@@ -198,7 +195,10 @@ export default function ContasPagar({ navigation, route }) {
                     <Checkbox
                         style={styles.checkbox2}
                         value={naoPagas}
-                        onValueChange={setNaoPagas}
+                        onValueChange={(value) => {
+                            setNaoPagas(value)
+                            setPagas(false)
+                        }}
                         color={naoPagas ? '#4630EB' : undefined}
                     />
                 </View>
@@ -207,7 +207,10 @@ export default function ContasPagar({ navigation, route }) {
                     <Checkbox
                         style={styles.checkbox3}
                         value={pagas}
-                        onValueChange={setPagas}
+                        onValueChange={(value) => {
+                                setPagas(value) 
+                                setNaoPagas(false)
+                            }}
                         color={pagas ? '#4630EB' : undefined}
                     />
                 </View>
@@ -228,7 +231,9 @@ export default function ContasPagar({ navigation, route }) {
                     value={searchText}
                     onChangeText={(t) => setSearchText(t)}
                 />
-                <FontAwesome name="search" size={24} color="black" />
+                <TouchableOpacity onPress={handleOrderClick}>
+                <FontAwesome name="search" size={30} color="black" />
+                </TouchableOpacity>
             </View>
             {state.loading ? (
                 <>

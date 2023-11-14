@@ -21,11 +21,6 @@ export default function Fornecedores({ navigation, route }) {
         listFornecedores();
     }, [page])
 
-    useEffect(() => {
-        handleOrderClick();
-        console.log(searchText);
-    }, [searchText])
-
     const listFornecedores = async () => {
         if(searchText == ""){
             dispatch({"type": "loading"})
@@ -154,7 +149,9 @@ export default function Fornecedores({ navigation, route }) {
                     value={searchText}
                     onChangeText={(t) => setText(t)}
                 />
-                <FontAwesome name="search" size={24} color="black" />
+                <TouchableOpacity onPress={handleOrderClick}>
+                <FontAwesome name="search" size={30} color="black" />
+                </TouchableOpacity>
             </View>
             {state.loading ? (
                 <>

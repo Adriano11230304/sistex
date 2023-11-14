@@ -58,7 +58,8 @@ export default function ContasPagarFixas({ navigation, route }) {
                 "fornecedor": forn.name,
                 "data_entrada": data,
                 "data_pagamento": dataPagamento,
-                "pago": des.pago
+                "pago": des.pago,
+                "fixa": des.fixa
             }
 
             despesasTotais.push(json);
@@ -100,11 +101,6 @@ export default function ContasPagarFixas({ navigation, route }) {
         listDespesas();
     }, [selected, pagas, naoPagas, page])
 
-    useEffect(() => {
-        handleOrderClick();
-        console.log("searchText", searchText);
-    }, [searchText])
-
     async function listDespesas() {
         if (searchText == "") {
             await atualizarDespesas();
@@ -117,7 +113,7 @@ export default function ContasPagarFixas({ navigation, route }) {
             const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
             let newList = null;
-            newList = await PagarController.findFornecedororCategoriaFixas(searchText, 50, datainicio, datafim);
+            newList = await PagarController.findFornecedororCategoriaFixas(searchText, datainicio, datafim, 50);
             const despesasTotais = await despTodosDados(newList);
             const action = {
                 "type": "atualizarDespesasFixas",
@@ -194,7 +190,10 @@ export default function ContasPagarFixas({ navigation, route }) {
                             <Checkbox
                                 style={styles.checkbox2}
                                 value={naoPagas}
-                                onValueChange={setNaoPagas}
+                                onValueChange={(value) => {
+                                    setNaoPagas(value)
+                                    setPagas(false)
+                                }}
                                 color={naoPagas ? '#4630EB' : undefined}
                             />
                         </View>
@@ -203,7 +202,10 @@ export default function ContasPagarFixas({ navigation, route }) {
                             <Checkbox
                                 style={styles.checkbox3}
                                 value={pagas}
-                                onValueChange={setPagas}
+                                onValueChange={(value) => {
+                                    setPagas(value)
+                                    setNaoPagas(false)
+                                }}
                                 color={pagas ? '#4630EB' : undefined}
                             />
                         </View>
@@ -225,7 +227,9 @@ export default function ContasPagarFixas({ navigation, route }) {
                     value={searchText}
                     onChangeText={(t) => setSearchText(t)}
                 />
-                <FontAwesome name="search" size={24} color="black" />
+                <TouchableOpacity onPress={handleOrderClick}>
+                    <FontAwesome name="search" size={30} color="black" />
+                </TouchableOpacity>
             </View>
             {state.loading ? (
                 <>

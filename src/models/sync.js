@@ -11,7 +11,10 @@ db.transaction((tx) => {
         "CREATE TABLE IF NOT EXISTS categorias (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT);"
     );
     tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS pagar (id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, observacoes TEXT, parcelas INTEGER, fixa BOOLEAN, categoria_id INTEGER, fornecedor_id INTEGER, created_at TIMESTAMP, data_entrada TIMESTAMP, pago BOOLEAN, data_pagamento TIMESTAMP, FOREIGN KEY(fornecedor_id) REFERENCES fornecedores(id), FOREIGN KEY(categoria_id) REFERENCES categorias(id));"
+        //"DROP TABLE pagar;"
+    );
+    tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS pagar (id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, observacoes TEXT, parcelas INTEGER, fixa BOOLEAN, categoria_id INTEGER, fornecedor_id INTEGER, created_at TIMESTAMP, data_entrada TIMESTAMP, pago BOOLEAN, data_pagamento TIMESTAMP, forma_pagamento TEXT, FOREIGN KEY(fornecedor_id) REFERENCES fornecedores(id), FOREIGN KEY(categoria_id) REFERENCES categorias(id));"
     );
     
 

@@ -16,8 +16,8 @@ class PagarController{
         return contas;
     }
 
-    async add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento){
-        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento);
+    async add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento){
+        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento);
         try {
             await conta.create();
             return "Conta adicionado com sucesso!";
@@ -46,21 +46,21 @@ class PagarController{
         }
     }
 
-    async findFornecedororCategoria(text, limit, datainicio, datafim){
+    async findFornecedororCategoria(text, datainicio, datafim, limit){
         const search = `%${text}%`
-        const despesas = Pagar.findFornecedororCategoria(search, limit, datainicio, datafim);
+        const despesas = Pagar.findFornecedororCategoria(search, datainicio, datafim, limit);
         return despesas;
     }
 
-    async findFornecedororCategoriaFixas(text, limit, datainicio, datafim) {
+    async findFornecedororCategoriaFixas(text, datainicio, datafim, limit) {
         const search = `%${text}%`
-        const despesas = Pagar.findFornecedororCategoria(search, limit, datainicio, datafim);
+        const despesas = Pagar.findFornecedororCategoriaFixas(search, datainicio, datafim, limit);
         return despesas;
     }
 
-    async findFornecedororCategoriaVariaveis(text, limit, datainicio, datafim) {
+    async findFornecedororCategoriaVariaveis(text, datainicio, datafim, limit) {
         const search = `%${text}%`
-        const despesas = Pagar.findFornecedororCategoria(search, limit, datainicio, datafim);
+        const despesas = Pagar.findFornecedororCategoriaVariaveis(search, datainicio, datafim, limit);
         return despesas;
     }
 }
