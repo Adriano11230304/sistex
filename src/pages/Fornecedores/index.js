@@ -53,7 +53,7 @@ export default function Fornecedores({ navigation, route }) {
                 if(searchText != ""){
                     dispatch({"type": "loading"})
                     let newList = null;
-                    newList = await FornecedorController.findNameorEmail(searchText, 50);
+                    newList = await FornecedorController.findNameorEmail(searchText, 30);
                     const action = {
                         "type": "atualizarFornecedores",
                         "fornecedores": newList

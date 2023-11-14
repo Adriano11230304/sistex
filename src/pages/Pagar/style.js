@@ -115,13 +115,28 @@ export const styles = StyleSheet.create({
         paddingTop: 2
     },
     inputadd: {
-        fontSize: 18,
+        fontSize: 13,
         paddingRight: '5%',
         paddingLeft: '5%',
         borderRadius: 10,
         borderWidth: 1,
         marginRight: '5%',
         paddingTop: '2%'
+    },
+    inputaddvalorv: {
+        marginLeft: 5,
+        width: 300,
+        paddingLeft: 7,
+        fontSize: 13,
+        borderRadius: 10,
+        borderWidth: 1,
+    },
+    inputaddobserv: {
+        width: 350,
+        paddingLeft: 7,
+        fontSize: 13,
+        borderRadius: 10,
+        borderWidth: 1,
     },
     buttons: {
         flexDirection: 'row-reverse'
@@ -164,6 +179,18 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         paddingRight: '5%'
     },
+    labelAdd:{
+        fontSize: 15,
+        paddingRight: '5%'
+    },
+    inputAddValor:{
+        fontSize: 15,
+        paddingLeft: '5%'
+    },
+    labelinputValor: {
+        flexDirection: 'row',
+        paddingLeft: '5%'
+    },
     form: {
         paddingTop: '5%'
     },
@@ -172,19 +199,26 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         paddingTop: '5%'
     },
+    labelinputAdd: {
+        paddingLeft: '5%',
+        flexDirection: 'column',
+    },
     labelinputdate: {
         flexDirection: 'row',
         paddingLeft: '5%',
-        paddingTop: '5%'
+        paddingTop: '5%',
+        backgroundColor: '#fff'
     },
     labelDate: {
-        fontSize: 20,
+        fontSize: 15,
     },
     datapicker: {
         marginTop: 150
     },
     modalDataEntrada: {
-        backgroundColor: '#808080'
+        flex: 0.5,
+        backgroundColor: '#fff',
+        height: 100
     },
     labelinputFixa: {
         flexDirection: 'row',

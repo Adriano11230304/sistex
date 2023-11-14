@@ -87,6 +87,19 @@ class Categoria{
             })
         })
     }
+
+    static findByTitulo(titulo, limit){
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM categorias WHERE titulo LIKE ? ORDER BY titulo asc LIMIT ?;",
+                    [titulo, limit],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
 }
 
 export default Categoria;

@@ -16,6 +16,12 @@ class CategoriaController{
         }
     }
 
+    async findTitulo(name, limit) {
+        const search = `%${name}%`
+        const categoria = await Categoria.findByTitulo(search, limit);
+        return categoria;
+    }
+
     async findById(id) {
         const categoria = await Categoria.findById(id);
         if (categoria.length > 0) {
