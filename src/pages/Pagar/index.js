@@ -12,6 +12,7 @@ import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
+import { despTodosDados } from '../../controllers/utils/functions';
 
 
 
@@ -35,41 +36,6 @@ export default function ContasPagar({ navigation, route }) {
     const [prevPage, setPrevPage] = useState(false);
     const [nexPage, setNexPage] = useState(false);
 
-    async function despTodosDados(despesas){
-        const despesasTotais = [];
-        let json;
-        for(des of despesas){
-            json = {};
-            const forn = await FornecedorController.findById(des.fornecedor_id);
-            const categoria = await CategoriaController.findById(des.categoria_id);
-            const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
-            let dataPagamento = "";
-            if (des.data_pagamento) {
-                dataPagamento = new Date(des.data_pagamento).toLocaleString().substring(0, 10);
-            } else {
-                dataPagamento = "";
-            }
-
-            json = {
-                "id": des.id,
-                "valor": des.valor,
-                "categoria_id": des.categoria_id,
-                "categoria": categoria.titulo,
-                "fornecedor_id": des.fornecedor_id,
-                "fornecedor": forn.name,
-                "data_entrada": data,
-                "data_pagamento": dataPagamento,
-                "pago": des.pago,
-                "forma_pagamento": des.forma_pagamento,
-                "fixa": des.fixa
-            }
-
-            despesasTotais.push(json);
-        }
-
-        return despesasTotais;
-    }
-
     async function atualizarDespesas(){
         dispatch({ 'type': 'loading' });
         // const pagar = await PagarController.add(3.45, "nada", 1, true, 5, 1, Date.now(), Date.now(), false, null, "credito");
@@ -78,6 +44,7 @@ export default function ContasPagar({ navigation, route }) {
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
         const despesas = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
+        console.log(despesas);
         const teste = await despTodosDados(despesas);
         const despNext = await PagarController.listAll(page + 1, datainicio, datafim, pagas, naoPagas);
         const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, pagas, naoPagas);

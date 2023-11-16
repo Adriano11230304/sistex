@@ -12,6 +12,7 @@ import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
+import { despTodosDados } from '../../controllers/utils/functions';
 
 
 
@@ -34,39 +35,6 @@ export default function ContasPagarVariaveis({ navigation, route }) {
     const [page, setPage] = useState(1);
     const [prevPage, setPrevPage] = useState(false);
     const [nexPage, setNexPage] = useState(false);
-
-    async function despTodosDados(despesas) {
-        const despesasTotais = [];
-        let json;
-        for (des of despesas) {
-            const forn = await FornecedorController.findById(des.fornecedor_id);
-            const categoria = await CategoriaController.findById(des.categoria_id);
-            const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
-            let dataPagamento = "";
-            if (des.data_pagamento) {
-                dataPagamento = new Date(des.data_pagamento).toLocaleString().substring(0, 10);
-            } else {
-                dataPagamento = "";
-            }
-
-            json = {
-                "id": des.id,
-                "valor": des.valor,
-                "categoria_id": des.categoria_id,
-                "categoria": categoria.titulo,
-                "fornecedor_id": des.fornecedor_id,
-                "fornecedor": forn.name,
-                "data_entrada": data,
-                "data_pagamento": dataPagamento,
-                "pago": des.pago,
-                "fixa": des.fixa
-            }
-
-            despesasTotais.push(json);
-        }
-
-        return despesasTotais;
-    }
 
     async function atualizarDespesas() {
         dispatch({ 'type': 'loading' });
@@ -145,7 +113,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
     }
 
     async function addDespesa() {
-        navigation.navigate("AddDespesa");
+        navigation.navigate("AddDespesaIcons");
     }
 
     const Item = ({ item }) => (

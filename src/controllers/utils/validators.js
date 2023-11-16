@@ -47,5 +47,32 @@ export async function categoriaValidate(schema) {
 
 } 
 
+let pagarSchema = Yup.object().shape({
+    valor: Yup.number().required("Valor é obrigatório!"),
+    parcelas: Yup.number().required("Parcelas é obrigatória!"),
+    fixa: Yup.boolean("É necessário que seja um booleano!").required("Escolher se a despesa é fixa ou variável é obrigatório!"),
+    categoria_id: Yup.number().required("Escolher a categoria é obrigatória!").typeError("Categoria inválida"),
+    fornecedor_id: Yup.number().required("Escolher o fornecedor é obrigatório!").typeError("Fornecedor inválido"),
+    data_entrada: Yup.number().required("Data de entrada é obrigatória!").typeError("Coloque uma data de entrada válida"),
+    pago: Yup.boolean().required("Escolher se a despesa é paga ou não é obrigatória!"),
+    forma_pagamento: Yup.string().required("Escolher a forma de pagamento é obrigatória!")
+});
 
+export async function pagarValidate(schema) {
+    try {
+        const despesa = await pagarSchema.validate(schema, { abortEarly: true });
 
+        const valid = {
+            "validate": despesa,
+            "isValid": true
+        }
+        return valid;
+    } catch (e) {
+        const valid = {
+            "validate": e.message,
+            "isValid": false
+        }
+        return valid;
+    }
+
+} 

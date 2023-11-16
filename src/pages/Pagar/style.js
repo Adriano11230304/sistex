@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     image: {
         width: 12,
         height: 12,
-        marginLeft: 7
+        marginLeft: 8
     },
     select: {
         justifyContent: 'center',

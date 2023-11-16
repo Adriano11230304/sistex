@@ -12,20 +12,21 @@ import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import CategoriaController from '../../controllers/CategoriaController';
+import { pagarValidate } from '../../controllers/utils/validators';
+import { despTodosDados } from '../../controllers/utils/functions';
 
 export default function AddDespesas({ navigation, route }) {
     const { state, dispatch } = useAuth();
     const [valor, setValor] = useState(null);
     const [observacoes, setObservacoes] = useState(null);
     const [parcelas, setParcelas] = useState(1);
-    const [ fixa, setFixa ] = useState("Nao");
+    const [ fixa, setFixa ] = useState(false);
     const [ categoria_id, setCategoria_id ] = useState(null);
     const [ fornecedor_id, setFornecedor_id ] = useState(null);
     const [ fornecedor, setFornecedor ] = useState("Fornecedor não escolhido")
     const [ categoria, setCategoria ] = useState("Categoria não escolhida");
-    const [created_at, setCreated_at] = useState(null);
     const [data_entrada, setData_entrada] = useState("Não escolhida");
-    const [pago, setPago] = useState("Nao");
+    const [pago, setPago] = useState(false);
     const [data_pagamento, setData_pagamento] = useState("Não escolhida");
     const [forma_pagamento, setForma_pagamento] = useState("pix");
     const [loading, setLoading] = useState(false);
@@ -52,42 +53,49 @@ export default function AddDespesas({ navigation, route }) {
 
     const addPagar = async () => {
         setLoading(true);
-        
-        /*const validatedesp = {
-            "name": nome,
-            "email": email
-        }*/
-        const teste = {
-            "isValid": true
+        const dataEntradaFormatada = new Date(data_entrada.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
+        let dataPagamentoFormatada;
+        if(pago){
+            dataPagamentoFormatada = new Date(data_pagamento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
+        }else{
+            dataPagamentoFormatada = null;
         }
+        
+        const validatedesp = {
+            "valor": valor,
+            "parcelas": parcelas,
+            "fixa": fixa,
+            "categoria_id": categoria_id,
+            "fornecedor_id": fornecedor_id,
+            "data_entrada": dataEntradaFormatada,
+            "pago": pago,
+            "forma_pagamento": forma_pagamento
+        }
+
+        const teste = await pagarValidate(validatedesp);
         if (teste.isValid) {
-            setValor(3.56);
-            setParcelas(0);
-            setObservacoes("");
-            setFixa(true);
-            setCategoria_id(2);
-            setFornecedor_id(1);
-            setCreated_at(Date.now().getTime());
-            setData_entrada(new Date('2023-11-13T00:00:00').getTime());
-            setData_pagamento(new Date('2023-11-23T00:00:00').getTime());
-            setPago(false);
-            // const desp = await PagarController.add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento);
-            // ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
             const date = Date.now();
+            const desp = await PagarController.add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, date, dataEntradaFormatada, pago, dataPagamentoFormatada, forma_pagamento);
+            console.log(desp);
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
+            const despesas = await PagarController.listAll(1, datainicio, datafim);
+            
             const action = {
                 "type": "atualizarDespesas",
-                "despesas": await PagarController.listAll(1, datainicio, datafim)
+                "despesas": await despTodosDados(despesas)
             }
+            ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
             dispatch(action);
             setLoading(false);
-            navigation.navigate('PagarStack', '1');
+            navigation.navigate('PagarStack');
         } else {
             ToastAndroid.show(teste.validate, ToastAndroid.SHORT);
             setLoading(false);
         }
+
+        setLoading(false);
 
     }
 
@@ -301,18 +309,30 @@ export default function AddDespesas({ navigation, route }) {
                             <Text style={styles.labelAdd}>Despesa Fixa:</Text>
                             <SelectDropdown
                                 buttonStyle={styles.selectedFixa}
-                                defaultValue={fixa}
+                                defaultValue={"Nao"}
                                 data={["Sim", "Nao"]}
-                                onSelect={(selectedItem, index) => { setFixa(selectedItem); }}
+                                onSelect={(selectedItem, index) => { 
+                                    if(selectedItem == 'Nao'){
+                                        setFixa(false);
+                                    }else{
+                                        setFixa(true);
+                                    }
+                                }}
                             />
                         </View>
                         <View style={styles.labelinputFixa}>
                             <Text style={styles.labelAdd}>Despesa já está paga:</Text>
                             <SelectDropdown
                                 buttonStyle={styles.selectedFixa}
-                                defaultValue={pago}
+                                defaultValue={"Nao"}
                                 data={["Sim", "Nao"]}
-                                onSelect={(selectedItem, index) => { setPago(selectedItem); }}
+                                onSelect={(selectedItem, index) => { 
+                                    if(selectedItem == 'Nao'){
+                                        setPago(false);
+                                    }else{
+                                        setPago(true);
+                                    }
+                                }}
                             />
                         </View>
                         <View style={styles.labelinputFixa}>
