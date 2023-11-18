@@ -49,14 +49,14 @@ export const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         flexDirection: 'row',
-        borderBottomColor: 'gray',
+        borderBottomColor: 'gray'
     },
     buttonText: {
         paddingRight: '5%',
         paddingTop: '2%'
     },
     buttonAdd: {
-        paddingBottom: '3%',
+        paddingBottom: '5%',
         alignSelf: 'flex-end',
         paddingEnd: '7%'
     },
@@ -88,67 +88,11 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: '5%'
     },
-    salvarUpdate: {
-        backgroundColor: '#5d8aa8',
-        borderRadius: 20,
-        width: 130,
-        height: 40,
-        alignSelf: 'center',
-        marginTop: '5%',
-    },
-    salvarUpdate2: {
-        backgroundColor: 'gray',
-        borderRadius: 20,
-        width: 130,
-        height: 40,
-        alignSelf: 'center',
-        marginTop: '5%',
-        marginLeft: '5%'
-    },
     salvarText: {
         paddingTop: '5%',
         alignSelf: 'center',
         fontSize: 20,
         color: '#fff',
         fontWeight: 'bold'
-    },
-    salvarTextUpdate: {
-        paddingTop: '5%',
-        alignSelf: 'center',
-        fontSize: 20,
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    buttonupdatevoltar: {
-        flexDirection: 'row',
-        alignSelf: 'center',
-    },
-    buttons: {
-        flexDirection: 'row-reverse'
-    },
-    pagesNext: {
-        flexDirection: 'row',
-        paddingBottom: '3%',
-        paddingRight: '40%'
-    },
-    visualizarFornecedor: {
-        flexDirection: 'column',
-        paddingTop: '5%',
-        paddingLeft: '5%'
-
-    },
-    visualizarFornecedorText: {
-        fontSize: 20,
-        paddingTop: '5%',
-        fontWeight: 'bold'
-    },
-    salvarUpdate3: {
-        backgroundColor: 'gray',
-        borderRadius: 20,
-        width: 130,
-        height: 40,
-        alignSelf: 'center',
-        marginTop: '10%',
-        marginLeft: '5%'
     },
 });

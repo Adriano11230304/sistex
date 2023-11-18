@@ -28,11 +28,25 @@ export async function despTodosDados(despesas) {
             "data_pagamento": dataPagamento,
             "pago": des.pago,
             "forma_pagamento": des.forma_pagamento,
-            "fixa": des.fixa
+            "fixa": des.fixa,
+            "parcela": des.parcelas,
+            "parcelamento": des.parcelamento
         }
 
         despesasTotais.push(json);
     }
 
     return despesasTotais;
+}
+
+export function somatorioDespesas(despesas){
+    let somaTotal = 0;
+
+    for(des of despesas){
+        somaTotal += des.valor;
+    }
+
+    somaTotal = somaTotal.toFixed(2);
+
+    return somaTotal;
 }

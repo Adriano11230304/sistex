@@ -34,7 +34,7 @@ class ClienteController {
     async findById(id) {
         const cliente = await Cliente.findById(id);
         if (cliente.length > 0) {
-            return Cliente[0];
+            return cliente[0];
         } else {
             return "Cliente com esse id não encontrado!";
         }

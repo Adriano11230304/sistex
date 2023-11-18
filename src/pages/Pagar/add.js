@@ -13,7 +13,7 @@ import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import CategoriaController from '../../controllers/CategoriaController';
 import { pagarValidate } from '../../controllers/utils/validators';
-import { despTodosDados } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
 
 export default function AddDespesas({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -75,21 +75,64 @@ export default function AddDespesas({ navigation, route }) {
         const teste = await pagarValidate(validatedesp);
         if (teste.isValid) {
             const date = Date.now();
-            const desp = await PagarController.add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, date, dataEntradaFormatada, pago, dataPagamentoFormatada, forma_pagamento);
-            console.log(desp);
+            let parc = parcelas;
+            while(parc > 0){
+                let mes = new Date(dataEntradaFormatada).getMonth() + parc;
+                let ano = new Date(dataEntradaFormatada).getFullYear();
+                if(mes > 12){
+                    mes = mes - 12
+                    ano++;
+                }
+                mes = mes < 10 ? "0"+mes : mes;
+            
+                if(parc > 1){
+                    let data = new Date(ano + "-" + mes + "-01T00:00:00").getTime();
+                    const desp = await PagarController.add(valor, obs, parc, fixa, categoria_id, fornecedor_id, date, data, false, null, forma_pagamento, true);
+                }else{
+                    const desp = await PagarController.add(valor, observacoes, parc, fixa, categoria_id, fornecedor_id, date, dataEntradaFormatada, pago, dataPagamentoFormatada, forma_pagamento, false);
+                }
+                
+                parc--;
+            }
+
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-            const despesas = await PagarController.listAll(1, datainicio, datafim);
-            
-            const action = {
-                "type": "atualizarDespesas",
-                "despesas": await despTodosDados(despesas)
+            if (route.params.prefix == 'fixa'){
+                const despesas = await PagarController.listAllFixas(1, datainicio, datafim);
+                const action = {
+                    "type": "atualizarDespesasFixas",
+                    "despesasFixas": await despTodosDados(despesas),
+                    "valorTotalFixas": somatorioDespesas(despesas)
+                }
+                dispatch(action);
+                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
+                setLoading(false);
+                navigation.navigate('PagarFixaStack');
+            } else if (route.params.prefix == 'variavel'){
+                const despesas = await PagarController.listAllVariaveis(1, datainicio, datafim);
+                const action = {
+                    "type": "atualizarDespesasVariaveis",
+                    "despesasVariaveis": await despTodosDados(despesas),
+                    "valorTotalVariaveis": somatorioDespesas(despesas)
+                }
+                dispatch(action);
+                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
+                setLoading(false);
+                navigation.navigate('PagarVariavelStack');
+            }else{
+                const despesas = await PagarController.listAll(1, datainicio, datafim);
+                const action = {
+                    "type": "atualizarDespesas",
+                    "despesas": await despTodosDados(despesas),
+                    "valorTotal": somatorioDespesas(despesas)
+                }
+                dispatch(action);
+                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
+                setLoading(false);
+                navigation.navigate('PagarStack');
             }
-            ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
-            dispatch(action);
-            setLoading(false);
-            navigation.navigate('PagarStack');
+            
         } else {
             ToastAndroid.show(teste.validate, ToastAndroid.SHORT);
             setLoading(false);
@@ -174,6 +217,10 @@ export default function AddDespesas({ navigation, route }) {
                                         }
                                     }
                                 />
+                                    <TouchableOpacity style={styles.modalSalvar}
+                                        onPress={() => setModalVisiblePicker(false)}>
+                                        <Text style={styles.salvarText}>Voltar</Text>
+                                    </TouchableOpacity>
                                 </Modal>
                         </View>
                         <View style={styles.labelinput}>
@@ -289,7 +336,7 @@ export default function AddDespesas({ navigation, route }) {
                                 <Modal
                                     statusBarTranslucent={true}
                                     animationType="fade"
-                                    transparent={true}
+                                    transparent={false}
                                     visible={modalVisiblePickerPagamento}
                                     hardwareAccelerated={true}
                                 >
@@ -303,6 +350,10 @@ export default function AddDespesas({ navigation, route }) {
                                             }
                                         }
                                     />
+                                    <TouchableOpacity style={styles.modalSalvar}
+                                        onPress={() => setModalVisiblePickerPagamento(false)}>
+                                        <Text style={styles.salvarText}>Voltar</Text>
+                                    </TouchableOpacity>
                                 </Modal>
                             </View>
                         <View style={styles.labelinputFixa}>

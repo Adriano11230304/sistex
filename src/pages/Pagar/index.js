@@ -12,7 +12,7 @@ import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
-import { despTodosDados } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
 
 
 
@@ -41,11 +41,12 @@ export default function ContasPagar({ navigation, route }) {
         // const pagar = await PagarController.add(3.45, "nada", 1, true, 5, 1, Date.now(), Date.now(), false, null, "credito");
         // console.log(pagar);
         // const apagar = await PagarController.remove(2);
+        let mesfim = 1 + parseInt(selected.substring(0, 2));
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-        const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+        const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const despesas = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
-        console.log(despesas);
-        const teste = await despTodosDados(despesas);
+        const despesasf = await PagarController.listAllFixas(page, datainicio, datafim, pagas, naoPagas);
+        const despesasv = await PagarController.listAllVariaveis(page, datainicio, datafim, pagas, naoPagas);
         const despNext = await PagarController.listAll(page + 1, datainicio, datafim, pagas, naoPagas);
         const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
@@ -59,10 +60,23 @@ export default function ContasPagar({ navigation, route }) {
         } else {
             setPrevPage(false);
         }
+        console.log("despesas", despesas);
+        console.log("todas Desp", await despTodosDados(despesas));
 
         dispatch({
             "type": "atualizarDespesas",
-            "despesas": await despTodosDados(despesas)
+            "despesas": await despTodosDados(despesas),
+            "valorTotal": somatorioDespesas(despesas)
+        })
+        dispatch({
+            "type": "atualizarDespesasFixas",
+            "despesasFixas": await despTodosDados(despesasf),
+            "valorTotalFixas": somatorioDespesas(despesasf)
+        })
+        dispatch({
+            "type": "atualizarDespesasVariaveis",
+            "despesasVariaveis": await despTodosDados(despesasv),
+            "valorTotalVariaveis": somatorioDespesas(despesasv)
         })
 
         dispatch({ 'type': 'loadingfalse' })
@@ -83,13 +97,15 @@ export default function ContasPagar({ navigation, route }) {
         if (searchText != "") {
             dispatch({ "type": "loading" })
             const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-            const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+            let mesfim = 1 + parseInt(selected.substring(0, 2));
+            const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
             let newList = null;
             newList = await PagarController.findFornecedororCategoria(searchText, datainicio, datafim, 50);
             const despesasTotais = await despTodosDados(newList);
             const action = {
                 "type": "atualizarDespesas",
-                "despesas": despesasTotais
+                "despesas": despesasTotais,
+                "valorTotal": somatorioDespesas(newList)
             }
 
             dispatch(action);
@@ -117,13 +133,40 @@ export default function ContasPagar({ navigation, route }) {
     }
 
     async function addDespesa(){
-        navigation.navigate("AddDespesaIcons");
+        navigation.navigate("AddDespesaIcons", {
+            "prefix": "index"
+        });
+    }
+
+    async function alterPago(item) {
+        let pagar;
+        let data_pagamento;
+        if (item.pago) {
+            pagar = false;
+            data_pagamento = null;
+            await PagarController.alterPago(pagar, data_pagamento, item.id);
+            await listDespesas();
+        } else {
+            navigation.navigate('AddDespesaPagamento', {
+                "paramskey": item.id,
+                "prefix": "index"
+            })
+
+        }
+    }
+
+    function editDespesa(id){
+        navigation.navigate("UpdateDespesas", {
+            "key": id,
+            "prefix": "index"
+        })
     }
 
     const Item = ({item}) => (
         <TouchableOpacity style={styles.itemList}>
             <View style={styles.list}>
                 <View style={styles.iconeCategoria}>
+                    {item.parcelamento ? (<><Text style={styles.textCategoria}>[Parcelamento]</Text></>):(<></>)}
                     <Text style={styles.textCategoria}>{item.data_entrada}</Text>
                     <Text style={styles.textCategoria}>{item.categoria}</Text>
                     <Text style={styles.textCategoria}>Despesa {item.fixa ? "fixa" : "variável"}</Text>
@@ -137,14 +180,18 @@ export default function ContasPagar({ navigation, route }) {
             <View>
                 {item.pago ? (
                     <>
-                        <Image style={styles.image} source={require('../../../assets/verde.png')} resizeMode='contain'/>
+                        <TouchableOpacity onPress={() => alterPago(item)}>
+                            <Image style={styles.image} source={require('../../../assets/verde.png')} resizeMode='contain' />
+                        </TouchableOpacity>
                     </>
                 ): (
                     <>
+                        <TouchableOpacity onPress={() => alterPago(item)}>
                             <Image style={styles.image} source={require('../../../assets/vermelho.png')} resizeMode='contain' />
+                        </TouchableOpacity>
                     </>
                 )}
-                <TouchableOpacity><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => editDespesa(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => {removeDespesa(item.id)}}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
             </View>
         </TouchableOpacity>
@@ -156,6 +203,7 @@ export default function ContasPagar({ navigation, route }) {
             <View style={styles.title}>
                 <Text style={styles.text}>Despesas</Text>
             </View>
+            <View style={styles.valorTotal}><Text style={styles.valorTotalText}>Valor Total: R$ {state.valorTotal}</Text></View>
             <View style={styles.select}>
                 <View style={styles.checkbox}>
                     <Text>Não pagas</Text>

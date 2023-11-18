@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 let fornecedorSchema = Yup.object().shape({
     name: Yup.string().required("Nome é obrigatório!"),
     email: Yup.string().email("Email inválido!").required("Email é obrigatório!"),
+    cnpj: Yup.string().required("Colocar números no CNPJ ou CPF é obrigatório").min(11, "Mínimo de 11 números no CPF/CNPJ").max(14, "Máximo de 14 números no CPF/CNPJ")
 });
 
 export async function fornecedorValidate(schema){
@@ -22,6 +23,32 @@ export async function fornecedorValidate(schema){
         return valid;
     }
     
+}
+
+
+let clienteSchema = Yup.object().shape({
+    name: Yup.string().required("Nome é obrigatório!"),
+    email: Yup.string().email("Email inválido!").required("Email é obrigatório!"),
+    cnpj: Yup.string().required("Colocar números no CNPJ ou CPF é obrigatório").min(11, "Mínimo de 11 números no CPF/CNPJ").max(14, "Máximo de 14 números no CPF/CNPJ")
+});
+
+export async function clienteValidate(schema) {
+    try {
+        const cli = await clienteSchema.validate(schema, { abortEarly: true });
+
+        const valid = {
+            "validate": cli,
+            "isValid": true
+        }
+        return valid;
+    } catch (e) {
+        const valid = {
+            "validate": e.message,
+            "isValid": false
+        }
+        return valid;
+    }
+
 }
 
 let categoriaSchema = Yup.object().shape({

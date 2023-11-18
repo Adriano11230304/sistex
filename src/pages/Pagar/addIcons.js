@@ -21,7 +21,7 @@ export default function AddDespesasIcons({ navigation, route }) {
             </View>
 
             <TouchableOpacity style={styles.salvar}><Text style={styles.salvarText}>QR Code</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.salvarManualmente} onPress={() => {navigation.navigate("AddDespesa")}}><Text style={styles.salvarText}>Adicionar uma despesa manualmente</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.salvarManualmente} onPress={() => {navigation.navigate("AddDespesa", {"prefix": route.params.prefix})}}><Text style={styles.salvarText}>Adicionar uma despesa manualmente</Text></TouchableOpacity>
         </SafeAreaView>
     );
 }

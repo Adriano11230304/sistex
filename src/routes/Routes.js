@@ -15,6 +15,14 @@ import AddCategoria from '../pages/Categorias/add';
 import AddDespesas from '../pages/Pagar/add';
 import Receber from '../pages/Receber';
 import AddDespesasIcons from '../pages/Pagar/addIcons';
+import ContasPagarFixas from '../pages/Pagar/despesasFixas';
+import ContasPagarVariaveis from '../pages/Pagar/despesasVariaveis';
+import AddDespesasPagamento from '../pages/Pagar/dataPagamento';
+import UpdateDespesas from '../pages/Pagar/updatePagar';
+import Clientes from '../pages/Clientes';
+import AddClientes from '../pages/Clientes/add';
+import EditClientes from '../pages/Clientes/editar';
+import VisCliente from '../pages/Clientes/visualizar';
 
 
 const Stack = createNativeStackNavigator();
@@ -30,12 +38,49 @@ export const FornecedorStack = () => {
   );
 };
 
+export const ClienteStack = () => {
+  return (
+    <Stack.Navigator initialRouteName='ClienteStack' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ClienteStack" component={Clientes} />
+      <Stack.Screen name="AddCliente" component={AddClientes} />
+      <Stack.Screen name="VisCliente" component={VisCliente} />
+      <Stack.Screen name="EditCliente" component={EditClientes} />
+    </Stack.Navigator>
+  );
+};
+
 export const PagarStack = () => {
   return (
     <Stack.Navigator initialRouteName='PagarStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PagarStack" component={ContasPagar} />
       <Stack.Screen name="AddDespesa" component={AddDespesas}/>
       <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
+      <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento}/>
+      <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
+    </Stack.Navigator>
+  );
+};
+
+export const PagarFixaStack = () => {
+  return (
+    <Stack.Navigator initialRouteName='PagarFixaStack' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="PagarFixaStack" component={ContasPagarFixas} />
+      <Stack.Screen name="AddDespesa" component={AddDespesas} />
+      <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
+      <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento} />
+      <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
+    </Stack.Navigator>
+  );
+};
+
+export const PagarVariavelStack = () => {
+  return (
+    <Stack.Navigator initialRouteName='PagarVariavelStack' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="PagarVariavelStack" component={ContasPagarVariaveis} />
+      <Stack.Screen name="AddDespesa" component={AddDespesas} />
+      <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
+      <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento} />
+      <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
     </Stack.Navigator>
   );
 };

@@ -16,8 +16,8 @@ class PagarController{
         return contas;
     }
 
-    async add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento){
-        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento);
+    async add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento){
+        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento);
         try {
             await conta.create();
             return "Conta adicionado com sucesso!";
@@ -28,7 +28,6 @@ class PagarController{
     }
 
     async findById(id) {
-        console.log(id);
         const conta = await Pagar.findById(id);
         if (conta.length > 0) {
             return conta[0];
@@ -62,6 +61,22 @@ class PagarController{
         const search = `%${text}%`
         const despesas = Pagar.findFornecedororCategoriaVariaveis(search, datainicio, datafim, limit);
         return despesas;
+    }
+
+    async alterPago(pago, data_pagamento, id){
+        const desp = await Pagar.findById(id);
+        await Pagar.alterPago(desp[0], pago, data_pagamento);
+        return "Despesa alterada com sucesso!";
+    }
+
+    async update(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, id){
+        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, id);        
+        try {
+            await conta.update();
+            return "Conta alterada com sucesso!";
+        } catch (err) {
+            return err;
+        }
     }
 }
 

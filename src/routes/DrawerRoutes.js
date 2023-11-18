@@ -6,13 +6,9 @@ import { useAuth } from '../store/auth'
 import { AntDesign, MaterialIcons, Entypo, Octicons } from '@expo/vector-icons';
 import Relatorios from '../pages/Relatorios';
 import Nfse from '../pages/NFSe';
-import Clientes from '../pages/Clientes';
-import Fornecedores from '../pages/Fornecedores';
 import CredenciaisGoogle from '../pages/CredenciaisGoogle';
 import Backups from '../pages/Backups';
-import { FornecedorStack, PagarStack, CategoriaStack, ReceitasStack } from './Routes';
-import ContasPagarFixas from '../pages/Pagar/despesasFixas';
-import ContasPagarVariaveis from '../pages/Pagar/despesasVariaveis';
+import { FornecedorStack, PagarStack, CategoriaStack, ReceitasStack, PagarFixaStack, PagarVariavelStack, ClienteStack } from './Routes';
 
 const Drawer = createDrawerNavigator();
 
@@ -32,12 +28,12 @@ function DrawerRoutes({ navigation }) {
                 <>
                     <Drawer.Screen options={{ drawerIcon: ({ color }) => (<AntDesign name="home" size={24} color={color} />), }} name="Home" component={Home} />
                     <Drawer.Screen name="Despesas" component={PagarStack} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
-                    <Drawer.Screen name="Despesas Fixas" component={ContasPagarFixas} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
-                    <Drawer.Screen name="Despesas Variáveis" component={ContasPagarVariaveis} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
+                    <Drawer.Screen name="Despesas Fixas" component={PagarFixaStack} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
+                    <Drawer.Screen name="Despesas Variáveis" component={PagarVariavelStack} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="money-off" size={24} color={color} />), }} />
                     <Drawer.Screen name="Contas a Receber" component={ReceitasStack} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="attach-money" size={24} color={color} />), }} />
                     <Drawer.Screen name="Emissão de NFSe" component={Nfse} options={{ drawerIcon: ({ color }) => (<Entypo name="direction" size={24} color={color} />), }} />
                     <Drawer.Screen name="Relatórios Financeiros" component={Relatorios} options={{ drawerIcon: ({ color }) => (<AntDesign name="areachart" size={24} color={color} />), }} />
-                    <Drawer.Screen name="Clientes" component={Clientes} options={{ drawerIcon: ({ color }) => (<AntDesign name="contacts" size={24} color={color} />), }} />
+                    <Drawer.Screen name="Clientes" component={ClienteStack} options={{ drawerIcon: ({ color }) => (<AntDesign name="contacts" size={24} color={color} />), }} />
                     <Drawer.Screen name="Fornecedores" component={FornecedorStack} options={{ drawerIcon: ({ color }) => (<Entypo name="v-card" size={24} color={color} />), }} />
                     <Drawer.Screen name="Credenciais Google" component={CredenciaisGoogle} options={{ drawerIcon: ({ color }) => (<AntDesign name="google" size={24} color={color} />), }} />
                     <Drawer.Screen name="Histórico de Backups" component={Backups} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="backup" size={24} color={color} />), }} />

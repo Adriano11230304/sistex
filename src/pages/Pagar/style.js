@@ -52,7 +52,6 @@ export const styles = StyleSheet.create({
         borderBottomColor: 'gray'
     },
     iconeCategoria: {
-        marginTop: '5%',
         paddingLeft: '2%',
         paddingRight: '2%',
         borderRadius: 30,
@@ -74,9 +73,9 @@ export const styles = StyleSheet.create({
         height: 65
     },
     image: {
-        width: 12,
-        height: 12,
-        marginLeft: 8
+        width: 14,
+        height: 14,
+        marginLeft: 7
     },
     select: {
         justifyContent: 'center',
@@ -216,7 +215,6 @@ export const styles = StyleSheet.create({
         marginTop: 150
     },
     modalDataEntrada: {
-        flex: 0.5,
         backgroundColor: '#fff',
         height: 100
     },
@@ -238,5 +236,43 @@ export const styles = StyleSheet.create({
         height: 40,
         alignSelf: 'center',
         marginTop: '5%'
-    }
+    },
+    valorTotal: {
+        backgroundColor: '#5d8aa8',
+        paddingLeft: '5%',
+        paddingBottom: '5%'
+    },
+    valorTotalText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 17
+    },
+    salvarUpdate: {
+        backgroundColor: '#5d8aa8',
+        borderRadius: 20,
+        width: 130,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '5%',
+    },
+    salvarUpdate2: {
+        backgroundColor: 'gray',
+        borderRadius: 20,
+        width: 130,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '5%',
+        marginLeft: '5%'
+    },
+    salvarTextUpdate: {
+        paddingTop: '5%',
+        alignSelf: 'center',
+        fontSize: 20,
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    buttonupdatevoltar: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+    },
 });

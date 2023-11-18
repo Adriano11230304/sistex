@@ -12,7 +12,7 @@ import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
-import { despTodosDados } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
 
 
 
@@ -39,8 +39,10 @@ export default function ContasPagarVariaveis({ navigation, route }) {
     async function atualizarDespesas() {
         dispatch({ 'type': 'loading' });
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-        const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+        let mesfim = 1 + parseInt(selected.substring(0, 2));
+        const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const despesas = await PagarController.listAllVariaveis(page, datainicio, datafim, pagas, naoPagas);
+        const despesast = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
         const despNext = await PagarController.listAllVariaveis(page + 1, datainicio, datafim, pagas, naoPagas);
         const despPrev = await PagarController.listAllVariaveis(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
@@ -57,10 +59,17 @@ export default function ContasPagarVariaveis({ navigation, route }) {
 
         dispatch({
             "type": "atualizarDespesasVariaveis",
-            "despesasVariaveis": await despTodosDados(despesas)
+            "despesasVariaveis": await despTodosDados(despesas),
+            "valorTotalVariaveis": somatorioDespesas(despesas)
+        })
+        dispatch({
+            "type": "atualizarDespesas",
+            "despesas": await despTodosDados(despesast),
+            "valorTotal": somatorioDespesas(despesast)
         })
 
         dispatch({ 'type': 'loadingfalse' })
+        console.log("entrou");
     }
 
 
@@ -79,13 +88,16 @@ export default function ContasPagarVariaveis({ navigation, route }) {
         if (searchText != "") {
             dispatch({ "type": "loading" })
             const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-            const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+            let mesfim = 1 + parseInt(selected.substring(0, 2));
+            const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
             let newList = null;
             newList = await PagarController.findFornecedororCategoriaVariaveis(searchText, datainicio, datafim, 50);
+            
             const despesasTotais = await despTodosDados(newList);
             const action = {
                 "type": "atualizarDespesasVariaveis",
-                "despesasVariaveis": despesasTotais
+                "despesasVariaveis": despesasTotais,
+                "valorTotalVariaveis": somatorioDespesas(newList)
             }
 
             dispatch(action);
@@ -113,7 +125,33 @@ export default function ContasPagarVariaveis({ navigation, route }) {
     }
 
     async function addDespesa() {
-        navigation.navigate("AddDespesaIcons");
+        navigation.navigate("AddDespesaIcons", {
+            "prefix": "variavel"
+        });
+    }
+
+    async function alterPago(item) {
+        let pagar;
+        let data_pagamento;
+        if (item.pago) {
+            pagar = false;
+            data_pagamento = null;
+            const desp = await PagarController.alterPago(pagar, data_pagamento, item.id);
+            await listDespesas();
+        } else {
+            navigation.navigate('AddDespesaPagamento', {
+                "paramskey": item.id,
+                "prefix": "variavel"
+            })
+
+        }
+    }
+
+    function editDespesa(id) {
+        navigation.navigate("UpdateDespesas", {
+            "key": id,
+            "prefix": "variavel"
+        })
     }
 
     const Item = ({ item }) => (
@@ -133,14 +171,18 @@ export default function ContasPagarVariaveis({ navigation, route }) {
             <View>
                 {item.pago ? (
                     <>
-                        <Image style={styles.image} source={require('../../../assets/verde.png')} resizeMode='contain' />
+                        <TouchableOpacity onPress={() => alterPago(item)}>
+                            <Image style={styles.image} source={require('../../../assets/verde.png')} resizeMode='contain' />
+                        </TouchableOpacity>
                     </>
                 ) : (
                     <>
-                        <Image style={styles.image} source={require('../../../assets/vermelho.png')} resizeMode='contain' />
+                        <TouchableOpacity onPress={() => alterPago(item)}>
+                            <Image style={styles.image} source={require('../../../assets/vermelho.png')} resizeMode='contain' />
+                        </TouchableOpacity>
                     </>
                 )}
-                <TouchableOpacity><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => editDespesa(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => { removeDespesa(item.id) }}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
             </View>
         </TouchableOpacity>
@@ -152,6 +194,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
             <View style={styles.title}>
                 <Text style={styles.text}>Despesas Variáveis</Text>
             </View>
+            <View style={styles.valorTotal}><Text style={styles.valorTotalText}>Valor Total: R$ {state.valorTotalVariaveis}</Text></View>
             <View style={styles.select}>
                 <View style={styles.checkbox}>
                     <Text>Não pagas</Text>

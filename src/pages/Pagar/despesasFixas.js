@@ -10,9 +10,10 @@ import { useAuth } from '../../store/auth';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
-import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
-import { despTodosDados } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
+import { Modal } from 'react-native-paper';
+import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 
 
 
@@ -41,7 +42,7 @@ export default function ContasPagarFixas({ navigation, route }) {
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
         const despesas = await PagarController.listAllFixas(page, datainicio, datafim, pagas, naoPagas);
-        console.log(despesas);
+        const despesast = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
         const despNext = await PagarController.listAllFixas(page + 1, datainicio, datafim, pagas, naoPagas);
         const despPrev = await PagarController.listAllFixas(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
@@ -58,7 +59,13 @@ export default function ContasPagarFixas({ navigation, route }) {
 
         dispatch({
             "type": "atualizarDespesasFixas",
-            "despesasFixas": await despTodosDados(despesas)
+            "despesasFixas": await despTodosDados(despesas),
+            "valorTotalFixas": somatorioDespesas(despesas)
+        })
+        dispatch({
+            "type": "atualizarDespesas",
+            "despesas": await despTodosDados(despesast),
+            "valorTotal": somatorioDespesas(despesast)
         })
 
         dispatch({ 'type': 'loadingfalse' })
@@ -85,7 +92,8 @@ export default function ContasPagarFixas({ navigation, route }) {
             const despesasTotais = await despTodosDados(newList);
             const action = {
                 "type": "atualizarDespesasFixas",
-                "despesasFixas": despesasTotais
+                "despesasFixas": despesasTotais,
+                "valorTotalFixas": somatorioDespesas(newList)
             }
 
             dispatch(action);
@@ -113,10 +121,37 @@ export default function ContasPagarFixas({ navigation, route }) {
     }
 
     async function addDespesa() {
-        navigation.navigate("AddDespesaIcons");
+        navigation.navigate("AddDespesaIcons", {
+            "prefix": "fixa"
+        });
+    }
+
+    async function alterPago(item){
+        let pagar;
+        let data_pagamento;
+        if(item.pago){
+            pagar = false;
+            data_pagamento = null;
+            await PagarController.alterPago(pagar, data_pagamento, item.id);
+            await listDespesas();
+        }else{
+            navigation.navigate('AddDespesaPagamento', {
+                "paramskey": item.id,
+                "prefix": "fixa"
+            })
+            
+        }
+    }
+
+    function editDespesa(id) {
+        navigation.navigate("UpdateDespesas", {
+            "key": id,
+            "prefix": "fixa"
+        })
     }
 
     const Item = ({ item }) => (
+        
         <TouchableOpacity style={styles.itemList}>
             <View style={styles.list}>
                 <View style={styles.iconeCategoria}>
@@ -133,14 +168,18 @@ export default function ContasPagarFixas({ navigation, route }) {
             <View>
                 {item.pago ? (
                     <>
-                        <Image style={styles.image} source={require('../../../assets/verde.png')} resizeMode='contain' />
+                        <TouchableOpacity onPress={() => alterPago(item)}>
+                            <Image style={styles.image} source={require('../../../assets/verde.png')} resizeMode='contain' />
+                        </TouchableOpacity>
                     </>
                 ) : (
                     <>
-                        <Image style={styles.image} source={require('../../../assets/vermelho.png')} resizeMode='contain' />
+                        <TouchableOpacity onPress={() => alterPago(item)}>
+                            <Image style={styles.image} source={require('../../../assets/vermelho.png')} resizeMode='contain' />
+                        </TouchableOpacity>
                     </>
                 )}
-                <TouchableOpacity><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => editDespesa(item.id)}><Text style={styles.buttonText}><AntDesign name="edit" size={24} color="black" /></Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => { removeDespesa(item.id) }}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
             </View>
         </TouchableOpacity>
@@ -152,6 +191,7 @@ export default function ContasPagarFixas({ navigation, route }) {
             <View style={styles.title}>
                 <Text style={styles.text}>Despesas Fixas</Text>
             </View>
+            <View style={styles.valorTotal}><Text style={styles.valorTotalText}>Valor Total: R$ {state.valorTotalFixas}</Text></View>
             <View style={styles.select}>
                         <View style={styles.checkbox}>
                             <Text>Não pagas</Text>

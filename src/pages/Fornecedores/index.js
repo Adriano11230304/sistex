@@ -9,6 +9,7 @@ import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-ico
 import LoaderSimple from '../../components/LoaderSimple';
 import FornecedorCard from '../../components/ListFornecedor'
 import { SeparatorItem } from '../../components/SeparatorItem'
+import Vazio from '../../components/Vazio';
 
 export default function Fornecedores({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -167,6 +168,7 @@ export default function Fornecedores({ navigation, route }) {
                         data={state.fornecedores}
                         renderItem={_renderitem}
                         keyExtractor={(item) => item.id}
+                        ListEmptyComponent={<Vazio text="Nenhum Fornecedor encontrado!" />}
                     />
                     <View style={styles.buttons}>
                         <View style={styles.buttonAdd}>

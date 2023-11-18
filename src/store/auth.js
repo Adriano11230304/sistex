@@ -11,17 +11,19 @@ function authReducer(state, action) {
         }case 'atualizarFornecedores': {
             return {...state, fornecedores: action.fornecedores}
         } case 'atualizarDespesasFixas': {
-            return { ...state, despesasFixas: action.despesasFixas }
+            return { ...state, despesasFixas: action.despesasFixas, valorTotalFixas: action.valorTotalFixas }
         } case 'atualizarDespesasVariaveis': {
-            return { ...state, despesasVariaveis: action.despesasVariaveis }
+            return { ...state, despesasVariaveis: action.despesasVariaveis, valorTotalVariaveis: action.valorTotalVariaveis }
         }case 'atualizarDespesas': {
-            return{...state, despesas: action.despesas}
+            return{...state, despesas: action.despesas, valorTotal: action.valorTotal}
         } case 'atualizarCategorias': {
             return { ...state, categorias: action.categorias }
         }case 'loading':{
             return {...state, loading: true}
         }case 'loadingfalse':{
             return {...state, loading: false}
+        } case 'atualizarClientes': {
+            return { ...state, clientes: action.clientes }
         }default: {
             throw new Error(`action.type não tratada: ${action.type}`);
         }
@@ -36,7 +38,11 @@ const initialState = {
     despesas: null,
     categorias: null,
     despesasFixas: null,
-    despesasVariaveis: null
+    despesasVariaveis: null,
+    clientes: null,
+    valorTotal: null,
+    valorTotalVariaveis: null,
+    valorTotalFixas: null
 }
 
 function AuthProvider({ children }) {
