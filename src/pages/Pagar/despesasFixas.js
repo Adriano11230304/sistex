@@ -150,9 +150,15 @@ export default function ContasPagarFixas({ navigation, route }) {
         })
     }
 
+    function visualizar(id) {
+        navigation.navigate("VisPagar", {
+            "paramskey": id
+        })
+    }
+
     const Item = ({ item }) => (
         
-        <TouchableOpacity style={styles.itemList}>
+        <TouchableOpacity style={styles.itemList} onPress={() => visualizar(item.id)}>
             <View style={styles.list}>
                 <View style={styles.iconeCategoria}>
                     <Text style={styles.textCategoria}>{item.data_entrada}</Text>
@@ -161,7 +167,7 @@ export default function ContasPagarFixas({ navigation, route }) {
                 </View>
                 <View style={styles.textListPagar}>
                     <Text style={styles.textList}>{item.fornecedor}</Text>
-                    <Text style={styles.textList}>R$ {item.valor}</Text>
+                    <Text style={styles.textList}>R$ {item.valor.toFixed(2)}</Text>
                     <Text>{item.data_pagamento}</Text>
                 </View>
             </View>

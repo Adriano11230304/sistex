@@ -275,4 +275,24 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center',
     },
+    visualizarPagar: {
+        flexDirection: 'column',
+        paddingTop: '5%',
+        paddingLeft: '5%'
+
+    },
+    visualizarPagarText: {
+        fontSize: 20,
+        paddingTop: '5%',
+        fontWeight: 'bold'
+    },
+    salvarUpdate3: {
+        backgroundColor: 'gray',
+        borderRadius: 20,
+        width: 130,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: '10%',
+        marginLeft: '5%'
+    },
 });

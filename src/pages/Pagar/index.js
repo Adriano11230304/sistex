@@ -162,8 +162,14 @@ export default function ContasPagar({ navigation, route }) {
         })
     }
 
+    function visualizar(id){
+        navigation.navigate("VisPagar", {
+            "paramskey": id
+        })
+    }
+
     const Item = ({item}) => (
-        <TouchableOpacity style={styles.itemList}>
+        <TouchableOpacity style={styles.itemList} onPress={() => visualizar(item.id)}>
             <View style={styles.list}>
                 <View style={styles.iconeCategoria}>
                     {item.parcelamento ? (<><Text style={styles.textCategoria}>[Parcelamento]</Text></>):(<></>)}
@@ -173,7 +179,7 @@ export default function ContasPagar({ navigation, route }) {
                 </View>
                 <View style={styles.textListPagar}>
                     <Text style={styles.textList}>{item.fornecedor}</Text>
-                    <Text style={styles.textList}>R$ {item.valor}</Text>
+                    <Text style={styles.textList}>R$ {item.valor.toFixed(2)}</Text>
                     <Text>{item.data_pagamento}</Text>
                 </View>
             </View>

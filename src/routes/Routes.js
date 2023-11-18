@@ -23,6 +23,7 @@ import Clientes from '../pages/Clientes';
 import AddClientes from '../pages/Clientes/add';
 import EditClientes from '../pages/Clientes/editar';
 import VisCliente from '../pages/Clientes/visualizar';
+import VisPagar from '../pages/Pagar/visualizar';
 
 
 const Stack = createNativeStackNavigator();
@@ -57,6 +58,7 @@ export const PagarStack = () => {
       <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
       <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento}/>
       <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
+      <Stack.Screen name="VisPagar" component={VisPagar} />
     </Stack.Navigator>
   );
 };
@@ -69,6 +71,7 @@ export const PagarFixaStack = () => {
       <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
       <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento} />
       <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
+      <Stack.Screen name="VisPagar" component={VisPagar} />
     </Stack.Navigator>
   );
 };
@@ -81,6 +84,7 @@ export const PagarVariavelStack = () => {
       <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
       <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento} />
       <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
+      <Stack.Screen name="VisPagar" component={VisPagar} />
     </Stack.Navigator>
   );
 };
