@@ -16,7 +16,34 @@ db.transaction((tx) => {
     tx.executeSql(
         "CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, cnpj TEXT);"
     );
-    
 
+    /*tx.executeSql(
+        'DROP TABLE receber;'
+        , [],
+        () => console.log(`Tabela receber excluída`),
+        (tx, e) => console.log(`Erro ao excluir a tabela receber`, e)
+    )*/
+
+    tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS receber (' +
+        'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+        'valor FLOAT,'+
+        'observacoes TEXT,' +
+        'parcelas INTEGER,' +
+        'parcelamento BOOLEAN,' +
+        'data_entrada TIMESTAMP,' +
+        'data_recebimento TIMESTAMP,' +
+        'recebida BOOLEAN,' +
+        'created_at TIMESTAMP,' +
+        'cliente_id INTEGER,' +
+        'forma_recebimento TEXT,' +
+        'FOREIGN KEY(cliente_id) REFERENCES clientes(id)' +
+        ');'
+        , [],
+        () => console.log(`Tabela receber criada com sucesso`),
+        (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
+    )
+    
     console.log("tabelas criadas!");
 });
+

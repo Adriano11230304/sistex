@@ -16,6 +16,8 @@ function authReducer(state, action) {
             return { ...state, despesasVariaveis: action.despesasVariaveis, valorTotalVariaveis: action.valorTotalVariaveis }
         }case 'atualizarDespesas': {
             return{...state, despesas: action.despesas, valorTotal: action.valorTotal}
+        } case 'atualizarReceitas': {
+            return { ...state, receitas: action.receitas, valorTotalReceitas: action.valorTotalReceitas }
         } case 'atualizarCategorias': {
             return { ...state, categorias: action.categorias }
         }case 'loading':{
@@ -42,7 +44,9 @@ const initialState = {
     clientes: null,
     valorTotal: null,
     valorTotalVariaveis: null,
-    valorTotalFixas: null
+    valorTotalFixas: null,
+    valorTotalReceitas: null,
+    receitas: null
 }
 
 function AuthProvider({ children }) {
