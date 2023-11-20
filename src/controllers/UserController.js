@@ -6,11 +6,12 @@ class UserController{
         return users;
     }
 
-    async add(email, verified_email, given_name, picture, id_gmail){
-        const user = new User(email, verified_email, given_name, picture, id_gmail);
+    async add(email, verified_email, given_name, picture, id_gmail, token){
+        const user = new User(email, verified_email, given_name, picture, id_gmail, token);
+        console.log(user);
         try{
-            if (email == null || verified_email == null || given_name == null || picture == null || id_gmail == null){
-                return "Não foi informado todos os dados, dados necessários: email, verified_email, given_name, picture, id_gmail";    
+            if (email == null || verified_email == null || given_name == null || picture == null || id_gmail == null || token == null){
+                return "Não foi informado todos os dados, dados necessários: email, verified_email, given_name, picture, id_gmail, token";    
             }else{
                 await user.create();
                 return "Usuário adicionado com sucesso!";

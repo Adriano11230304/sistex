@@ -9,12 +9,13 @@ class User{
     picture;
     id_gmail;
 
-    constructor(email, verified_email, name, picture, id_gmail) {
+    constructor(email, verified_email, name, picture, id_gmail, token) {
         this.email = email;
         this.verified_email = verified_email;
         this.name = name;
         this.picture = picture;
         this.id_gmail = id_gmail;
+        this.token = token;
         console.log("constructor");
     }
 
@@ -49,8 +50,8 @@ class User{
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO users (email, verified_email, name, picture, id_gmail) values (?, ?, ?, ?, ?);",
-                    [this.email, this.verified_email, this.name, this.picture, this.id_gmail],
+                    "INSERT INTO users (email, verified_email, name, picture, id_gmail, token) values (?, ?, ?, ?, ?, ?);",
+                    [this.email, this.verified_email, this.name, this.picture, this.id_gmail, this.token],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));

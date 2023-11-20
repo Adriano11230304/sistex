@@ -4,9 +4,18 @@ import { styles } from './style';
 import { useEffect } from 'react';
 import SelectHome from '../../components/SelectHome';
 import {useAuth} from '../../store/auth';
+import UserController from '../../controllers/UserController';
 
 export default function Home({ navigation }) {
     const {state, dispatch} = useAuth();
+
+    useEffect(() => {
+        // apagar();
+    }, [])
+
+    /*async function apagar(){
+        const deleted = await UserController.remove(2);
+    }*/
 
     return (
         <View style={styles.container}>

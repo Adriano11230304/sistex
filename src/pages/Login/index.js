@@ -94,7 +94,18 @@ const Login = ({ navigation }) => {
 
       const user = await response.json();
       console.log(user);
-      await UserController.add(user.email, user.verified_email, user.given_name, user.picture, user.id);
+      console.log("token", token);
+      await UserController.add(user.email, user.verified_email, user.given_name, user.picture, user.id, token);
+      const users = await UserController.listAll();
+      console.log(users);
+      if (users.length > 0) {
+        const action = {
+          "type": "signIn",
+          "user": users[0]
+        }
+
+        dispatch(action);
+      }
     }catch (error){
       console.log(error);
     }
