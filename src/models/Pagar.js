@@ -15,8 +15,9 @@ class Pagar {
     data_pagamento;
     forma_pagamento;
     parcelamento;
+    data_vencimento;
 
-    constructor(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento, id = 1) {
+    constructor(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento, data_vencimento,id = 1) {
         this.id = id;
         this.valor = valor;
         this.observacoes = observacoes;
@@ -30,8 +31,22 @@ class Pagar {
         this.data_pagamento = data_pagamento;
         this.forma_pagamento = forma_pagamento;
         this.parcelamento = parcelamento;
+        this.data_vencimento = data_vencimento;
     }
 
+
+    static findAllAll() {
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                    tx.executeSql(
+                        "SELECT * FROM pagar;",
+                        [],
+                        (_, { rows }) => resolve(rows._array),
+                        (_, error) => reject(error)
+                    );
+            });
+        });
+    }
 
     static findAll(page, datainicio, datafim, pagas = false, naoPagas = false) {
         if (page < 1) {

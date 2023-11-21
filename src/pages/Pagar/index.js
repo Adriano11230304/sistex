@@ -42,6 +42,8 @@ export default function ContasPagar({ navigation, route }) {
         // console.log(pagar);
         // const apagar = await PagarController.remove(2);
         let mesfim = 1 + parseInt(selected.substring(0, 2));
+        const totDespesas = await PagarController.listAllAll();
+        console.log("total", totDespesas);
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const despesas = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);

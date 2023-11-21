@@ -6,8 +6,8 @@ class ReceberController {
         return contas;
     }
 
-    async add(valor, parcelas, parcelamento, observacoes, data_entrada, recebida, data_recebimento, cliente_id, forma_recebimento) {
-        const conta = new Receber(valor, parcelas, parcelamento, observacoes, data_entrada, recebida, data_recebimento, cliente_id, forma_recebimento);
+    async add(valor, parcelas, parcelamento, observacoes, data_entrada, recebida, data_recebimento, cliente_id, forma_recebimento, data_vencimento) {
+        const conta = new Receber(valor, parcelas, parcelamento, observacoes, data_entrada, recebida, data_recebimento, cliente_id, forma_recebimento, data_vencimento);
         console.log(conta);
         try {
             await conta.create();

@@ -6,6 +6,11 @@ class PagarController{
         return contas;
     }
 
+    async listAllAll(){
+        const contas = Pagar.findAllAll();
+        return contas;
+    }
+
     async listAllFixas(page, datainicio, datafim, pagas = false, naoPagas = false) {
         const contas = Pagar.findAllFixas(page, datainicio, datafim, pagas, naoPagas);
         return contas;
@@ -16,8 +21,8 @@ class PagarController{
         return contas;
     }
 
-    async add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento){
-        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento);
+    async add(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento, data_vencimento){
+        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento, data_vencimento);
         try {
             await conta.create();
             return "Conta adicionado com sucesso!";
