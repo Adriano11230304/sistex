@@ -54,6 +54,7 @@ db.transaction((tx) => {
     tx.executeSql(
         'CREATE TABLE IF NOT EXISTS backup (' +
         'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+        'tipo TEXT,'+
         'data_entrada TIMESTAMP' +
         ');'
         , [],

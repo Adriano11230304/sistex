@@ -1,4 +1,4 @@
-import db from './configDatabase'
+import Database from '../models/Database'
 
 class Pagar {
 
@@ -37,7 +37,7 @@ class Pagar {
 
     static findAllAll() {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                     tx.executeSql(
                         "SELECT * FROM pagar;",
                         [],
@@ -56,7 +56,7 @@ class Pagar {
         const offset = (page - 1) * 25;
         const limit = 25;
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 if (pagas || naoPagas) {
                     tx.executeSql(
                         "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada < ? AND pago = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
@@ -84,7 +84,7 @@ class Pagar {
         const offset = (page - 1) * 25;
         const limit = 25;
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 if (pagas || naoPagas) {
                     tx.executeSql(
                         "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada < ? AND pago = ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
@@ -112,7 +112,7 @@ class Pagar {
         const offset = (page - 1) * 25;
         const limit = 25;
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 if (pagas || naoPagas) {
                     tx.executeSql(
                         "SELECT * FROM pagar WHERE data_entrada >= ? AND data_entrada < ? AND pago = ? AND fixa = ? ORDER BY data_entrada asc LIMIT ? OFFSET ?;",
@@ -134,7 +134,7 @@ class Pagar {
 
     static findById(id) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM pagar WHERE id = ?;",
                     [id],
@@ -147,7 +147,7 @@ class Pagar {
 
     create() {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "INSERT INTO pagar (valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
                     [this.valor, this.observacoes, this.parcelas, this.fixa, this.categoria_id, this.fornecedor_id, this.created_at, this.data_entrada, this.pago, this.data_pagamento, this.forma_pagamento, this.parcelamento],
@@ -163,7 +163,7 @@ class Pagar {
 
     static delete(id) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "DELETE FROM pagar WHERE id=?;",
                     [id],
@@ -178,7 +178,7 @@ class Pagar {
 
     static findFornecedororCategoria(text, datainicio, datafim, limit){
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT pagar.id, pagar.valor, pagar.categoria_id, pagar.fornecedor_id, fornecedores.name, categorias.titulo, pagar.data_entrada, pagar.data_pagamento, pagar.forma_pagamento, pagar.pago, pagar.fixa FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id INNER JOIN categorias ON categorias.id = pagar.categoria_id  WHERE pagar.data_entrada >= ? and pagar.data_entrada < ? AND (fornecedores.name LIKE ? OR categorias.titulo LIKE ?) ORDER BY pagar.data_entrada asc LIMIT ?",
                     [datainicio, datafim, text, text, limit],
@@ -191,7 +191,7 @@ class Pagar {
 
     static findFornecedororCategoriaVariaveis(text, datainicio, datafim, limit) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT pagar.id, pagar.valor, pagar.categoria_id, pagar.fornecedor_id, fornecedores.name, categorias.titulo, pagar.data_entrada, pagar.data_pagamento, pagar.forma_pagamento, pagar.pago, pagar.fixa FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id INNER JOIN categorias ON categorias.id = pagar.categoria_id  WHERE pagar.data_entrada >= ? and pagar.data_entrada < ? AND pagar.fixa = ? AND (fornecedores.name LIKE ? OR categorias.titulo LIKE ?) ORDER BY pagar.data_entrada asc LIMIT ?",
                     [datainicio, datafim, false, text, text, limit],
@@ -204,7 +204,7 @@ class Pagar {
 
     static findFornecedororCategoriaFixas(text, datainicio, datafim, limit) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT pagar.id, pagar.valor, pagar.categoria_id, pagar.fornecedor_id, fornecedores.name, categorias.titulo, pagar.data_entrada, pagar.data_pagamento, pagar.forma_pagamento, pagar.pago, pagar.fixa FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id INNER JOIN categorias ON categorias.id = pagar.categoria_id  WHERE pagar.data_entrada >= ? and pagar.data_entrada < ? AND pagar.fixa = ? AND (fornecedores.name LIKE ? OR categorias.titulo LIKE ?) ORDER BY pagar.data_entrada asc LIMIT ?",
                     [datainicio, datafim, true, text, text, limit],
@@ -217,7 +217,7 @@ class Pagar {
 
     static alterPago(desp, pago, data_pagamento) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "UPDATE pagar SET pago = ?, data_pagamento = ? WHERE id = ?;",
                     [pago, data_pagamento, desp.id],
@@ -233,7 +233,7 @@ class Pagar {
 
     update(){
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "UPDATE pagar SET valor = ?, observacoes = ?, data_entrada = ?, data_pagamento = ?, fixa = ?, categoria_id = ?, fornecedor_id = ?, pago = ?, forma_pagamento = ? WHERE id = ?;",
                     [this.valor, this.observacoes, this.data_entrada, this.data_pagamento, this.fixa, this.categoria_id, this.fornecedor_id, this.pago, this.forma_pagamento, this.id],

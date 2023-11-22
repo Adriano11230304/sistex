@@ -7,10 +7,10 @@ import * as FileSystem from 'expo-file-system';
 import { useEffect, useState } from 'react';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
+import Database from '../../models/Database'
 
 export default function Backups() {
 
-    const [db, setDb] = useState(SQLite.openDatabase('sistex.db'));
   useEffect(() => {
     openDatabase();
   }, []);
@@ -19,14 +19,6 @@ export default function Backups() {
     if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
       await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
     }
-
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM users;',
-      [],
-      (_, {rows}) => console.log(rows),
-      (_, e) => (console.log(e))
-      )
-    })
   }
 
   async function exportData(){
@@ -62,8 +54,20 @@ export default function Backups() {
         );
 
         await FileSystem.writeAsStringAsync(FileSystem.documentDirectory + 'SQLite/sistex.db', base64, { encoding: FileSystem.EncodingType.Base64 });
-        db.closeAsync();
-        setDb(SQLite.openDatabase('sistex.db'));
+        try{
+          Database.closeDb();
+          Database.setDb(SQLite.openDatabase('sistex.db'));
+          Database.db.transaction(tx => {
+            tx.executeSql('SELECT * FROM backup;',
+            [],
+            (_, {rows}) => console.log(rows),
+            (_, e) => (console.log(e))
+            )
+          })
+        }catch(e){
+          console.log(e);
+        }
+        
       } else {
         console.log("Renomeie para 'sistex.db' o nome do arquivo que você está tentando importar.");
       }
