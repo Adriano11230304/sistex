@@ -11,11 +11,6 @@ export const styles = StyleSheet.create({
         borderRadius: 28,
         marginLeft: '10%'
     },
-    textListPagar: {
-        paddingLeft: '10%',
-        width: 250,
-        height: 65
-    },
     itemList: {
         flex: 1,
         height: 60,

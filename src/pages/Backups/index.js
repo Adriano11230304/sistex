@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import Header from '../../components/Header'
 import { styles } from './style';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, FlatList } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 import * as FileSystem from 'expo-file-system';
 import { useEffect, useState } from 'react';
@@ -14,13 +14,34 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Vazio from '../../components/Vazio';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../store/auth';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Backups() {
   const [ backups, setBackups ] = useState(null);
   const { state, dispatch } = useAuth();
 
+  async function atualizarBackups(){
+    const backupsArray = [];
+    let json;
+    const bacs = await BackupController.listAll(1);
+    console.log(bacs);
+    for(let bac of bacs){
+      let data_formatted = dataRecebimento = new Date(bac.data_entrada).toLocaleString().substring(0, 10);
+      json = {
+        "id": bac.id,
+        "tipo": bac.TIPO,
+        "data_entrada": data_formatted
+      }
+
+      backupsArray.push(json);
+    }
+
+    setBackups(backupsArray)
+  }
+
   useEffect(() => {
     openDatabase();
+    atualizarBackups();
   }, []);
 
   async function openDatabase() {
@@ -89,17 +110,17 @@ export default function Backups() {
   }
 
   const Item = ({ item }) => (
-    <SafeAreaView style={styles.itemList}>
+    <View style={styles.itemList}>
       <View style={styles.list}>
         <View style={styles.textListPagar}>
           <Text style={styles.textList}>{item.tipo}</Text>
           <Text style={styles.textList}>{item.data_entrada}</Text>
         </View>
         <View>
-          <TouchableOpacity onPress={() => delBackup(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => delBackup(item.id)}><Text style={styles.buttonTextLixeira}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 
     return (
@@ -129,8 +150,8 @@ export default function Backups() {
             )}
             <View style={styles.buttonsFinal}>
             <View style={styles.buttons}>
-            <TouchableOpacity onPress={exportData} style={styles.button}><Text style={styles.buttonText}>Exportar Dados</Text></TouchableOpacity>
-            <TouchableOpacity onPress={importData} style={styles.button}><Text style={styles.buttonText}>Importar Dados</Text></TouchableOpacity>
+            <TouchableOpacity onPress={exportData} style={styles.button}><Text style={styles.buttonText}>Exportar</Text></TouchableOpacity>
+            <TouchableOpacity onPress={importData} style={styles.button}><Text style={styles.buttonText}>Importar</Text></TouchableOpacity>
             </View>
             </View>
             <StatusBar style="auto" />
