@@ -8,8 +8,16 @@ import { useEffect, useState } from 'react';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import Database from '../../models/Database'
+import BackupController from '../../controllers/BackupController';
+import LoaderSimple from '../../components/LoaderSimple';
+import { SeparatorItem } from '../../components/SeparatorItem';
+import Vazio from '../../components/Vazio';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '../../store/auth';
 
 export default function Backups() {
+  const [ backups, setBackups ] = useState(null);
+  const { state, dispatch } = useAuth();
 
   useEffect(() => {
     openDatabase();
@@ -76,12 +84,49 @@ export default function Backups() {
     }
   }
 
+  async function delBackup(id){
+    console.log("remove backup");
+  }
+
+  const Item = ({ item }) => (
+    <SafeAreaView style={styles.itemList}>
+      <View style={styles.list}>
+        <View style={styles.textListPagar}>
+          <Text style={styles.textList}>{item.tipo}</Text>
+          <Text style={styles.textList}>{item.data_entrada}</Text>
+        </View>
+        <View>
+          <TouchableOpacity onPress={() => delBackup(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+
     return (
         <View style={styles.container}>
             <Header />
             <View style={styles.title}>
                 <Text style={styles.text}>Backups</Text>
             </View>
+        {state.loading ? (
+          <>
+            <LoaderSimple />
+          </>
+        ) : (
+            <>
+              <FlatList
+                ItemSeparatorComponent={SeparatorItem}
+                initialNumToRender={50}
+                maxToRenderPerBatch={50}
+                showsVerticalScrollIndicator={false}
+                data={backups}
+                renderItem={({ item }) => <Item item={item} />}
+                keyExtractor={(item) => item.id}
+                ListEmptyComponent={<Vazio text="Nenhum backup encontrado!" />}
+
+              />
+            </>
+            )}
             <View style={styles.buttonsFinal}>
             <View style={styles.buttons}>
             <TouchableOpacity onPress={exportData} style={styles.button}><Text style={styles.buttonText}>Exportar Dados</Text></TouchableOpacity>
