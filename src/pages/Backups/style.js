@@ -28,9 +28,21 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
     },
+    textInformation: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    information: {
+        paddingBottom: '10%',
+        paddingLeft: '5%',
+        paddingRight: '5%'
+    },
     buttons:{
+        flex: 1,
         flexDirection: 'row',
-        paddingLeft: '10%'
+        alignSelf: 'center',
+        paddingTop: '50%'
     },
     buttonsFinal: {
         flexDirection: 'row',
