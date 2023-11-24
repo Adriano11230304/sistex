@@ -30,13 +30,11 @@ export const styles = StyleSheet.create({
     },
     buttons:{
         flexDirection: 'row',
+        paddingLeft: '10%'
     },
     buttonsFinal: {
-        flex: 1,
-        flexDirection: 'column-reverse',
-        paddingBottom: '5%',
-        alignContent: 'center',
-        alignItems: 'center'
+        flexDirection: 'row',
+        paddingBottom: '5%'
     },
     title: {
         backgroundColor: '#5d8aa8',
@@ -69,5 +67,10 @@ export const styles = StyleSheet.create({
     buttonTextLixeira: {
         paddingTop: '2%',
         paddingRight: '5%'
+    },
+    pagesNext: {
+        flexDirection: 'row',
+        paddingTop: '3%',
+        paddingLeft: '3%'
     },
 });

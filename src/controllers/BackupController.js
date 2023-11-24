@@ -6,6 +6,11 @@ class BackupController {
         return backups;
     }
 
+    async listAllAll() {
+        const backups = await Backup.findAllAll();
+        return backups;
+    }
+
     async add(tipo, data_entrada) {
         const backup = new Backup(tipo, data_entrada);
         try {
