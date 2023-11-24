@@ -120,7 +120,7 @@ export default function ContasReceber({ navigation, route }) {
     }
 
     async function alterRecebida(item) {
-        console.log("recebida");
+        console.log("recebida fazer");
         /*let pagar;
         let data_pagamento;
         if (item.pago) {
