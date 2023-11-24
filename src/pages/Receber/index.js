@@ -116,11 +116,7 @@ export default function ContasReceber({ navigation, route }) {
     }
 
     async function addReceita() {
-        console.log("Adicionar");
-        /*
-        navigation.navigate("AddDespesaIcons", {
-            "prefix": "index"
-        });*/
+        navigation.navigate("AddReceitaIcon");
     }
 
     async function alterRecebida(item) {

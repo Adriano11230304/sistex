@@ -31,20 +31,19 @@ export default function Backups() {
     const bacNext = await BackupController.listAll(page + 1);
     console.log(page);
     console.log("bac", bacNext);
-    console.log("todos", await BackupController.listAllAll());
-        const bacPrev = await BackupController.listAll(page - 1);
-        if (bacNext.length > 0) {
-            setNexPage(true);
-        } else {
-            setNexPage(false);
-        }
-        console.log("next", nexPage);
+    const bacPrev = await BackupController.listAll(page - 1);
+    if (bacNext.length > 0) {
+        setNexPage(true);
+    } else {
+        setNexPage(false);
+    }
+    console.log("next", nexPage);
 
-        if (bacPrev.length > 0) {
-            setPrevPage(true);
-        } else {
-            setPrevPage(false);
-        }
+    if (bacPrev.length > 0) {
+        setPrevPage(true);
+    } else {
+        setPrevPage(false);
+    }
     for(let bac of bacs){
       let data_formatted = dataRecebimento = new Date(bac.data_entrada).toLocaleString().substring(0, 10);
       json = {
