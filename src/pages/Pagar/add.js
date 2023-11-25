@@ -57,6 +57,7 @@ export default function AddDespesas({ navigation, route }) {
         setLoading(true);
         const dataEntradaFormatada = new Date(data_entrada.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
         let dataPagamentoFormatada;
+        let dataVencimento = data_vencimento ? dataVencimento = new Date(data_vencimento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime(): null;
         if(pago){
             dataPagamentoFormatada = new Date(data_pagamento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
         }else{
@@ -86,12 +87,12 @@ export default function AddDespesas({ navigation, route }) {
                     ano++;
                 }
                 mes = mes < 10 ? "0"+mes : mes;
-            
+                console.log("data_vencimento", dataVencimento, data_vencimento);
                 if(parc > 1){
                     let data = new Date(ano + "-" + mes + "-01T00:00:00").getTime();
-                    const desp = await PagarController.add(valor, obs, parc, fixa, categoria_id, fornecedor_id, date, data, false, null, forma_pagamento, true);
+                    const desp = await PagarController.add(valor, obs, parc, fixa, categoria_id, fornecedor_id, date, data, false, null, forma_pagamento, true, dataVencimento);
                 }else{
-                    const desp = await PagarController.add(valor, observacoes, parc, fixa, categoria_id, fornecedor_id, date, dataEntradaFormatada, pago, dataPagamentoFormatada, forma_pagamento, false);
+                    const desp = await PagarController.add(valor, observacoes, parc, fixa, categoria_id, fornecedor_id, date, dataEntradaFormatada, pago, dataPagamentoFormatada, forma_pagamento, false, dataVencimento);
                 }
                 
                 parc--;

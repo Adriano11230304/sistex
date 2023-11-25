@@ -17,6 +17,12 @@ export async function despTodosDados(despesas) {
         } else {
             dataPagamento = "";
         }
+        let dataVencimento = "";
+        if (des.data_vencimento) {
+            dataVencimento = new Date(des.data_vencimento).toLocaleString().substring(0, 10);
+        } else {
+            dataVencimento = "";
+        }
 
         json = {
             "id": des.id,
@@ -31,7 +37,8 @@ export async function despTodosDados(despesas) {
             "forma_pagamento": des.forma_pagamento,
             "fixa": des.fixa,
             "parcela": des.parcelas,
-            "parcelamento": des.parcelamento
+            "parcelamento": des.parcelamento,
+            "data_vencimento": dataVencimento
         }
 
         despesasTotais.push(json);

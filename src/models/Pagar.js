@@ -149,8 +149,8 @@ class Pagar {
         return new Promise((resolve, reject) => {
             Database.db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO pagar (valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                    [this.valor, this.observacoes, this.parcelas, this.fixa, this.categoria_id, this.fornecedor_id, this.created_at, this.data_entrada, this.pago, this.data_pagamento, this.forma_pagamento, this.parcelamento],
+                    "INSERT INTO pagar (valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, parcelamento, data_vencimento) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                    [this.valor, this.observacoes, this.parcelas, this.fixa, this.categoria_id, this.fornecedor_id, this.created_at, this.data_entrada, this.pago, this.data_pagamento, this.forma_pagamento, this.parcelamento, this.data_vencimento],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));

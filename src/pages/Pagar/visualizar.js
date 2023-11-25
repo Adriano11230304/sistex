@@ -21,6 +21,7 @@ export default function VisPagar({ navigation, route }) {
     const [ categoria, setCategoria ] = useState(null);
     const [ fornecedor, setFornecedor ] = useState(null);
     const [ fixa, setFixa ] = useState(null);
+    const [ data_vencimento, setData_vencimento ] = useState(null);
 
     useEffect(() => {
         async function visualizarPagar() {
@@ -32,6 +33,7 @@ export default function VisPagar({ navigation, route }) {
                     res.parcelamento ? setParcelamento("Sim") : setParcelamento("Não");
                     setForma_pagamento(res.forma_pagamento);
                     setData_entrada(new Date(res.data_entrada).toLocaleString().substring(0, 10));
+                    res.data_vencimento ? setData_vencimento(new Date(res.data_vencimento).toLocaleString().substring(0, 10)) : null;
                     res.data_pagamento ? setData_pagamento(new Date(res.data_pagamento).toLocaleString().substring(0, 10)) : null;
                     setParcela(res.parcelas);
                     let setaCategoria = await CategoriaController.findById(res.categoria_id);
@@ -39,6 +41,7 @@ export default function VisPagar({ navigation, route }) {
                     let setaFornecedor = await FornecedorController.findById(res.fornecedor_id);
                     setFornecedor(setaFornecedor.name);
                     res.fixa ? setFixa("Fixa") : setFixa("Variável");
+                    console.log("findById", res);
                 })
         }
 
@@ -72,6 +75,7 @@ export default function VisPagar({ navigation, route }) {
                         <Text style={styles.visualizarPagarText}>Categoria: {categoria}</Text>
                         <Text style={styles.visualizarPagarText}>Fornecedor: {fornecedor}</Text>
                         <Text style={styles.visualizarPagarText}>Forma de Pagamento: {forma_pagamento}</Text>
+                        <Text style={styles.visualizarPagarText}>Data de vencimento: {data_vencimento}</Text>
                         <Text style={styles.visualizarPagarText}>Observações: {observacoes}</Text>
                     </View>
                     <TouchableOpacity style={styles.salvarUpdate3} onPress={voltar}>
