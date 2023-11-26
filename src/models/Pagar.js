@@ -206,7 +206,7 @@ class Pagar {
         return new Promise((resolve, reject) => {
             Database.db.transaction((tx) => {
                 tx.executeSql(
-                    "SELECT pagar.id, pagar.valor, pagar.categoria_id, pagar.fornecedor_id, fornecedores.name, categorias.titulo, pagar.data_entrada, pagar.data_pagamento, pagar.forma_pagamento, pagar.pago, pagar.fixa FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id INNER JOIN categorias ON categorias.id = pagar.categoria_id  WHERE pagar.data_entrada >= ? and pagar.data_entrada < ? AND pagar.fixa = ? AND (fornecedores.name LIKE ? OR categorias.titulo LIKE ?) ORDER BY pagar.data_entrada asc LIMIT ?",
+                    "SELECT pagar.id, pagar.valor, pagar.categoria_id, pagar.fornecedor_id, fornecedores.name, categorias.titulo, pagar.data_entrada, pagar.data_pagamento, pagar.forma_pagamento, pagar.pago, pagar.fixa, pagar.data_vencimento FROM pagar INNER JOIN fornecedores ON fornecedores.id = pagar.fornecedor_id INNER JOIN categorias ON categorias.id = pagar.categoria_id  WHERE pagar.data_entrada >= ? and pagar.data_entrada < ? AND pagar.fixa = ? AND (fornecedores.name LIKE ? OR categorias.titulo LIKE ?) ORDER BY pagar.data_entrada asc LIMIT ?",
                     [datainicio, datafim, true, text, text, limit],
                     (_, { rows }) => resolve(rows._array),
                     (_, error) => reject(error)
@@ -235,8 +235,8 @@ class Pagar {
         return new Promise((resolve, reject) => {
             Database.db.transaction((tx) => {
                 tx.executeSql(
-                    "UPDATE pagar SET valor = ?, observacoes = ?, data_entrada = ?, data_pagamento = ?, fixa = ?, categoria_id = ?, fornecedor_id = ?, pago = ?, forma_pagamento = ? WHERE id = ?;",
-                    [this.valor, this.observacoes, this.data_entrada, this.data_pagamento, this.fixa, this.categoria_id, this.fornecedor_id, this.pago, this.forma_pagamento, this.id],
+                    "UPDATE pagar SET valor = ?, observacoes = ?, data_entrada = ?, data_pagamento = ?, fixa = ?, categoria_id = ?, fornecedor_id = ?, pago = ?, forma_pagamento = ?, data_vencimento = ? WHERE id = ?;",
+                    [this.valor, this.observacoes, this.data_entrada, this.data_pagamento, this.fixa, this.categoria_id, this.fornecedor_id, this.pago, this.forma_pagamento, this.data_vencimento, this.id],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));

@@ -74,8 +74,8 @@ class PagarController{
         return "Despesa alterada com sucesso!";
     }
 
-    async update(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, id){
-        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, id);        
+    async update(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, data_vencimento, id){
+        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, data_vencimento, id);        
         try {
             await conta.update();
             return "Conta alterada com sucesso!";

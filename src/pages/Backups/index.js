@@ -84,7 +84,7 @@ export default function Backups() {
             <TouchableOpacity onPress={exportData} style={styles.button}><Text style={styles.buttonText}>Exportar</Text></TouchableOpacity>
             <TouchableOpacity onPress={importData} style={styles.button}><Text style={styles.buttonText}>Importar</Text></TouchableOpacity>
             </View>
-        <View style={styles.information}><Text style={styles.textInformation}>Faça as importações e exportações para o seu Google Drive para um funcionamento mais rápido da ferramenta.</Text></View>
+        <View style={styles.information}><Text style={styles.textInformation}>Faça as importações e exportações para o seu Google Drive.</Text></View>
             <StatusBar style="auto" />
         </View>
     );

@@ -283,7 +283,7 @@ export const styles = StyleSheet.create({
     },
     visualizarPagarText: {
         fontSize: 20,
-        paddingTop: '5%',
+        paddingTop: '3%',
         fontWeight: 'bold'
     },
     salvarUpdate3: {

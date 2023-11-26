@@ -31,12 +31,14 @@ export default function UpdateDespesas({ navigation, route }) {
     const [loading, setLoading] = useState(false);
     const [modalVisiblePicker, setModalVisiblePicker] = useState(false);
     const [modalVisiblePickerPagamento, setModalVisiblePickerPagamento] = useState(false);
+    const [modalVisiblePickerVencimento, setModalVisiblePickerVencimento] = useState(false);
     const [modalVisiblePickerFornecedor, setModalVisiblePickerFornecedor] = useState(false);
     const [modalVisiblePickerCategoria, setModalVisiblePickerCategoria] = useState(false);
     const [searchText, setSearchText] = useState("");
     const [searchTextCategoria, setSearchTextCategoria] = useState("");
     const [categorias, setCategorias] = useState(null);
     const [fornecedores, setFornecedores] = useState(null);
+    const [ data_vencimento, setData_vencimento ] = useState(null);
 
     async function searchFornecedor() {
         setFornecedores(await FornecedorController.findNameorEmail(searchText, 25));
@@ -371,6 +373,33 @@ export default function UpdateDespesas({ navigation, route }) {
                                     </TouchableOpacity>
                             </Modal>
                         </View>
+                            <View style={styles.labelinputdate}>
+                                <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePickerVencimento(true)}>
+                                    <Text style={styles.labelDate}>Data de vencimento: {data_vencimento}</Text>
+                                </TouchableOpacity>
+                                <Modal
+                                    statusBarTranslucent={true}
+                                    animationType="fade"
+                                    transparent={false}
+                                    visible={modalVisiblePickerVencimento}
+                                    hardwareAccelerated={true}
+                                >
+                                    <DatePicker
+                                        mode='calendar'
+                                        style={styles.datapicker}
+                                        onSelectedChange={
+                                            date => {
+                                                setData_vencimento(date)
+                                                setModalVisiblePickerVencimento(false)
+                                            }
+                                        }
+                                    />
+                                    <TouchableOpacity style={styles.modalSalvar}
+                                        onPress={() => setModalVisiblePickerVencimento(false)}>
+                                        <Text style={styles.salvarText}>Voltar</Text>
+                                    </TouchableOpacity>
+                                </Modal>
+                            </View>
                         <View style={styles.labelinputFixa}>
                             <Text style={styles.labelAdd}>Despesa Fixa:</Text>
                             <SelectDropdown

@@ -171,7 +171,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
                 <View style={styles.textListPagar}>
                     <Text style={styles.textList}>{item.fornecedor}</Text>
                     <Text style={styles.textList}>R$ {item.valor.toFixed(2)}</Text>
-                    <Text>{item.data_pagamento}</Text>
+                    <Text style={!item.pago ? { color: 'red' } : {}}>{item.pago ? item.data_pagamento : item.data_vencimento}</Text>
                 </View>
             </View>
             <View>

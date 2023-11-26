@@ -102,4 +102,32 @@ export async function pagarValidate(schema) {
         return valid;
     }
 
-} 
+}
+
+let receberSchema = Yup.object().shape({
+    valor: Yup.number().required("Valor é obrigatório!"),
+    parcelas: Yup.number().required("Parcelas é obrigatória!"),
+    cliente_id: Yup.number().required("Escolher o cliente é obrigatório!").typeError("Cliente inválido"),
+    data_entrada: Yup.number().required("Data de entrada é obrigatória!").typeError("Coloque uma data de entrada válida"),
+    recebida: Yup.boolean().required("Escolher se a receita está recebida ou não!"),
+    forma_recebimento: Yup.string().required("Escolher a forma de recebimento é obrigatória!")
+});
+
+export async function receberValidate(schema) {
+    try {
+        const receita = await receberSchema.validate(schema, { abortEarly: true });
+
+        const valid = {
+            "validate": receita,
+            "isValid": true
+        }
+        return valid;
+    } catch (e) {
+        const valid = {
+            "validate": e.message,
+            "isValid": false
+        }
+        return valid;
+    }
+
+}

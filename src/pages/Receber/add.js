@@ -3,78 +3,62 @@ import Header from '../../components/Header'
 import { styles } from './style'
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../store/auth';
-import FornecedorController from '../../controllers/FornecedorController';
-import PagarController from '../../controllers/PagarController';
+import ClienteController from '../../controllers/ClienteController';
+import ReceberController from '../../controllers/ReceberController';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
-import CategoriaController from '../../controllers/CategoriaController';
-import { pagarValidate } from '../../controllers/utils/validators';
-import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
+import { receberValidate } from '../../controllers/utils/validators';
+import { receitasTodosDados, somatorioReceitas } from '../../controllers/utils/functions';
 
 export default function AddReceita({ navigation, route }) {
     const { state, dispatch } = useAuth();
     const [valor, setValor] = useState(null);
     const [observacoes, setObservacoes] = useState(null);
     const [parcelas, setParcelas] = useState(1);
-    const [ fixa, setFixa ] = useState(false);
-    const [ categoria_id, setCategoria_id ] = useState(null);
-    const [ fornecedor_id, setFornecedor_id ] = useState(null);
-    const [ fornecedor, setFornecedor ] = useState("Fornecedor não escolhido")
-    const [ categoria, setCategoria ] = useState("Categoria não escolhida");
+    const [ cliente_id, setCliente_id ] = useState(null);
+    const [ cliente, setCliente ] = useState("Cliente não escolhido")
     const [data_entrada, setData_entrada] = useState("Não escolhida");
-    const [pago, setPago] = useState(false);
-    const [data_pagamento, setData_pagamento] = useState("Não escolhida");
+    const [recebida, setRecebida] = useState(false);
+    const [data_recebimento, setData_recebimento] = useState("Não escolhida");
     const [data_vencimento, setData_vencimento] = useState("Não escolhida");
-    const [forma_pagamento, setForma_pagamento] = useState("pix");
+    const [forma_recebimento, setForma_recebimento] = useState("pix");
     const [loading, setLoading] = useState(false);
     const [modalVisiblePicker, setModalVisiblePicker] = useState(false);
-    const [modalVisiblePickerPagamento, setModalVisiblePickerPagamento] = useState(false);
+    const [modalVisiblePickerRecebimento, setModalVisiblePickerRecebimento] = useState(false);
     const [modalVisiblePickerVencimento, setModalVisiblePickerVencimento] = useState(false);
-    const [modalVisiblePickerFornecedor, setModalVisiblePickerFornecedor] = useState(false);
-    const [modalVisiblePickerCategoria, setModalVisiblePickerCategoria ] = useState(false);
+    const [modalVisiblePickerCliente, setModalVisiblePickerCliente] = useState(false);
     const [ searchText, setSearchText ] = useState("");
-    const [searchTextCategoria, setSearchTextCategoria] = useState("");
-    const [ categorias, setCategorias ] = useState(null);
-    const [ fornecedores, setFornecedores ] = useState(null);
+    const [ clientes, setClientes ] = useState(null);
 
-    async function searchFornecedor(){
-        setFornecedores(await FornecedorController.findNameorEmail(searchText, 25));
+    async function searchCliente(){
+        setClientes(await ClienteController.findNameorEmail(searchText, 25));
     }
 
-    useEffect(() => {
-        searchCategoria();
-    }, [])
-
-    async function searchCategoria(){
-        setCategorias(await CategoriaController.findTitulo(searchTextCategoria, 20));
-    }
-
-    const addPagar = async () => {
+    const addReceber = async () => {
         setLoading(true);
         const dataEntradaFormatada = new Date(data_entrada.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
-        let dataPagamentoFormatada;
-        if(pago){
-            dataPagamentoFormatada = new Date(data_pagamento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
+        let dataRecebimentoFormatada;
+        let dataVencimento = !recebida ? new Date(data_vencimento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime() : null;
+        if(recebida){
+            dataRecebimentoFormatada = new Date(data_recebimento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
         }else{
-            dataPagamentoFormatada = null;
+            dataRecebimentoFormatada = null;
         }
         
-        const validatedesp = {
+        const validatereceber = {
             "valor": valor,
             "parcelas": parcelas,
-            "fixa": fixa,
-            "categoria_id": categoria_id,
-            "fornecedor_id": fornecedor_id,
+            "cliente_id": cliente_id,
             "data_entrada": dataEntradaFormatada,
-            "pago": pago,
-            "forma_pagamento": forma_pagamento
+            "recebida": recebida,
+            "forma_recebimento": forma_recebimento
         }
 
-        const teste = await pagarValidate(validatedesp);
+        const teste = await receberValidate(validatereceber);
         if (teste.isValid) {
             const date = Date.now();
             let parc = parcelas;
@@ -89,9 +73,9 @@ export default function AddReceita({ navigation, route }) {
             
                 if(parc > 1){
                     let data = new Date(ano + "-" + mes + "-01T00:00:00").getTime();
-                    const desp = await PagarController.add(valor, obs, parc, fixa, categoria_id, fornecedor_id, date, data, false, null, forma_pagamento, true);
+                    const receita = await ReceberController.add(valor, parc, true, observacoes, data, recebida, dataRecebimentoFormatada, cliente_id, forma_recebimento, dataVencimento);
                 }else{
-                    const desp = await PagarController.add(valor, observacoes, parc, fixa, categoria_id, fornecedor_id, date, dataEntradaFormatada, pago, dataPagamentoFormatada, forma_pagamento, false);
+                    const receita = await ReceberController.add(valor, parc, false, observacoes, dataEntradaFormatada, recebida, dataRecebimentoFormatada, cliente_id, forma_recebimento, dataVencimento);
                 }
                 
                 parc--;
@@ -100,40 +84,18 @@ export default function AddReceita({ navigation, route }) {
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-            if (route.params.prefix == 'fixa'){
-                const despesas = await PagarController.listAllFixas(1, datainicio, datafim);
-                const action = {
-                    "type": "atualizarDespesasFixas",
-                    "despesasFixas": await despTodosDados(despesas),
-                    "valorTotalFixas": somatorioDespesas(despesas)
-                }
-                dispatch(action);
-                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
-                setLoading(false);
-                navigation.navigate('PagarFixaStack');
-            } else if (route.params.prefix == 'variavel'){
-                const despesas = await PagarController.listAllVariaveis(1, datainicio, datafim);
-                const action = {
-                    "type": "atualizarDespesasVariaveis",
-                    "despesasVariaveis": await despTodosDados(despesas),
-                    "valorTotalVariaveis": somatorioDespesas(despesas)
-                }
-                dispatch(action);
-                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
-                setLoading(false);
-                navigation.navigate('PagarVariavelStack');
-            }else{
-                const despesas = await PagarController.listAll(1, datainicio, datafim);
-                const action = {
-                    "type": "atualizarDespesas",
-                    "despesas": await despTodosDados(despesas),
-                    "valorTotal": somatorioDespesas(despesas)
-                }
-                dispatch(action);
-                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
-                setLoading(false);
-                navigation.navigate('PagarStack');
+            
+            const receitas = await ReceberController.listAll(1, datainicio, datafim);
+            const action = {
+                    "type": "atualizarReceitas",
+                    "receitas": await receitasTodosDados(receitas),
+                    "valorTotal": somatorioReceitas(receitas)
             }
+            dispatch(action);
+            ToastAndroid.show("Receita adicionada com sucesso!", ToastAndroid.SHORT);
+            setLoading(false);
+            navigation.navigate('ReceitaStack');
+            
             
         } else {
             ToastAndroid.show(teste.validate, ToastAndroid.SHORT);
@@ -144,22 +106,15 @@ export default function AddReceita({ navigation, route }) {
 
     }
 
-    async function setaFornecedor_id(id){
-        setFornecedor_id(id);
-        const forn = await FornecedorController.findById(id);
-        setFornecedor(forn.name)
-        setModalVisiblePickerFornecedor(false);
-    }
-
-    async function setaCategoria_id(id) {
-        setCategoria_id(id);
-        const cat = await CategoriaController.findById(id);
-        setCategoria(cat.titulo)
-        setModalVisiblePickerCategoria(false);
+    async function setaCliente_id(id){
+        setCliente_id(id);
+        const forn = await ClienteController.findById(id);
+        setCliente(forn.name)
+        setModalVisiblePickerCliente(false);
     }
 
     const Item = ({ item }) => (
-        <TouchableOpacity onPress={() => setaFornecedor_id(item.id)} style={styles.itemList}>
+        <TouchableOpacity onPress={() => setaCliente_id(item.id)} style={styles.itemList}>
             <View style={styles.list}>
                 <View style={styles.textListPagar}>
                     <Text style={styles.textList}>{item.name}</Text>
@@ -168,17 +123,6 @@ export default function AddReceita({ navigation, route }) {
             </View>
         </TouchableOpacity>
     );
-
-    const ItemCategoria = ({ item }) => (
-        <TouchableOpacity onPress={() => setaCategoria_id(item.id)} style={styles.itemList}>
-            <View style={styles.list}>
-                <View style={styles.textListPagar}>
-                    <Text style={styles.textList}>{item.titulo}</Text>
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
-
     
 
     return (
@@ -191,7 +135,7 @@ export default function AddReceita({ navigation, route }) {
                 <>
                     <Header />
                     <View style={styles.title}>
-                        <Text style={styles.text}>Adicionar uma nova despesa</Text>
+                        <Text style={styles.text}>Adicionar uma nova receita</Text>
                     </View>
                     <View style={styles.form}>
                         <View style={styles.labelinputValor}>
@@ -201,7 +145,7 @@ export default function AddReceita({ navigation, route }) {
                         <View style={styles.labelinputdate}>
                                 <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePicker(true)}>
                                     <Text style={styles.labelDate}>Data de entrada: {data_entrada}</Text>
-                            </TouchableOpacity>
+                                </TouchableOpacity>
                                 <Modal
                                     style={styles.modalDataEntrada}
                                     animationType="slide"
@@ -226,29 +170,29 @@ export default function AddReceita({ navigation, route }) {
                                 </Modal>
                         </View>
                         <View style={styles.labelinput}>
-                            <Text style={styles.labelAdd}>Fornecedor:</Text>
-                                <TouchableOpacity onPress={() => setModalVisiblePickerFornecedor(true)}>
-                                <Text style={styles.inputadd}>{fornecedor}</Text>
+                            <Text style={styles.labelAdd}>Cliente:</Text>
+                                <TouchableOpacity onPress={() => setModalVisiblePickerCliente(true)}>
+                                <Text style={styles.inputadd}>{cliente}</Text>
                                 </TouchableOpacity>
                                 <Modal
                                     animationType="slide"
                                     transparent={false}
-                                    visible={modalVisiblePickerFornecedor}
+                                    visible={modalVisiblePickerCliente}
                                     hardwareAccelerated={true}
                                 >
                                     <SafeAreaView>
                                         <View style={styles.title}>
-                                            <Text style={styles.text}>Escolha um Fornecedor</Text>
+                                            <Text style={styles.text}>Escolha um Cliente</Text>
                                         </View>
                                         <View style={styles.searchArea}>
                                             <TextInput
                                                 style={styles.input}
-                                                placeholder="Pesquise pelo fornecedor ou categoria"
+                                                placeholder="Pesquise pelo cliente ou forma de recebimento"
                                                 placeholderTextColor="#888"
                                                 value={searchText}
                                                 onChangeText={(t) => setSearchText(t)}
                                             />
-                                            <TouchableOpacity onPress={searchFornecedor}>
+                                            <TouchableOpacity onPress={searchCliente}>
                                             <FontAwesome name="search" size={30} color="black" />
                                             </TouchableOpacity>
                                         </View>
@@ -263,8 +207,8 @@ export default function AddReceita({ navigation, route }) {
                                                     initialNumToRender={50}
                                                     maxToRenderPerBatch={50}
                                                     showsVerticalScrollIndicator={false}
-                                                    data={fornecedores}
-                                                    ListEmptyComponent={<Vazio text={"Nenhum fornecedor encontrado!"} />}
+                                                    data={clientes}
+                                                    ListEmptyComponent={<Vazio text={"Nenhum cliente encontrado!"} />}
                                                     renderItem={({ item }) => <Item item={item} />}
                                                     keyExtractor={(item) => item.id}
 
@@ -272,74 +216,22 @@ export default function AddReceita({ navigation, route }) {
                                             </>
                                         )}
                                     <TouchableOpacity style={styles.modalSalvar}
-                                        onPress={() => setModalVisiblePickerFornecedor(false)}>
+                                        onPress={() => setModalVisiblePickerCliente(false)}>
                                         <Text style={styles.salvarText}>Voltar</Text>
                                     </TouchableOpacity>
                                     </SafeAreaView>
                                 </Modal>
                             
                         </View>
-                        <View style={styles.labelinput}>
-                                <Text style={styles.labelAdd}>Categoria: </Text>
-                                <TouchableOpacity onPress={() => setModalVisiblePickerCategoria(true)}>
-                                    <Text style={styles.inputadd}>{categoria}</Text>
-                                </TouchableOpacity>
-                                <Modal
-                                    animationType="slide"
-                                    transparent={false}
-                                    visible={modalVisiblePickerCategoria}
-                                    hardwareAccelerated={true}
-                                >
-                                    <SafeAreaView>
-                                        <View style={styles.title}>
-                                            <Text style={styles.text}>Escolha uma Categoria</Text>
-                                        </View>
-                                        <View style={styles.searchArea}>
-                                            <TextInput
-                                                style={styles.input}
-                                                placeholder="Pesquise pela categoria"
-                                                placeholderTextColor="#888"
-                                                value={searchTextCategoria}
-                                                onChangeText={(t) => setSearchTextCategoria(t)}
-                                            />
-                                            <TouchableOpacity onPress={searchCategoria}>
-                                                <FontAwesome name="search" size={30} color="black" />
-                                            </TouchableOpacity>
-                                        </View>
-                                        {state.loading ? (
-                                            <>
-                                                <LoaderSimple />
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FlatList
-                                                    ItemSeparatorComponent={SeparatorItem}
-                                                    initialNumToRender={50}
-                                                    maxToRenderPerBatch={50}
-                                                    showsVerticalScrollIndicator={false}
-                                                    data={categorias}
-                                                    ListEmptyComponent={<Vazio text={"Nenhum categoria encontrado!"} />}
-                                                    renderItem={({ item }) => <ItemCategoria item={item} />}
-                                                    keyExtractor={(item) => item.id}
-                                                />
-                                            </>
-                                        )}
-                                        <TouchableOpacity style={styles.modalSalvar}
-                                            onPress={() => setModalVisiblePickerCategoria(false)}>
-                                            <Text style={styles.salvarText}>Voltar</Text>
-                                        </TouchableOpacity>
-                                    </SafeAreaView>
-                                </Modal>
-                        </View>
                             <View style={styles.labelinputdate}>
-                                <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePickerPagamento(true)}>
-                                    <Text style={styles.labelDate}>Data de pagamento: {data_pagamento}</Text>
+                                <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePickerRecebimento(true)}>
+                                    <Text style={styles.labelDate}>Data de recebimento: {data_recebimento}</Text>
                                 </TouchableOpacity>
                                 <Modal
                                     statusBarTranslucent={true}
                                     animationType="fade"
                                     transparent={false}
-                                    visible={modalVisiblePickerPagamento}
+                                    visible={modalVisiblePickerRecebimento}
                                     hardwareAccelerated={true}
                                 >
                                     <DatePicker
@@ -347,13 +239,13 @@ export default function AddReceita({ navigation, route }) {
                                         style={styles.datapicker}
                                         onSelectedChange={
                                             date => {
-                                                setData_pagamento(date)
-                                                setModalVisiblePickerPagamento(false)
+                                                setData_recebimento(date)
+                                                setModalVisiblePickerRecebimento(false)
                                             }
                                         }
                                     />
                                     <TouchableOpacity style={styles.modalSalvar}
-                                        onPress={() => setModalVisiblePickerPagamento(false)}>
+                                        onPress={() => setModalVisiblePickerRecebimento(false)}>
                                         <Text style={styles.salvarText}>Voltar</Text>
                                     </TouchableOpacity>
                                 </Modal>
@@ -380,48 +272,33 @@ export default function AddReceita({ navigation, route }) {
                                         }
                                     />
                                     <TouchableOpacity style={styles.modalSalvar}
-                                        onPress={() => setModalVisiblePickerPagamento(false)}>
+                                        onPress={() => setModalVisiblePickerRecebimento(false)}>
                                         <Text style={styles.salvarText}>Voltar</Text>
                                     </TouchableOpacity>
                                 </Modal>
                             </View>
                         <View style={styles.labelinputFixa}>
-                            <Text style={styles.labelAdd}>Despesa Fixa:</Text>
+                            <Text style={styles.labelAdd}>Receita já foi recebida:</Text>
                             <SelectDropdown
                                 buttonStyle={styles.selectedFixa}
                                 defaultValue={"Nao"}
                                 data={["Sim", "Nao"]}
                                 onSelect={(selectedItem, index) => { 
                                     if(selectedItem == 'Nao'){
-                                        setFixa(false);
+                                        setRecebida(false);
                                     }else{
-                                        setFixa(true);
+                                        setRecebida(true);
                                     }
                                 }}
                             />
                         </View>
                         <View style={styles.labelinputFixa}>
-                            <Text style={styles.labelAdd}>Despesa já está paga:</Text>
+                            <Text style={styles.labelAdd}>Forma de Recebimento:</Text>
                             <SelectDropdown
                                 buttonStyle={styles.selectedFixa}
-                                defaultValue={"Nao"}
-                                data={["Sim", "Nao"]}
-                                onSelect={(selectedItem, index) => { 
-                                    if(selectedItem == 'Nao'){
-                                        setPago(false);
-                                    }else{
-                                        setPago(true);
-                                    }
-                                }}
-                            />
-                        </View>
-                        <View style={styles.labelinputFixa}>
-                            <Text style={styles.labelAdd}>Forma de Pagamento:</Text>
-                            <SelectDropdown
-                                buttonStyle={styles.selectedFixa}
-                                defaultValue={forma_pagamento}
+                                defaultValue={forma_recebimento}
                                 data={["crédito", "pix", "debito"]}
-                                onSelect={(selectedItem, index) => { setForma_pagamento(selectedItem); }}
+                                onSelect={(selectedItem, index) => { setForma_recebimento(selectedItem); }}
                             />
                         </View>
                             <View style={styles.labelinputFixa}>
@@ -437,7 +314,7 @@ export default function AddReceita({ navigation, route }) {
                             <Text style={styles.labelAdd}>Observações:</Text>
                                 <TextInput keyboardType='ascii-capable' style={styles.inputaddobserv} value={observacoes} placeholderTextColor="#888" onChangeText={(t) => setObservacoes(t)}></TextInput>
                         </View>
-                        <TouchableOpacity style={styles.salvar} onPress={addPagar}>
+                        <TouchableOpacity style={styles.salvar} onPress={addReceber}>
                             <Text style={styles.salvarText}>Salvar</Text>
                         </TouchableOpacity>
                     </View>

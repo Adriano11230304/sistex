@@ -25,6 +25,7 @@ import EditClientes from '../pages/Clientes/editar';
 import VisCliente from '../pages/Clientes/visualizar';
 import VisPagar from '../pages/Pagar/visualizar';
 import AddReceitasIcons from '../pages/Receber/addIcons';
+import AddReceita from '../pages/Receber/add';
 
 
 const Stack = createNativeStackNavigator();
@@ -95,6 +96,7 @@ export const ReceitasStack = () => {
     <Stack.Navigator initialRouteName='ReceitaStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ReceitaStack" component={Receber} />
       <Stack.Screen name="AddReceitaIcon" component={AddReceitasIcons} />
+      <Stack.Screen name="AddReceita" component={AddReceita} />
     </Stack.Navigator>
   );
 };
