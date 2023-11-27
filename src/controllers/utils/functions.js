@@ -67,6 +67,7 @@ export async function receitasTodosDados(receitas) {
         const cliente = await ClienteController.findById(des.cliente_id);
         const data = new Date(des.data_entrada).toLocaleString().substring(0, 10);
         let dataRecebimento = "";
+        let dataVencimentoFormatada = des.data_vencimento ? new Date(des.data_vencimento).toLocaleString().substring(0, 10) : null;
         if (des.data_recebimento) {
             dataRecebimento = new Date(des.data_recebimento).toLocaleString().substring(0, 10);
         } else {
@@ -80,10 +81,11 @@ export async function receitasTodosDados(receitas) {
             "cliente": cliente.name,
             "data_entrada": data,
             "data_recebimento": dataRecebimento,
-            "recebido": des.recebido,
+            "recebida": des.recebida,
             "forma_recebimento": des.forma_recebimento,
             "parcela": des.parcelas,
-            "parcelamento": des.parcelamento
+            "parcelamento": des.parcelamento,
+            "data_vencimento": dataVencimentoFormatada
         }
 
         receitasTotais.push(json);

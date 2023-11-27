@@ -53,6 +53,7 @@ export default function UpdateDespesas({ navigation, route }) {
         const desp = await PagarController.findById(route.params.key);
         setValor(''+desp.valor);
         setData_entrada(new Date(desp.data_entrada).toISOString().substring(0, 10).replace("-", "/").replace("-", "/"));
+        desp.data_vencimento ? setData_vencimento(new Date(desp.data_vencimento).toISOString().substring(0, 10).replace("-", "/").replace("-", "/")) : null;
         if(desp.pago){
             console.log("pagamento", desp.data_pagamento);
             setData_pagamento(new Date(desp.data_pagamento).toISOString().substring(0, 10).replace("-", "/").replace("-", "/"));
@@ -78,6 +79,8 @@ export default function UpdateDespesas({ navigation, route }) {
         const dataEntradaFormatada = new Date(data_entrada.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
         console.log(dataEntradaFormatada);
         let dataPagamentoFormatada;
+        let dataVencimentoFormatada = data_vencimento ? new Date(data_vencimento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime() : null;
+        console.log(dataVencimentoFormatada);
         if (pago) {
             console.log("data_pagamento", data_pagamento);
             dataPagamentoFormatada = new Date(data_pagamento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
@@ -103,8 +106,9 @@ export default function UpdateDespesas({ navigation, route }) {
         if (teste.isValid) {
             const date = Date.now();
             console.log(teste);
-            const desp = await PagarController.update(validatedesp.valor, observacoes, validatedesp.parcelas, validatedesp.fixa, validatedesp.categoria_id, validatedesp.fornecedor_id, Date.now(), validatedesp.data_entrada, validatedesp.pago, dataPagamentoFormatada, validatedesp.forma_pagamento, route.params.key);
-            console.log(desp);
+            const desp = await PagarController.update(validatedesp.valor, observacoes, validatedesp.parcelas, validatedesp.fixa, validatedesp.categoria_id, validatedesp.fornecedor_id, Date.now(), validatedesp.data_entrada, validatedesp.pago, dataPagamentoFormatada, validatedesp.forma_pagamento, false, dataVencimentoFormatada, route.params.key);
+            const desp1 = await PagarController.findById(route.params.key);
+            console.log(desp1);
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();

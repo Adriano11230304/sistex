@@ -39,21 +39,24 @@ export default function ContasReceber({ navigation, route }) {
         const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const receitas = await ReceberController.listAll(page, datainicio, datafim, recebidas, naoRecebidas);
         console.log(receitas);
-        const despNext = await ReceberController.listAll(page + 1, datainicio, datafim, recebidas, naoRecebidas);
-        const despPrev = await ReceberController.listAll(page - 1, datainicio, datafim, recebidas, naoRecebidas);
-        if (despNext.length > 0) {
+        const recNext = await ReceberController.listAll(page + 1, datainicio, datafim, recebidas, naoRecebidas);
+        const recPrev = await ReceberController.listAll(page - 1, datainicio, datafim, recebidas, naoRecebidas);
+        if (recNext.length > 0) {
             setNexPage(true);
         } else {
             setNexPage(false);
         }
 
-        if (despPrev.length > 0) {
+        if (recPrev.length > 0) {
             setPrevPage(true);
         } else {
             setPrevPage(false);
         }
         console.log("receitas", receitas);
         console.log("todas Receitas", await receitasTodosDados(receitas));
+
+        const receitasTodasAll = await ReceberController.listAll(page, datainicio, datafim, recebidas, naoRecebidas);
+        console.log("tudoAll", receitasTodasAll);
 
         dispatch({
             "type": "atualizarReceitas",
@@ -105,6 +108,7 @@ export default function ContasReceber({ navigation, route }) {
         dispatch({ 'type': 'loading' });
         await atualizarReceitas();
         dispatch({ 'type': 'loadingfalse' })
+        ToastAndroid.show("Receita excluída com sucesso!", ToastAndroid.SHORT);
     }
 
     async function nextPage() {
@@ -120,37 +124,31 @@ export default function ContasReceber({ navigation, route }) {
     }
 
     async function alterRecebida(item) {
-        console.log("recebida fazer");
-        /*let pagar;
-        let data_pagamento;
-        if (item.pago) {
-            pagar = false;
-            data_pagamento = null;
-            await PagarController.alterPago(pagar, data_pagamento, item.id);
-            await listDespesas();
+        let receber;
+        let data_recebimento;
+        if (item.recebida) {
+            receber = false;
+            data_recebimento = null;
+            await ReceberController.alterReceber(receber, data_recebimento, item.id);
+            await listReceitas();
         } else {
-            navigation.navigate('AddDespesaPagamento', {
-                "paramskey": item.id,
-                "prefix": "index"
+            navigation.navigate('AddReceitaRecebimento', {
+                "paramskey": item.id
             })
 
-        }*/
+        }
     }
 
     function editReceita(id) {
-        console.log("editar");
-        /*
-        navigation.navigate("UpdateDespesas", {
+        navigation.navigate("UpdateReceita", {
             "key": id
-        })*/
+        })
     }
 
     function visualizar(id) {
-        console.log("visualizar");
-        /*
-        navigation.navigate("VisPagar", {
+        navigation.navigate("VisReceber", {
             "paramskey": id
-        })*/
+        })
     }
 
     const Item = ({ item }) => (
@@ -164,7 +162,7 @@ export default function ContasReceber({ navigation, route }) {
                 <View style={styles.textListPagar}>
                     <Text style={styles.textList}>{item.cliente}</Text>
                     <Text style={styles.textList}>R$ {item.valor.toFixed(2)}</Text>
-                    <Text>{item.data_recebimento}</Text>
+                    <Text style={!item.recebida ? {color: 'red'} : {}}>{item.recebida ? item.data_recebimento : item.data_vencimento}</Text>
                 </View>
             </View>
             <View>

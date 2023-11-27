@@ -6,26 +6,31 @@ class ReceberController {
         return contas;
     }
 
+    async listAllAll() {
+        const contas = Receber.findAllAll();
+        return contas;
+    }
+
     async add(valor, parcelas, parcelamento, observacoes, data_entrada, recebida, data_recebimento, cliente_id, forma_recebimento, data_vencimento) {
         const receita = new Receber(valor, parcelas, parcelamento, observacoes, data_entrada, recebida, data_recebimento, cliente_id, forma_recebimento, data_vencimento);
         console.log("create", receita);
         try {
-            // await receita.create();
+            await receita.create();
             return "Receita adicionado com sucesso!";
         } catch (err) {
             return err;
         }
 
     }
-    /*
+    
     async findById(id) {
-        const conta = await Pagar.findById(id);
-        if (conta.length > 0) {
-            return conta[0];
+        const receita = await Receber.findById(id);
+        if (receita.length > 0) {
+            return receita[0];
         } else {
-            return "despesa com esse id não encontrado!";
+            return "receita com esse id não encontrado!";
         }
-    }*/
+    }
 
     async remove(id) {
         const receberdeleted = await Receber.delete(id)
@@ -42,33 +47,25 @@ class ReceberController {
         return receitas;
     }
 
-    /*async findFornecedororCategoriaFixas(text, datainicio, datafim, limit) {
-        const search = `%${text}%`
-        const despesas = Pagar.findFornecedororCategoriaFixas(search, datainicio, datafim, limit);
-        return despesas;
-    }
-
-    async findFornecedororCategoriaVariaveis(text, datainicio, datafim, limit) {
-        const search = `%${text}%`
-        const despesas = Pagar.findFornecedororCategoriaVariaveis(search, datainicio, datafim, limit);
-        return despesas;
-    }
-
-    async alterPago(pago, data_pagamento, id) {
-        const desp = await Pagar.findById(id);
-        await Pagar.alterPago(desp[0], pago, data_pagamento);
-        return "Despesa alterada com sucesso!";
-    }
-
-    async update(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, id) {
-        const conta = new Pagar(valor, observacoes, parcelas, fixa, categoria_id, fornecedor_id, created_at, data_entrada, pago, data_pagamento, forma_pagamento, id);
+    async update(rec) {
+        const receita = new Receber(rec.valor, rec.parcelas, rec.parcelamento, rec.observacoes, rec.data_entrada, rec.recebida, rec.data_recebimento, rec.cliente_id, rec.forma_recebimento, rec.data_vencimento);
+        console.log("receita", receita);
         try {
-            await conta.update();
-            return "Conta alterada com sucesso!";
+            await receita.update();
+            return "Receita alterada com sucesso!";
         } catch (err) {
             return err;
         }
-    }*/
+    }
+
+    async alterReceber(recebida, data_recebimento, id) {
+        console.log("data_recebimento", data_recebimento);
+        console.log("recebida", recebida);
+        const rec = await Receber.findById(id);
+        console.log("rec", rec);
+        await Receber.alterReceber(rec[0], recebida, data_recebimento);
+        return "Receita alterada com sucesso!";
+    }
 }
 
 export default new ReceberController();

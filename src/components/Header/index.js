@@ -15,9 +15,6 @@ export default function Header() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <TouchableOpacity style={styles.buttonLogout} onPress={configuracoes}>
-                    <Ionicons name="options" size={24} color="black" />
-                </TouchableOpacity>
             </View>
         </View>
     );

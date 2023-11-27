@@ -55,17 +55,6 @@ class Database{
                 () => console.log(`Tabela receber criada com sucesso`),
                 (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
             );
-        
-            tx.executeSql(
-                'CREATE TABLE IF NOT EXISTS backup (' +
-                'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
-                'tipo TEXT,'+
-                'data_entrada TIMESTAMP' +
-                ');'
-                , [],
-                () => console.log(`Tabela backup criada com sucesso`),
-                (tx, e) => console.log(`Erro ao criar a tabela backup`, e)
-            )
             
             console.log("tabelas criadas!");
         });

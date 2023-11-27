@@ -54,6 +54,7 @@ export const styles = StyleSheet.create({
     iconeCategoria: {
         paddingLeft: '2%',
         paddingRight: '2%',
+        paddingTop: '2%',
         borderRadius: 30,
         height: 45,
         width: 125,

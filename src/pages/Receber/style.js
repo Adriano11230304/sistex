@@ -54,6 +54,7 @@ export const styles = StyleSheet.create({
     iconeCategoria: {
         paddingLeft: '2%',
         paddingRight: '2%',
+        paddingTop: '2%',
         borderRadius: 30,
         height: 45,
         width: 125,
@@ -93,7 +94,8 @@ export const styles = StyleSheet.create({
     },
     selectHome: {
         paddingTop: '2%',
-        paddingLeft: '5%'
+        paddingLeft: '3%',
+        paddingRight: '2%'
     },
     checkbox3: {
         marginLeft: 10

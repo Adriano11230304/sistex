@@ -14,7 +14,7 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import { receberValidate } from '../../controllers/utils/validators';
 import { receitasTodosDados, somatorioReceitas } from '../../controllers/utils/functions';
 
-export default function AddReceita({ navigation, route }) {
+export default function UpdateReceita({ navigation, route }) {
     const { state, dispatch } = useAuth();
     const [valor, setValor] = useState(null);
     const [observacoes, setObservacoes] = useState(null);
@@ -34,12 +34,33 @@ export default function AddReceita({ navigation, route }) {
     const [ searchText, setSearchText ] = useState("");
     const [ clientes, setClientes ] = useState(null);
 
+    useEffect(() => {
+        atualizarReceita();
+    }, [])
+
+
+    async function atualizarReceita(){
+        const rec = await ReceberController.findById(route.params.key);
+        setValor(''+rec.valor);
+        setData_entrada(new Date(rec.data_entrada).toISOString().substring(0, 10).replace("-", "/").replace("-", "/"));
+        rec.data_vencimento ? setData_vencimento(new Date(rec.data_vencimento).toISOString().substring(0, 10).replace("-", "/").replace("-", "/")) : null;
+        if(rec.recebida){
+            setData_recebimento(new Date(rec.data_recebimento).toISOString().substring(0, 10).replace("-", "/").replace("-", "/"));
+        }
+        setCliente_id(rec.cliente_id);
+        await setaCliente_id(rec.cliente_id);
+        setRecebida(rec.recebida);
+        setObservacoes(rec.observacoes);
+        setForma_recebimento(rec.forma_recebimento);
+    }
+
     async function searchCliente(){
         setClientes(await ClienteController.findNameorEmail(searchText, 25));
     }
 
-    const addReceber = async () => {
+    const atualizarReceber = async () => {
         setLoading(true);
+        const rec = await ReceberController.findById(route.params.key);
         const dataEntradaFormatada = new Date(data_entrada.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
         let dataRecebimentoFormatada;
         let dataVencimento = data_vencimento ? new Date(data_vencimento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime() : null;
@@ -51,7 +72,7 @@ export default function AddReceita({ navigation, route }) {
         
         const validatereceber = {
             "valor": valor,
-            "parcelas": parcelas,
+            "parcelas": 1,
             "cliente_id": cliente_id,
             "data_entrada": dataEntradaFormatada,
             "recebida": recebida,
@@ -62,29 +83,18 @@ export default function AddReceita({ navigation, route }) {
         if (teste.isValid) {
             const date = Date.now();
             let parc = parcelas;
-            while(parc > 0){
-                let mes = new Date(dataEntradaFormatada).getMonth() + parc;
-                let ano = new Date(dataEntradaFormatada).getFullYear();
-                if(mes > 12){
-                    mes = mes - 12
-                    ano++;
-                }
-                mes = mes < 10 ? "0"+mes : mes;
-            
-                if(parc > 1){
-                    let data = new Date(ano + "-" + mes + "-01T00:00:00").getTime();
-                    const receita = await ReceberController.add(valor, parc, true, observacoes, data, recebida, dataRecebimentoFormatada, cliente_id, forma_recebimento, dataVencimento);
-                }else{
-                    const receita = await ReceberController.add(valor, parc, false, observacoes, dataEntradaFormatada, recebida, dataRecebimentoFormatada, cliente_id, forma_recebimento, dataVencimento);
-                }
-                
-                parc--;
-            }
-
+            rec.valor = valor;
+            rec.data_entrada = dataEntradaFormatada;
+            rec.observacoes = observacoes;
+            rec.recebida = recebida;
+            rec.data_recebimento = dataRecebimentoFormatada
+            rec.data_vencimento = dataVencimento;
+            rec.cliente_id = cliente_id;
+            rec.forma_recebimento = forma_recebimento;
+            const receita = await ReceberController.update(rec);
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
-            const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-            
+            const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();    
             const receitas = await ReceberController.listAll(1, datainicio, datafim);
             const action = {
                     "type": "atualizarReceitas",
@@ -135,7 +145,7 @@ export default function AddReceita({ navigation, route }) {
                 <>
                     <Header />
                     <View style={styles.title}>
-                        <Text style={styles.text}>Adicionar uma nova receita</Text>
+                        <Text style={styles.text}>Atualizar receita</Text>
                     </View>
                     <View style={styles.form}>
                         <View style={styles.labelinputValor}>
@@ -314,8 +324,8 @@ export default function AddReceita({ navigation, route }) {
                             <Text style={styles.labelAdd}>Observações:</Text>
                                 <TextInput keyboardType='ascii-capable' style={styles.inputaddobserv} value={observacoes} placeholderTextColor="#888" onChangeText={(t) => setObservacoes(t)}></TextInput>
                         </View>
-                        <TouchableOpacity style={styles.salvar} onPress={addReceber}>
-                            <Text style={styles.salvarText}>Salvar</Text>
+                        <TouchableOpacity style={styles.salvar} onPress={atualizarReceber}>
+                            <Text style={styles.salvarText}>Atualizar</Text>
                         </TouchableOpacity>
                     </View>
                 </>

@@ -26,6 +26,9 @@ import VisCliente from '../pages/Clientes/visualizar';
 import VisPagar from '../pages/Pagar/visualizar';
 import AddReceitasIcons from '../pages/Receber/addIcons';
 import AddReceita from '../pages/Receber/add';
+import VisReceber from '../pages/Receber/visualizar';
+import AddReceitasRecebimento from '../pages/Receber/dataRecebimento';
+import UpdateReceita from '../pages/Receber/update';
 
 
 const Stack = createNativeStackNavigator();
@@ -97,6 +100,9 @@ export const ReceitasStack = () => {
       <Stack.Screen name="ReceitaStack" component={Receber} />
       <Stack.Screen name="AddReceitaIcon" component={AddReceitasIcons} />
       <Stack.Screen name="AddReceita" component={AddReceita} />
+      <Stack.Screen name="VisReceber" component={VisReceber} />
+      <Stack.Screen name="AddReceitaRecebimento" component={AddReceitasRecebimento} />
+      <Stack.Screen name="UpdateReceita" component={UpdateReceita} />
     </Stack.Navigator>
   );
 };
