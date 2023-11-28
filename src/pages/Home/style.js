@@ -68,18 +68,20 @@ export const styles = StyleSheet.create({
     select: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: '5%'
+        paddingTop: '5%',
+        borderRadius: 50
+    },
+    selected: {
+        borderRadius: 28,
+        height: 30,
+        width: 120,
+        paddingTop: 2
     },
     grafico: {
         alignContent: 'center',
-        alignItems: 'center',
-        paddingTop: 100,
-        borderColor: '#000000',
-        borderWidth: 1,
-        paddingLeft: '5%',
         marginLeft: 30,
         marginRight: 30,
-        marginTop: 20,
+        marginTop: 5,
     },
     graficoText: {
         fontSize: 50,

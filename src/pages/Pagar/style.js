@@ -149,7 +149,10 @@ export const styles = StyleSheet.create({
     buttonAdd: {
         paddingBottom: '3%',
         alignSelf: 'flex-end',
-        paddingEnd: '7%'
+        flexDirection: 'row'
+    },
+    buttonsqrcode:{
+        paddingRight: '5%'
     },
     salvar: {
         backgroundColor: '#5d8aa8',
@@ -296,4 +299,19 @@ export const styles = StyleSheet.create({
         marginTop: '10%',
         marginLeft: '5%'
     },
+    modalCancelarQr: {
+        marginLeft: '5%',
+        backgroundColor: 'gray',
+        borderRadius: 50,
+        width: 110,
+        height: 35,
+        marginTop: 5
+    },
+    cancelarTextQr: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 'bold',
+        paddingTop: '2%'
+    }
 });

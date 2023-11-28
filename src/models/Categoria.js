@@ -1,4 +1,4 @@
-import db from './configDatabase'
+import Database from '../models/Database'
 
 class Categoria{
     id;
@@ -17,7 +17,7 @@ class Categoria{
         const offset = (page - 1) * 30;
         const limit = 30;
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM categorias ORDER BY titulo asc LIMIT ? OFFSET ?;",
                     [limit, offset],
@@ -30,7 +30,7 @@ class Categoria{
 
     static findById(id) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM categorias WHERE id = ?;",
                     [id],
@@ -43,7 +43,7 @@ class Categoria{
 
     create() {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "INSERT INTO categorias (titulo) values (?);",
                     [this.titulo],
@@ -59,7 +59,7 @@ class Categoria{
 
     update() {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "UPDATE categorias SET titulo = ? WHERE id = ?;",
                     [this.name, this.email, this.cnpj, this.id],
@@ -75,7 +75,7 @@ class Categoria{
 
     static delete(id){
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "DELETE FROM categorias WHERE id = ?;",
                     [id],
@@ -90,7 +90,7 @@ class Categoria{
 
     static findByTitulo(titulo, limit){
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM categorias WHERE titulo LIKE ? ORDER BY titulo asc LIMIT ?;",
                     [titulo, limit],

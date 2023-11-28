@@ -1,4 +1,4 @@
-import db from './configDatabase'
+import Database from '../models/Database'
 
 class User{
 
@@ -22,7 +22,7 @@ class User{
 
     static findAll(){
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM users;",
                     [],
@@ -35,7 +35,7 @@ class User{
 
     static findById(id) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM users WHERE id = ?;",
                     [id],
@@ -48,7 +48,7 @@ class User{
 
     create(){
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "INSERT INTO users (email, verified_email, name, picture, id_gmail, token) values (?, ?, ?, ?, ?, ?);",
                     [this.email, this.verified_email, this.name, this.picture, this.id_gmail, this.token],
@@ -64,7 +64,7 @@ class User{
 
     static delete(id){
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "DELETE FROM users WHERE id=?;",
                     [id],

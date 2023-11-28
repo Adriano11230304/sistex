@@ -121,7 +121,7 @@ export default function ContasPagarFixas({ navigation, route }) {
     }
 
     async function addDespesa() {
-        navigation.navigate("AddDespesaIcons", {
+        navigation.navigate("AddDespesa", {
             "prefix": "fixa"
         });
     }

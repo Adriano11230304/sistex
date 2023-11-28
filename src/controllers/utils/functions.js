@@ -106,3 +106,71 @@ export function somatorioReceitas(receitas) {
     return somaTotal;
 }
 
+export function totalReceitasSeparadas(receitas) {
+    let somaTotal = 0;
+    let somaRecebidas = 0;
+    let somaNaoRecebidas = 0;
+
+
+    for (des of receitas) {
+        somaTotal += des.valor;
+        if(des.recebida){
+            somaRecebidas += des.valor;
+        }else{
+            somaNaoRecebidas += des.valor;
+        }
+    }
+
+    somaTotal = somaTotal.toFixed(2);
+
+    return {
+        "somaTotal": somaTotal,
+        "somaRecebidas": somaRecebidas.toFixed(2),
+        "somaNaoRecebidas": somaNaoRecebidas.toFixed(2)
+    }
+}
+
+export function totalDespesasSeparadas(despesas) {
+    let somaTotal = 0;
+    let somaPagas = 0;
+    let somaNaoPagas = 0;
+    let somaNaoPagasFixas = 0;
+    let somaTotalFixas = 0;
+    let somaPagasFixas = 0;
+    let somaTotalVariaveis = 0;
+
+
+    for (des of despesas) {
+        somaTotal += des.valor;
+
+        if(des.fixa){
+            somaTotalFixas += des.valor;
+        }else{
+            somaTotalVariaveis += des.valor;
+        }
+        if (des.pago) {
+            somaPagas += des.valor;
+            if(des.fixa){
+                somaPagasFixas += des.valor;
+            }
+        } else {
+            somaNaoPagas += des.valor;
+            if (des.fixa) {
+                somaNaoPagasFixas += des.valor;
+            }
+        }
+    }
+
+    somaTotal = somaTotal.toFixed(2);
+
+    return {
+        "somaTotal": somaTotal,
+        "somaPagas": somaPagas.toFixed(2),
+        "somaNaoPagas": somaNaoPagas.toFixed(2),
+        "somaTotalFixas": somaTotalFixas.toFixed(2),
+        "somaNaoPagasFixas": somaNaoPagasFixas.toFixed(2),
+        "somaPagasFixas": somaPagasFixas.toFixed(2),
+        "somaTotalVariaveis": somaTotalVariaveis.toFixed(2)
+    }
+}
+

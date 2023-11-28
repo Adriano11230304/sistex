@@ -6,6 +6,11 @@ class ReceberController {
         return contas;
     }
 
+    async listAllNoPage(datainicio, datafim) {
+        const contas = Receber.findAllNoPage( datainicio, datafim);
+        return contas;
+    }
+
     async listAllAll() {
         const contas = Receber.findAllAll();
         return contas;

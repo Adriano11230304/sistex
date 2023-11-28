@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid, Image } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity, ToastAndroid, Image, Modal } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
 import PagarController from '../../controllers/PagarController';
@@ -13,6 +13,8 @@ import SelectDropdown from 'react-native-select-dropdown';
 import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
 import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import Scanner from '../../components/ScannerComponent';
 
 
 
@@ -38,9 +40,6 @@ export default function ContasPagar({ navigation, route }) {
 
     async function atualizarDespesas(){
         dispatch({ 'type': 'loading' });
-        // const pagar = await PagarController.add(3.45, "nada", 1, true, 5, 1, Date.now(), Date.now(), false, null, "credito");
-        // console.log(pagar);
-        // const apagar = await PagarController.remove(2);
         let mesfim = 1 + parseInt(selected.substring(0, 2));
         const totDespesas = await PagarController.listAllAll();
         console.log("total", totDespesas);
@@ -135,7 +134,7 @@ export default function ContasPagar({ navigation, route }) {
     }
 
     async function addDespesa(){
-        navigation.navigate("AddDespesaIcons", {
+        navigation.navigate("AddDespesa", {
             "prefix": "index"
         });
     }
@@ -211,6 +210,7 @@ export default function ContasPagar({ navigation, route }) {
             <View style={styles.title}>
                 <Text style={styles.text}>Despesas</Text>
             </View>
+            
             <View style={styles.valorTotal}><Text style={styles.valorTotalText}>Valor Total: R$ {state.valorTotal}</Text></View>
             <View style={styles.select}>
                 <View style={styles.checkbox}>
@@ -277,7 +277,7 @@ export default function ContasPagar({ navigation, route }) {
                     />
                     <View style={styles.buttons}>
                         <View style={styles.buttonAdd}>
-                            <TouchableOpacity onPress={addDespesa}>
+                            <TouchableOpacity style={styles.buttonsqrcode} onPress={addDespesa}>
                                 <AntDesign name="pluscircleo" size={50} color="black" />
                             </TouchableOpacity>
                         </View>

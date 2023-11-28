@@ -14,7 +14,6 @@ import ContasPagar from '../pages/Pagar';
 import AddCategoria from '../pages/Categorias/add';
 import AddDespesas from '../pages/Pagar/add';
 import Receber from '../pages/Receber';
-import AddDespesasIcons from '../pages/Pagar/addIcons';
 import ContasPagarFixas from '../pages/Pagar/despesasFixas';
 import ContasPagarVariaveis from '../pages/Pagar/despesasVariaveis';
 import AddDespesasPagamento from '../pages/Pagar/dataPagamento';
@@ -24,7 +23,6 @@ import AddClientes from '../pages/Clientes/add';
 import EditClientes from '../pages/Clientes/editar';
 import VisCliente from '../pages/Clientes/visualizar';
 import VisPagar from '../pages/Pagar/visualizar';
-import AddReceitasIcons from '../pages/Receber/addIcons';
 import AddReceita from '../pages/Receber/add';
 import VisReceber from '../pages/Receber/visualizar';
 import AddReceitasRecebimento from '../pages/Receber/dataRecebimento';
@@ -60,7 +58,6 @@ export const PagarStack = () => {
     <Stack.Navigator initialRouteName='PagarStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PagarStack" component={ContasPagar} />
       <Stack.Screen name="AddDespesa" component={AddDespesas}/>
-      <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
       <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento}/>
       <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
       <Stack.Screen name="VisPagar" component={VisPagar} />
@@ -73,7 +70,6 @@ export const PagarFixaStack = () => {
     <Stack.Navigator initialRouteName='PagarFixaStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PagarFixaStack" component={ContasPagarFixas} />
       <Stack.Screen name="AddDespesa" component={AddDespesas} />
-      <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
       <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento} />
       <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
       <Stack.Screen name="VisPagar" component={VisPagar} />
@@ -86,7 +82,6 @@ export const PagarVariavelStack = () => {
     <Stack.Navigator initialRouteName='PagarVariavelStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PagarVariavelStack" component={ContasPagarVariaveis} />
       <Stack.Screen name="AddDespesa" component={AddDespesas} />
-      <Stack.Screen name="AddDespesaIcons" component={AddDespesasIcons} />
       <Stack.Screen name="AddDespesaPagamento" component={AddDespesasPagamento} />
       <Stack.Screen name="UpdateDespesas" component={UpdateDespesas} />
       <Stack.Screen name="VisPagar" component={VisPagar} />
@@ -98,7 +93,6 @@ export const ReceitasStack = () => {
   return (
     <Stack.Navigator initialRouteName='ReceitaStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ReceitaStack" component={Receber} />
-      <Stack.Screen name="AddReceitaIcon" component={AddReceitasIcons} />
       <Stack.Screen name="AddReceita" component={AddReceita} />
       <Stack.Screen name="VisReceber" component={VisReceber} />
       <Stack.Screen name="AddReceitaRecebimento" component={AddReceitasRecebimento} />

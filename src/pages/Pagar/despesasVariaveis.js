@@ -125,7 +125,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
     }
 
     async function addDespesa() {
-        navigation.navigate("AddDespesaIcons", {
+        navigation.navigate("AddDespesa", {
             "prefix": "variavel"
         });
     }

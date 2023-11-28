@@ -1,4 +1,4 @@
-import db from './configDatabase'
+import Database from '../models/Database'
 
 class Fornecedor {
 
@@ -23,7 +23,7 @@ class Fornecedor {
         const offset = (page - 1) * 30;
         const limit = 30;
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM fornecedores ORDER BY name asc LIMIT ? OFFSET ?;",
                     [limit, offset],
@@ -36,7 +36,7 @@ class Fornecedor {
 
     static findAllAll() {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM fornecedores ORDER BY name asc;",
                     [],
@@ -49,7 +49,7 @@ class Fornecedor {
 
     static findById(id) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM fornecedores WHERE id = ?;",
                     [id],
@@ -62,7 +62,7 @@ class Fornecedor {
 
     static findByNameorEmail(name, limit) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "SELECT * FROM fornecedores WHERE name LIKE ? OR email LIKE ? OR cnpj LIKE ? ORDER BY name asc LIMIT ?;",
                     [name, name, name, limit],
@@ -75,7 +75,7 @@ class Fornecedor {
 
     create() {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "INSERT INTO fornecedores (name, email, cnpj) values (?, ?, ?);",
                     [this.name, this.email, this.cnpj],
@@ -91,7 +91,7 @@ class Fornecedor {
 
     update() {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "UPDATE fornecedores SET name = ?, email = ?, cnpj = ? WHERE id = ?;",
                     [this.name, this.email, this.cnpj, this.id],
@@ -107,7 +107,7 @@ class Fornecedor {
 
     static delete(id) {
         return new Promise((resolve, reject) => {
-            db.transaction((tx) => {
+            Database.db.transaction((tx) => {
                 tx.executeSql(
                     "DELETE FROM fornecedores WHERE id=?;",
                     [id],

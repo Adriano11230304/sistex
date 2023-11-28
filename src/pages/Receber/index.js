@@ -120,7 +120,7 @@ export default function ContasReceber({ navigation, route }) {
     }
 
     async function addReceita() {
-        navigation.navigate("AddReceitaIcon");
+        navigation.navigate("AddReceita");
     }
 
     async function alterRecebida(item) {

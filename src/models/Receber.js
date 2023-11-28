@@ -73,6 +73,19 @@ class Receber{
         });
     }
 
+    static findAllNoPage(datainicio, datafim) {
+        return new Promise((resolve, reject) => {
+            Database.db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM receber WHERE data_entrada >= ? AND data_entrada < ? ORDER BY data_entrada asc;",
+                    [datainicio, datafim],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
     static findAllAll(){
         return new Promise((resolve, reject) => {
             Database.db.transaction((tx) => {

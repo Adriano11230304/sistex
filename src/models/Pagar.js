@@ -76,6 +76,19 @@ class Pagar {
         });
     }
 
+    static findAllNoPage(datainicio, datafim) {
+        return new Promise((resolve, reject) => {
+            Database.db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM pagar WHERE data_entrada >= ? and data_entrada < ? ORDER BY data_entrada asc;",
+                    [datainicio, datafim],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
     static findAllFixas(page, datainicio, datafim, pagas = false, naoPagas = false){
         if (page < 1) {
             const vazio = []
