@@ -13,7 +13,7 @@ import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import CategoriaController from '../../controllers/CategoriaController';
 import { pagarValidate } from '../../controllers/utils/validators';
-import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas, totalDespesasSeparadas } from '../../controllers/utils/functions';
 
 export default function AddDespesas({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -101,40 +101,42 @@ export default function AddDespesas({ navigation, route }) {
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-            if (route.params.prefix == 'fixa'){
-                const despesas = await PagarController.listAllFixas(1, datainicio, datafim);
-                const action = {
+                const despesasFixas = await PagarController.listAllFixas(1, datainicio, datafim);
+                const actionFixas = {
                     "type": "atualizarDespesasFixas",
-                    "despesasFixas": await despTodosDados(despesas),
-                    "valorTotalFixas": somatorioDespesas(despesas)
+                    "despesasFixas": await despTodosDados(despesasFixas),
+                    "valorTotalFixas": somatorioDespesas(despesasFixas)
                 }
-                dispatch(action);
-                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
-                setLoading(false);
-                navigation.navigate('PagarFixaStack');
-            } else if (route.params.prefix == 'variavel'){
-                const despesas = await PagarController.listAllVariaveis(1, datainicio, datafim);
-                const action = {
+                dispatch(actionFixas);
+          
+                const despesasVariaveis = await PagarController.listAllVariaveis(1, datainicio, datafim);
+                const actionVariaveis = {
                     "type": "atualizarDespesasVariaveis",
-                    "despesasVariaveis": await despTodosDados(despesas),
-                    "valorTotalVariaveis": somatorioDespesas(despesas)
+                    "despesasVariaveis": await despTodosDados(despesasVariaveis),
+                    "valorTotalVariaveis": somatorioDespesas(despesasVariaveis)
                 }
-                dispatch(action);
-                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
-                setLoading(false);
-                navigation.navigate('PagarVariavelStack');
-            }else{
+                dispatch(actionVariaveis);
+           
                 const despesas = await PagarController.listAll(1, datainicio, datafim);
+                const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
+                const totDespesas = totalDespesasSeparadas(despesastot);
                 const action = {
                     "type": "atualizarDespesas",
                     "despesas": await despTodosDados(despesas),
-                    "valorTotal": somatorioDespesas(despesas)
+                    "valorTotal": somatorioDespesas(despesas),
+                    "valorTotalDespesasNoPage": totDespesas
                 }
                 dispatch(action);
                 ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
                 setLoading(false);
-                navigation.navigate('PagarStack');
-            }
+                if(route.params.prefix == 'variavel'){
+                    navigation.navigate('PagarFixaStack');
+                }else if(route.params.prefix == 'variavel'){
+                    navigation.navigate('PagarVariavelStack');
+                }else{
+                    navigation.navigate('PagarStack');
+                }
+                
             
         } else {
             ToastAndroid.show(teste.validate, ToastAndroid.SHORT);

@@ -13,11 +13,11 @@ function authReducer(state, action) {
         } case 'atualizarDespesasFixas': {
             return { ...state, despesasFixas: action.despesasFixas, valorTotalFixas: action.valorTotalFixas }
         } case 'atualizarDespesasVariaveis': {
-            return { ...state, despesasVariaveis: action.despesasVariaveis, valorTotalVariaveis: action.valorTotalVariaveis }
+            return { ...state, despesasVariaveis: action.despesasVariaveis, valorTotalVariaveis: action.valorTotalVariaveis, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage }
         }case 'atualizarDespesas': {
             return{...state, despesas: action.despesas, valorTotal: action.valorTotal}
         } case 'atualizarReceitas': {
-            return { ...state, receitas: action.receitas, valorTotalReceitas: action.valorTotalReceitas }
+            return { ...state, receitas: action.receitas, valorTotalReceitas: action.valorTotalReceitas, valorTotalReceitasNoPage: action.valorTotalReceitasNoPage }
         } case 'atualizarCategorias': {
             return { ...state, categorias: action.categorias }
         }case 'loading':{
@@ -46,7 +46,9 @@ const initialState = {
     valorTotalVariaveis: null,
     valorTotalFixas: null,
     valorTotalReceitas: null,
-    receitas: null
+    receitas: null,
+    valorTotalDespesasNoPage: null,
+    valorTotalReceitasNoPage: null,
 }
 
 function AuthProvider({ children }) {

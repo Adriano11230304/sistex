@@ -12,7 +12,7 @@ import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
-import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas, totalDespesasSeparadas } from '../../controllers/utils/functions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Scanner from '../../components/ScannerComponent';
 
@@ -63,11 +63,14 @@ export default function ContasPagar({ navigation, route }) {
         }
         console.log("despesas", despesas);
         console.log("todas Desp", await despTodosDados(despesas));
+        const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
+        const totDespesasAll = totalDespesasSeparadas(despesastot);
 
         dispatch({
             "type": "atualizarDespesas",
             "despesas": await despTodosDados(despesas),
-            "valorTotal": somatorioDespesas(despesas)
+            "valorTotal": somatorioDespesas(despesas),
+            "valorTotalDespesasNoPage": totDespesasAll
         })
         dispatch({
             "type": "atualizarDespesasFixas",
@@ -103,10 +106,13 @@ export default function ContasPagar({ navigation, route }) {
             let newList = null;
             newList = await PagarController.findFornecedororCategoria(searchText, datainicio, datafim, 50);
             const despesasTotais = await despTodosDados(newList);
+            const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
+            const totDespesas = totalDespesasSeparadas(despesastot);
             const action = {
                 "type": "atualizarDespesas",
                 "despesas": despesasTotais,
-                "valorTotal": somatorioDespesas(newList)
+                "valorTotal": somatorioDespesas(newList),
+                "valorTotalDespesasNoPage": totDespesas
             }
 
             dispatch(action);

@@ -12,7 +12,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import { receberValidate } from '../../controllers/utils/validators';
-import { receitasTodosDados, somatorioReceitas } from '../../controllers/utils/functions';
+import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas } from '../../controllers/utils/functions';
 
 export default function AddReceita({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -84,12 +84,14 @@ export default function AddReceita({ navigation, route }) {
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-            
+            const receitastot = await ReceberController.listAllNoPage(datainicio, datafim);
+            const totReceitas = totalReceitasSeparadas(receitastot);
             const receitas = await ReceberController.listAll(1, datainicio, datafim);
             const action = {
                     "type": "atualizarReceitas",
                     "receitas": await receitasTodosDados(receitas),
-                    "valorTotalReceitas": somatorioReceitas(receitas)
+                    "valorTotalReceitas": somatorioReceitas(receitas),
+                    "valorTotalReceitasNoPage": totReceitas
             }
             dispatch(action);
             ToastAndroid.show("Receita adicionada com sucesso!", ToastAndroid.SHORT);

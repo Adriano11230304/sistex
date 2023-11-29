@@ -11,7 +11,7 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
-import { receitasTodosDados, somatorioReceitas } from '../../controllers/utils/functions';
+import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas } from '../../controllers/utils/functions';
 
 export default function ContasReceber({ navigation, route }) {
     const date = Date.now();
@@ -58,10 +58,14 @@ export default function ContasReceber({ navigation, route }) {
         const receitasTodasAll = await ReceberController.listAll(page, datainicio, datafim, recebidas, naoRecebidas);
         console.log("tudoAll", receitasTodasAll);
 
+        const receitastot = await ReceberController.listAllNoPage(datainicio, datafim);
+        const totReceitas = totalReceitasSeparadas(receitastot);
+
         dispatch({
             "type": "atualizarReceitas",
             "receitas": await receitasTodosDados(receitas),
-            "valorTotalReceitas": somatorioReceitas(receitas)
+            "valorTotalReceitas": somatorioReceitas(receitas),
+            "valorTotalReceitasNoPage": totReceitas
         })
 
         dispatch({ 'type': 'loadingfalse' })
