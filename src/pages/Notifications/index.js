@@ -4,6 +4,7 @@ import Header from '../../components/Header'
 import { styles } from './style'
 
 export default function Notifications() {
+   
     return (
         <View style={styles.container}>
             <Header />
