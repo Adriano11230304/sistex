@@ -7,32 +7,67 @@ class Database{
         this.db = db;
         this.db.transaction((tx) => {
             tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, verified_email BOOLEAN, name TEXT, picture TEXT, id_gmail TEXT, token TEXT);"
-            );
-            tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS fornecedores (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, cnpj TEXT);"
-            );
-            tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS categorias (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT);"
-            );
-            /*tx.executeSql(
-                'DROP TABLE pagar;'
+                "CREATE TABLE IF NOT EXISTS users ("+
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                "email TEXT, "+
+                "verified_email BOOLEAN, "+
+                "name TEXT, "+
+                "picture TEXT, "+
+                "id_gmail TEXT, "+
+                "token TEXT);"
                 , [],
-                () => console.log(`Tabela excluída`),
-                (tx, e) => console.log(`Erro ao excluir a tabela pagar`, e)
-            );*/
-        
-            /*tx.executeSql(
-                'SELECT * from pagar;'
-                , [],
-                (_, {rows}) => console.log(rows),
-              (_, e) => (console.log(e))
-            );*/
-            tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS pagar (id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, observacoes TEXT, parcelas INTEGER, fixa BOOLEAN, categoria_id INTEGER, fornecedor_id INTEGER, created_at TIMESTAMP, data_entrada TIMESTAMP, pago BOOLEAN, data_pagamento TIMESTAMP, forma_pagamento TEXT, parcelamento BOOLEAN, data_vencimento TIMESTAMP, FOREIGN KEY(fornecedor_id) REFERENCES fornecedores(id), FOREIGN KEY(categoria_id) REFERENCES categorias(id));"
+                () => console.log(`Tabela users criada com sucesso`),
+                (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
             );
             tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, cnpj TEXT);"
+                "CREATE TABLE IF NOT EXISTS fornecedores ("+
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                "name TEXT, "+
+                "email TEXT, "+
+                "cnpj TEXT);"
+                , [],
+                () => console.log(`Tabela fornecedores criada com sucesso`),
+                (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
+            );
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS categorias ("+
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                "titulo TEXT);"
+                , [],
+                () => console.log(`Tabela categorias criada com sucesso`),
+                (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
+            );
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS pagar ("+
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                "valor FLOAT, "+
+                "observacoes TEXT, "+
+                "parcelas INTEGER, "+
+                "fixa BOOLEAN, "+
+                "categoria_id INTEGER, "+
+                "fornecedor_id INTEGER, "+
+                "created_at TIMESTAMP, "+
+                "data_entrada TIMESTAMP, "+
+                "pago BOOLEAN, "+
+                "data_pagamento TIMESTAMP, "+
+                "forma_pagamento TEXT, "+
+                "parcelamento BOOLEAN, "+
+                "data_vencimento TIMESTAMP, "+
+                "FOREIGN KEY(fornecedor_id) REFERENCES fornecedores(id), "+
+                "FOREIGN KEY(categoria_id) REFERENCES categorias(id));"
+                , [],
+                () => console.log(`Tabela pagar criada com sucesso`),
+                (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
+            );
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS clientes ("+
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                "name TEXT, "+
+                "email TEXT, "+
+                "cnpj TEXT);"
+                , [],
+                () => console.log(`Tabela clientes criada com sucesso`),
+                (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
             );
         
             tx.executeSql(
@@ -55,8 +90,6 @@ class Database{
                 () => console.log(`Tabela receber criada com sucesso`),
                 (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
             );
-            
-            console.log("tabelas criadas!");
         });
     }
 
