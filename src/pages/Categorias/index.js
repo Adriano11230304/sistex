@@ -16,6 +16,29 @@ export default function Categorias({navigation, route}) {
         loadCategorias();
     }, [])
 
+    const setText = (t) => {
+        setSearchText(t)
+    }
+
+    const handleOrderClick = async () => {
+        if (searchText != "") {
+            dispatch({ "type": "loading" })
+            let newList = null;
+            newList = await CategoriaController.findTitulo(searchText, 30);
+            const action = {
+                "type": "atualizarCategorias",
+                "categorias": newList
+            }
+
+            dispatch(action);
+            dispatch({ "type": "loadingfalse" })
+        } else {
+            await loadCategorias();
+        }
+        console.log('search');
+
+    };
+
     async function loadCategorias(){
         dispatch({"type": "loading"})
         dispatch({
@@ -76,7 +99,9 @@ export default function Categorias({navigation, route}) {
                     value={searchText}
                     onChangeText={(t) => setText(t)}
                 />
-                <FontAwesome name="search" size={24} color="black" />
+                <TouchableOpacity onPress={handleOrderClick}>
+                    <FontAwesome name="search" size={30} color="black" />
+                </TouchableOpacity>
             </View>
             {state.loading ? (
                 <>

@@ -38,7 +38,6 @@ export default function ContasReceber({ navigation, route }) {
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const receitas = await ReceberController.listAll(page, datainicio, datafim, recebidas, naoRecebidas);
-        console.log(receitas);
         const recNext = await ReceberController.listAll(page + 1, datainicio, datafim, recebidas, naoRecebidas);
         const recPrev = await ReceberController.listAll(page - 1, datainicio, datafim, recebidas, naoRecebidas);
         if (recNext.length > 0) {
@@ -52,11 +51,8 @@ export default function ContasReceber({ navigation, route }) {
         } else {
             setPrevPage(false);
         }
-        console.log("receitas", receitas);
-        console.log("todas Receitas", await receitasTodosDados(receitas));
 
         const receitasTodasAll = await ReceberController.listAll(page, datainicio, datafim, recebidas, naoRecebidas);
-        console.log("tudoAll", receitasTodasAll);
 
         const receitastot = await ReceberController.listAllNoPage(datainicio, datafim);
         const totReceitas = totalReceitasSeparadas(receitastot);
