@@ -41,6 +41,14 @@ export default function AddDespesas({ navigation, route }) {
     const [ categorias, setCategorias ] = useState(null);
     const [ fornecedores, setFornecedores ] = useState(null);
 
+    useEffect(() => {
+        loadFornecedores();
+    }, [])
+
+    async function loadFornecedores(){
+        setFornecedores(await FornecedorController.listAll(1));
+    }
+
     async function searchFornecedor(){
         setFornecedores(await FornecedorController.findNameorEmail(searchText, 25));
     }
@@ -101,11 +109,14 @@ export default function AddDespesas({ navigation, route }) {
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-                const despesasFixas = await PagarController.listAllFixas(1, datainicio, datafim);
+            const despesasFixas = await PagarController.listAllFixas(1, datainicio, datafim);
+            const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
+            const totDespesas = totalDespesasSeparadas(despesastot);
                 const actionFixas = {
                     "type": "atualizarDespesasFixas",
                     "despesasFixas": await despTodosDados(despesasFixas),
-                    "valorTotalFixas": somatorioDespesas(despesasFixas)
+                    "valorTotalFixas": somatorioDespesas(despesasFixas),
+                    "valorTotalDespesasNoPage": totDespesas
                 }
                 dispatch(actionFixas);
           
@@ -113,13 +124,12 @@ export default function AddDespesas({ navigation, route }) {
                 const actionVariaveis = {
                     "type": "atualizarDespesasVariaveis",
                     "despesasVariaveis": await despTodosDados(despesasVariaveis),
-                    "valorTotalVariaveis": somatorioDespesas(despesasVariaveis)
+                    "valorTotalVariaveis": somatorioDespesas(despesasVariaveis),
+                    "valorTotalDespesasNoPage": totDespesas
                 }
                 dispatch(actionVariaveis);
            
                 const despesas = await PagarController.listAll(1, datainicio, datafim);
-                const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
-                const totDespesas = totalDespesasSeparadas(despesastot);
                 const action = {
                     "type": "atualizarDespesas",
                     "despesas": await despTodosDados(despesas),

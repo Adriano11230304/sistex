@@ -20,7 +20,7 @@ class ReceberController {
         const receita = new Receber(valor, parcelas, parcelamento, observacoes, data_entrada, recebida, data_recebimento, cliente_id, forma_recebimento, data_vencimento);
         console.log("create", receita);
         try {
-            await receita.create();
+            const teste = await receita.create();
             return "Receita adicionado com sucesso!";
         } catch (err) {
             return err;

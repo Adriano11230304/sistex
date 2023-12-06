@@ -7,7 +7,7 @@ import UserController from '../../controllers/UserController';
 import PagarController from '../../controllers/PagarController';
 import ReceberController from '../../controllers/ReceberController';
 import SelectDropdown from 'react-native-select-dropdown';
-import { totalDespesasSeparadas, totalReceitasSeparadas } from '../../controllers/utils/functions';
+import { totalDespesasSeparadas, totalReceitasSeparadas, despTodosDados, receitasTodosDados, somatorioDespesas, somatorioReceitas } from '../../controllers/utils/functions';
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native'
 import LoaderSimple from '../../components/LoaderSimple';
 
@@ -37,14 +37,14 @@ export default function Home({ navigation }) {
     const dataPagar = [
         {
             "x": "Desp Total",
-            "y": parseFloat(somaDespesasTotal)
+            "y": parseFloat(state.valorTotalDespesasNoPage.somaTotal)
         },
         {
-            "y": parseFloat(somaPagas),
+            "y": parseFloat(state.valorTotalDespesasNoPage.somaPagas),
             "x": 'Desp Pagas'
         },
         {
-            "y": parseFloat(somaNaoPagas),
+            "y": parseFloat(state.valorTotalDespesasNoPage.somaNaoPagas),
             "x": 'Desp Não Pagas'
         }
     ]
@@ -52,28 +52,50 @@ export default function Home({ navigation }) {
     const dataReceitas = [
         {
             "x": "Rec totais",
-            "y": parseFloat(somaTotalReceitas)
+            "y": parseFloat(state.valorTotalReceitasNoPage.somaTotal)
 
         },
         {
             "x": "Rec. recebidas",
-            "y": parseFloat(recebidas)
+            "y": parseFloat(state.valorTotalReceitasNoPage.somaRecebidas)
         },
         {
             "x": "Rec não rec",
-            "y": parseFloat(naoRecebidas)
+            "y": parseFloat(state.valorTotalReceitasNoPage.somaNaoRecebidas)
         }
     ]
+
+    useEffect(() => {
+        atualizarDespesasReceitas();
+    }, [selected])
 
     async function atualizarDespesasReceitas(){
         dispatch({"type": "loading"});
         let mesfim = 1 + parseInt(selected.substring(0, 2));
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
-        const despesas = await PagarController.listAllNoPage(datainicio, datafim);
+        const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
+        const totDespesasAll = totalDespesasSeparadas(despesastot);
+        dispatch({
+            "type": "atualizarDespesas",
+            "despesas": 0,
+            "valorTotal": 0,
+            "valorTotalDespesasNoPage": totDespesasAll
+        })
+        console.log("despesas", state.valorTotalDespesasNoPage);
         const receitas = await ReceberController.listAllNoPage(datainicio, datafim);
-        const totDespesas = totalDespesasSeparadas(despesas);
-        const totReceitas = totalReceitasSeparadas(receitas);
+        const totReceitasteste = totalReceitasSeparadas(receitas);
+        console.log("totReceitas", totReceitasteste);
+        dispatch({
+            "type": "atualizarReceitas",
+            "receitas": 0,
+            "valorTotal": 0,
+            "valorTotalReceitasNoPage": totalReceitasSeparadas(receitas)
+        })
+        const totDespesas = state.valorTotalDespesasNoPage;
+        console.log("despesas", totDespesas);
+        const totReceitas = state.valorTotalReceitasNoPage;
+        console.log("receitas", totReceitas);
         setSomaDespesasTotal(totDespesas.somaTotal);
         setSomaPagas(totDespesas.somaPagas);
         setSomaNaoPagas(totDespesas.somaNaoPagas);
@@ -88,10 +110,6 @@ export default function Home({ navigation }) {
         setSaldo(sal);
         dispatch({ "type": "loadingfalse" });
     }
-
-    useEffect(() => {
-        atualizarDespesasReceitas();
-    }, [selected])
     
 
     return (
@@ -119,34 +137,34 @@ export default function Home({ navigation }) {
                     <Text style={styles.contasPagarTitle}>Despesas</Text>
                     <View style={styles.viewdespesas}>
                         <Text style={styles.contasPagar}>Totais</Text>
-                        <Text style={styles.valorPagar}>R$ {somaDespesasTotal}</Text>
+                        <Text style={styles.valorPagar}>R$ {state.valorTotalDespesasNoPage.somaTotal}</Text>
                     </View>
                     <View style={styles.viewdespesas}>
                         <Text style={styles.contasPagar}>Fixas</Text>
-                        <Text style={styles.valorPagar}>R$ {somaTotalFixas}</Text>
+                        <Text style={styles.valorPagar}>R$ {state.valorTotalDespesasNoPage.somaTotalFixas}</Text>
                     </View>
                     <View style={styles.viewdespesas}>
                         <Text style={styles.contasPagar}>Variáveis</Text>
-                        <Text style={styles.valorPagar}>R$ {somaTotalVariaveis}</Text>
+                        <Text style={styles.valorPagar}>R$ {state.valorTotalDespesasNoPage.somaTotalVariaveis}</Text>
                     </View>
                     <View style={styles.viewdespesas}>
                         <Text style={styles.contasPagar}>Pagas</Text>
-                        <Text style={styles.valorPagar}>R$ {somaPagas}</Text>
+                        <Text style={styles.valorPagar}>R$ {state.valorTotalDespesasNoPage.somaPagas}</Text>
                     </View>
                     <View style={styles.viewdespesas}>
                         <Text style={styles.contasPagar}>Não Pagas</Text>
-                        <Text style={styles.valorPagar}>R$ {somaNaoPagas}</Text>
+                        <Text style={styles.valorPagar}>R$ {state.valorTotalDespesasNoPage.somaNaoPagas}</Text>
                     </View>
                 </View>
                 <View style={styles.viewReceber}>
                     <Text style={styles.contasReceberTitle}>Receitas</Text>
                     <View style={styles.viewdespesas}>
                         <Text style={styles.contasReceber}>Não rec.</Text>
-                        <Text style={styles.valorPagar}>R$ {naoRecebidas}</Text>
+                        <Text style={styles.valorPagar}>R$ {state.valorTotalReceitasNoPage.somaNaoRecebidas}</Text>
                     </View>
                     <View style={styles.viewdespesas}>
                         <Text style={styles.contasReceber}>Receb.</Text>
-                        <Text style={styles.valorPagar}>R$ {recebidas}</Text>
+                        <Text style={styles.valorPagar}>R$ {state.valorTotalReceitasNoPage.somaRecebidas}</Text>
                     </View>
                 </View>
             </View>

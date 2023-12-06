@@ -34,6 +34,15 @@ export default function AddReceita({ navigation, route }) {
     const [ searchText, setSearchText ] = useState("");
     const [ clientes, setClientes ] = useState(null);
 
+
+    useEffect(() => {
+        loadClientes();
+    }, [])
+
+    async function loadClientes(){
+        setClientes(await ClienteController.listAll(1));
+    }
+
     async function searchCliente(){
         setClientes(await ClienteController.findNameorEmail(searchText, 25));
     }

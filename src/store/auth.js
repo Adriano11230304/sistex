@@ -11,11 +11,11 @@ function authReducer(state, action) {
         }case 'atualizarFornecedores': {
             return {...state, fornecedores: action.fornecedores}
         } case 'atualizarDespesasFixas': {
-            return { ...state, despesasFixas: action.despesasFixas, valorTotalFixas: action.valorTotalFixas }
+            return { ...state, despesasFixas: action.despesasFixas, valorTotalFixas: action.valorTotalFixas, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage }
         } case 'atualizarDespesasVariaveis': {
             return { ...state, despesasVariaveis: action.despesasVariaveis, valorTotalVariaveis: action.valorTotalVariaveis, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage }
         }case 'atualizarDespesas': {
-            return{...state, despesas: action.despesas, valorTotal: action.valorTotal}
+            return{...state, despesas: action.despesas, valorTotal: action.valorTotal, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage}
         } case 'atualizarReceitas': {
             return { ...state, receitas: action.receitas, valorTotalReceitas: action.valorTotalReceitas, valorTotalReceitasNoPage: action.valorTotalReceitasNoPage }
         } case 'atualizarCategorias': {
@@ -47,8 +47,8 @@ const initialState = {
     valorTotalFixas: null,
     valorTotalReceitas: null,
     receitas: null,
-    valorTotalDespesasNoPage: null,
-    valorTotalReceitasNoPage: null,
+    valorTotalDespesasNoPage: {"somaNaoPagas": 0, "somaNaoPagasFixas": 0, "somaPagas": 0, "somaPagasFixas": 0, "somaTotal": 0},
+    valorTotalReceitasNoPage: {"somaNaoRecebidas": 0, "somaRecebidas": 0, "somaTotal": 0},
 }
 
 function AuthProvider({ children }) {

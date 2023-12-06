@@ -52,8 +52,6 @@ export default function ContasReceber({ navigation, route }) {
             setPrevPage(false);
         }
 
-        const receitasTodasAll = await ReceberController.listAll(page, datainicio, datafim, recebidas, naoRecebidas);
-
         const receitastot = await ReceberController.listAllNoPage(datainicio, datafim);
         const totReceitas = totalReceitasSeparadas(receitastot);
 
@@ -63,6 +61,8 @@ export default function ContasReceber({ navigation, route }) {
             "valorTotalReceitas": somatorioReceitas(receitas),
             "valorTotalReceitasNoPage": totReceitas
         })
+
+        console.log(state.valorTotalReceitasNoPage);
 
         dispatch({ 'type': 'loadingfalse' })
     }
@@ -79,7 +79,6 @@ export default function ContasReceber({ navigation, route }) {
     }
 
     async function handleOrderClick() {
-        console.log("search");
         if (searchText != "") {
             dispatch({ "type": "loading" })
             const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
@@ -88,13 +87,17 @@ export default function ContasReceber({ navigation, route }) {
             let newList = null;
             newList = await ReceberController.findClientesorForma(searchText, datainicio, datafim, 50);
             const receitasTotais = await receitasTodosDados(newList);
+            const receitastot = await ReceberController.listAllNoPage(datainicio, datafim);
+            const totReceitas = totalReceitasSeparadas(receitastot);
             const action = {
                 "type": "atualizarReceitas",
                 "receitas": receitasTotais,
-                "valorTotalReceitas": somatorioReceitas(newList)
+                "valorTotalReceitas": somatorioReceitas(newList),
+                "valorTotalReceitasNoPage": totReceitas
             }
 
             dispatch(action);
+            console.log(state.valorTotalReceitasNoPage);
             setNexPage(false);
             setPrevPage(false);
             dispatch({ "type": "loadingfalse" })

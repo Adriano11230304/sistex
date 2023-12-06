@@ -2,7 +2,6 @@ import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpa
 import Header from '../../components/Header'
 import { styles } from './style'
 import PagarController from '../../controllers/PagarController';
-import FornecedorController from '../../controllers/FornecedorController';
 import { useEffect, useState } from 'react';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
@@ -10,11 +9,8 @@ import { useAuth } from '../../store/auth';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
-import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
 import { despTodosDados, somatorioDespesas, totalDespesasSeparadas } from '../../controllers/utils/functions';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import Scanner from '../../components/ScannerComponent';
 
 
 
@@ -40,6 +36,11 @@ export default function ContasPagar({ navigation, route }) {
 
     async function atualizarDespesas(){
         dispatch({ 'type': 'loading' });
+        countries.map(count => {
+            if (dataatual == count) {
+                defaultValue = dataatual
+            }
+        })
         let mesfim = 1 + parseInt(selected.substring(0, 2));
         const totDespesas = await PagarController.listAllAll();
         console.log("total", totDespesas);
@@ -61,10 +62,9 @@ export default function ContasPagar({ navigation, route }) {
         } else {
             setPrevPage(false);
         }
-        console.log("despesas", despesas);
-        console.log("todas Desp", await despTodosDados(despesas));
         const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
         const totDespesasAll = totalDespesasSeparadas(despesastot);
+        console.log(totDespesasAll);
 
         dispatch({
             "type": "atualizarDespesas",
@@ -75,12 +75,14 @@ export default function ContasPagar({ navigation, route }) {
         dispatch({
             "type": "atualizarDespesasFixas",
             "despesasFixas": await despTodosDados(despesasf),
-            "valorTotalFixas": somatorioDespesas(despesasf)
+            "valorTotalFixas": somatorioDespesas(despesasf),
+            "valorTotalDespesasNoPage": totDespesasAll
         })
         dispatch({
             "type": "atualizarDespesasVariaveis",
             "despesasVariaveis": await despTodosDados(despesasv),
-            "valorTotalVariaveis": somatorioDespesas(despesasv)
+            "valorTotalVariaveis": somatorioDespesas(despesasv),
+            "valorTotalDespesasNoPage": totDespesasAll
         })
 
         dispatch({ 'type': 'loadingfalse' })
