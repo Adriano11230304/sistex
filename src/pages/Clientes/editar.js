@@ -63,7 +63,7 @@ export default function EditClientes({ navigation, route }) {
                 <>
                     <Header />
                     <View style={styles.title}>
-                        <Text style={styles.text}>Editar fornecedor</Text>
+                        <Text style={styles.text}>Editar cliente</Text>
                     </View>
                     <View style={styles.form}>
                         <View style={styles.labelinput}>
