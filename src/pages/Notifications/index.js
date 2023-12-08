@@ -16,12 +16,12 @@ export default function Notifications() {
 
     async function loadNotificacoes(){
         dispatch({"type": "loading"})
+        console.log("entrou");
         dispatch({
             "type": "atualizarNotificacoes",
             "notificacoes": await NotificacaoController.listAll(1)
         });
-        const nots = await NotificacaoController.listAll(1);
-        console.log(nots);
+        console.log(state.notificacoes);
         dispatch({ "type": "loadingfalse" })
     }
 
@@ -43,7 +43,7 @@ export default function Notifications() {
         <TouchableOpacity style={styles.itemList}>
             <View style={styles.list}>
                 <View style={styles.textListPagar}>
-                    <Text style={styles.textList}>{item.titulo}</Text>
+                    <Text style={styles.textList}>{item.texto}</Text>
                 </View>
                 <View>
                     <TouchableOpacity onPress={() => delNotificacao(item.id)}><Text style={styles.buttonText}><MaterialCommunityIcons name="delete" size={24} color="black" /></Text></TouchableOpacity>

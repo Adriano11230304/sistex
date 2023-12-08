@@ -45,16 +45,6 @@ class Database{
                 () => console.log(`Tabela notificacoes criada com sucesso`),
                 (tx, e) => console.log(`Erro ao criar a tabela notificacoes`, e)
             );
-            const texto = "Existem despesas que estão quase vencidas, verifique as mesmas e as marque como pagas.";
-            tx.executeSql(
-                "INSERT INTO notificacoes (texto) values (?);"
-                , [texto],
-                (_, { rowsAffected, insertId }) => {
-                    if (rowsAffected > 0) resolve(insertId);
-                    else reject("Error inserting obj: " + JSON.stringify(obj));
-                },
-                (_, error) => reject(error)
-            );
             tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS pagar ("+
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, "+

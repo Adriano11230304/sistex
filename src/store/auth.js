@@ -21,7 +21,7 @@ function authReducer(state, action) {
         } case 'atualizarCategorias': {
             return { ...state, categorias: action.categorias }
         } case 'atualizarNotificacoes': {
-            return { ...state, categorias: action.notificacoes }
+            return { ...state, notificacoes: action.notificacoes }
         }case 'loading':{
             return {...state, loading: true}
         }case 'loadingfalse':{
