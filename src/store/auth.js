@@ -20,6 +20,8 @@ function authReducer(state, action) {
             return { ...state, receitas: action.receitas, valorTotalReceitas: action.valorTotalReceitas, valorTotalReceitasNoPage: action.valorTotalReceitasNoPage }
         } case 'atualizarCategorias': {
             return { ...state, categorias: action.categorias }
+        } case 'atualizarNotificacoes': {
+            return { ...state, categorias: action.notificacoes }
         }case 'loading':{
             return {...state, loading: true}
         }case 'loadingfalse':{
@@ -39,6 +41,7 @@ const initialState = {
     loading: false,
     despesas: null,
     categorias: null,
+    notificacoes: null,
     despesasFixas: null,
     despesasVariaveis: null,
     clientes: null,
