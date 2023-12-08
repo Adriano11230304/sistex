@@ -131,9 +131,9 @@ const Login = ({ navigation }) => {
                   source={require('../../../assets/google.png')}
                 />
               </TouchableOpacity>
-              <TouchableOpacity onPress={entrar} style={styles.button}>
+              {/*<TouchableOpacity onPress={entrar} style={styles.button}>
                 <Text>Entrar sem login</Text>
-              </TouchableOpacity>
+                </TouchableOpacity>*/}
             </View>
           </>
         )}
