@@ -7,6 +7,7 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import { useAuth } from '../../store/auth';
 import LoaderSimple from '../../components/LoaderSimple';
 import NotificacaoController from '../../controllers/NotificacaoController';
+import * as CronJob from 'react-native-cron-job';
 
 export default function Notifications() {
     const { state, dispatch } = useAuth();
@@ -14,9 +15,18 @@ export default function Notifications() {
         loadNotificacoes();
     }, [])
 
+    const CronJobTask = async () => {
+        console.log(testando);
+        // Do your task here.
+  
+        // Be sure to call completeTask at the end.
+        CronJob.completeTask();
+  };
+
+  CronJob.startCronJob(22,12);
+
     async function loadNotificacoes(){
         dispatch({"type": "loading"})
-        console.log("entrou");
         dispatch({
             "type": "atualizarNotificacoes",
             "notificacoes": await NotificacaoController.listAll(1)

@@ -15,17 +15,7 @@ export default function Home({ navigation }) {
     const {state, dispatch} = useAuth();
     const date = Date.now();
     const dataatual = new Date(date).toLocaleString().substring(3, 10);
-    const [somaDespesasTotal, setSomaDespesasTotal] = useState(0);
-    const [somaTotalFixas, setSomaTotalFixas] = useState(0);
-    const [somaTotalVariaveis, setSomaTotalVariaveis] = useState(0);
-    const [ somaPagas, setSomaPagas] = useState(0);
-    const [somaNaoPagas, setSomaNaoPagas] = useState(0);
-    const [recebidas, setRecebidas] = useState(0);
-    const [naoRecebidas, setNaoRecebidas] = useState(0);
-    const [ somaTotalReceitas, setSomaTotalReceitas ] = useState(0);
-    const [ saldo, setSaldo ] = useState(0);
     const [selected, setSelected] = useState(dataatual);
-    const [balanco, setBalanco] = useState(0);
     const countries = ["01/2023", "02/2023", "03/2023", "04/2023", "05/2023", "06/2023", "07/2023", "08/2023", "09/2023", "10/2023", "11/2023", "12/2023", "01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024", "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024", "01/2025", "02/2025", "03/2025", "04/2025", "05/2025", "06/2025", "07/2025", "08/2025", "09/2025", "10/2025", "11/2025", "12/2025"]
     let defaultValue;
     countries.map(count => {
@@ -84,30 +74,20 @@ export default function Home({ navigation }) {
         })
         console.log("despesas", state.valorTotalDespesasNoPage);
         const receitas = await ReceberController.listAllNoPage(datainicio, datafim);
-        const totReceitasteste = totalReceitasSeparadas(receitas);
-        console.log("totReceitas", totReceitasteste);
         dispatch({
             "type": "atualizarReceitas",
             "receitas": 0,
             "valorTotal": 0,
             "valorTotalReceitasNoPage": totalReceitasSeparadas(receitas)
         })
-        const totDespesas = state.valorTotalDespesasNoPage;
+        const totDespesas = totalDespesasSeparadas(despesastot);
         console.log("despesas", totDespesas);
-        const totReceitas = state.valorTotalReceitasNoPage;
+        const totReceitas = totalReceitasSeparadas(receitas);
         console.log("receitas", totReceitas);
-        setSomaDespesasTotal(totDespesas.somaTotal);
-        setSomaPagas(totDespesas.somaPagas);
-        setSomaNaoPagas(totDespesas.somaNaoPagas);
-        setSomaTotalFixas(totDespesas.somaTotalFixas);
-        setSomaTotalVariaveis(totDespesas.somaTotalVariaveis);
-        setRecebidas(totReceitas.somaRecebidas);
-        setNaoRecebidas(totReceitas.somaNaoRecebidas);
-        setSomaTotalReceitas(totReceitas.somaTotal);
-        const bal = (totReceitas.somaTotal - totDespesas.somaTotal).toFixed(2);
-        setBalanco(bal);
-        const sal = (totReceitas.somaRecebidas - totDespesas.somaPagas).toFixed(2);
-        setSaldo(sal);
+        const bal = (totReceitas.somaTotal - totDespesas.somaTotal);
+        dispatch({ "type": "balanco", "balanco": bal.toFixed(2)});
+        const sal = (totReceitas.somaRecebidas - totDespesas.somaPagas);
+        dispatch({ "type": "saldo", "saldo": sal.toFixed(2)});
         dispatch({ "type": "loadingfalse" });
     }
     
@@ -168,19 +148,33 @@ export default function Home({ navigation }) {
                     </View>
                 </View>
             </View>
-            <View style={styles.balanco}><Text style={styles.balancoText}>Balanço Mensal R$ {balanco}</Text></View>
-            <View style={styles.balanco}><Text style={styles.balancoText}>Saldo em caixa R$ {saldo}</Text></View>
+            <View style={styles.balanco}><Text style={styles.balancoText}>Balanço Mensal R$ {state.balanco}</Text></View>
+            <View style={styles.balanco}><Text style={styles.balancoText}>Saldo em caixa R$ {state.saldo}</Text></View>
                     <ScrollView showsVerticalScrollIndicator={false} style={styles.grafico}>
                         <View>
                             <Text style={styles.balancoText}>Despesas</Text>
                             <VictoryChart domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}>
-                                <VictoryBar data={dataPagar} x="x" y="y" />
+                                <VictoryBar
+                                style={{
+                                    data: {
+                                        fill: "#c43a31"
+                                    }
+                                }}
+                                data={dataPagar} x="x" y="y" />
                             </VictoryChart>
                         </View>
                         <View>
                             <Text style={styles.balancoText}>Receitas</Text>
-                            <VictoryChart domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}>
-                                <VictoryBar data={dataReceitas} x="x" y="y" />
+                            <VictoryChart domainPadding={20} height={250} width={350} theme={VictoryTheme.material}>
+                                <VictoryBar
+                                style={{
+                                    data: {
+                                        fill: "#418452",
+                                        width: 25
+                                    }
+                                }}  
+                                data={dataReceitas}
+                                />
                             </VictoryChart>
                         </View>
                     </ScrollView>

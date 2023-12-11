@@ -28,6 +28,10 @@ function authReducer(state, action) {
             return {...state, loading: false}
         } case 'atualizarClientes': {
             return { ...state, clientes: action.clientes }
+        } case 'balanco': {
+            return { ...state, balanco: action.balanco }
+        } case 'saldo': {
+            return { ...state, saldo: action.saldo }
         }default: {
             throw new Error(`action.type não tratada: ${action.type}`);
         }
@@ -52,6 +56,8 @@ const initialState = {
     receitas: null,
     valorTotalDespesasNoPage: {"somaNaoPagas": 0, "somaNaoPagasFixas": 0, "somaPagas": 0, "somaPagasFixas": 0, "somaTotal": 0},
     valorTotalReceitasNoPage: {"somaNaoRecebidas": 0, "somaRecebidas": 0, "somaTotal": 0},
+    saldo: 0,
+    balanco: 0
 }
 
 function AuthProvider({ children }) {
