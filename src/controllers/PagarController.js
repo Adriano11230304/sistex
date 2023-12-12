@@ -6,6 +6,11 @@ class PagarController{
         return contas;
     }
 
+    async despesasVencidas(datainicio){
+        const contas = Pagar.despesasVencidas(datainicio);
+        return contas;
+    }
+
     async listAllNoPage(datainicio, datafim) {
         const contas = Pagar.findAllNoPage(datainicio, datafim);
         return contas;

@@ -1,6 +1,8 @@
 import FornecedorController from "../FornecedorController";
 import CategoriaController from "../CategoriaController";
 import ClienteController from "../ClienteController";
+import * as Notify from "expo-notifications";
+import PagarController from "../PagarController";
 
 
 export async function despTodosDados(despesas) {
@@ -173,4 +175,25 @@ export function totalDespesasSeparadas(despesas) {
         "somaTotalVariaveis": somaTotalVariaveis.toFixed(2)
     }
 }
+
+export async function notificationLocal() {
+    const date = Date.now();
+    console.log("entrou");
+    const despesas = await PagarController.despesasVencidas(date);
+    console.log("notificações", despesas);
+    let mensagem = "Existem despesas que estão por vencer, verifique-as!";
+    if(despesas.length > 0){
+        await Notify.scheduleNotificationAsync({
+            content: {
+                title: 'Notificação local',
+                body: mensagem,
+                data: [],
+            },
+            trigger: {
+                seconds: 1,
+            },
+        });
+    }
+    
+};
 

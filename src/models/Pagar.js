@@ -89,6 +89,19 @@ class Pagar {
         });
     }
 
+    static despesasVencidas(datainicio) {
+        return new Promise((resolve, reject) => {
+            Database.db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM pagar WHERE data_vencimento <= ? and pago = ? ORDER BY data_entrada asc;",
+                    [datainicio, false],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
     static findAllFixas(page, datainicio, datafim, pagas = false, naoPagas = false){
         if (page < 1) {
             const vazio = []

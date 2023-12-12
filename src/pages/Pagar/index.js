@@ -10,7 +10,7 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
-import { despTodosDados, somatorioDespesas, totalDespesasSeparadas } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas, totalDespesasSeparadas, notificationLocal } from '../../controllers/utils/functions';
 
 
 
@@ -33,9 +33,10 @@ export default function ContasPagar({ navigation, route }) {
     const [page, setPage] = useState(1);
     const [prevPage, setPrevPage] = useState(false);
     const [nexPage, setNexPage] = useState(false);
-
+    
     async function atualizarDespesas(){
         dispatch({ 'type': 'loading' });
+        await notificationLocal();
         countries.map(count => {
             if (dataatual == count) {
                 defaultValue = dataatual
