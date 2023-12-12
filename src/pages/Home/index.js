@@ -66,24 +66,38 @@ export default function Home({ navigation }) {
         const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
         const totDespesasAll = totalDespesasSeparadas(despesastot);
+        const despesas = await PagarController.listAll(1, datainicio, datafim, false, false);
+        const despesasf = await PagarController.listAllFixas(1, datainicio, datafim, false, false);
+        const despesasv = await PagarController.listAllVariaveis(1, datainicio, datafim, false, false);
         dispatch({
             "type": "atualizarDespesas",
-            "despesas": 0,
-            "valorTotal": 0,
+            "despesas": await despTodosDados(despesas),
+            "valorTotal": somatorioDespesas(despesas),
+            "valorTotalDespesasNoPage": totDespesasAll
+        })
+        dispatch({
+            "type": "atualizarDespesasFixas",
+            "despesasFixas": await despTodosDados(despesasf),
+            "valorTotalFixas": somatorioDespesas(despesasf),
+            "valorTotalDespesasNoPage": totDespesasAll
+        })
+        dispatch({
+            "type": "atualizarDespesasVariaveis",
+            "despesasVariaveis": await despTodosDados(despesasv),
+            "valorTotalVariaveis": somatorioDespesas(despesasv),
             "valorTotalDespesasNoPage": totDespesasAll
         })
         console.log("despesas", state.valorTotalDespesasNoPage);
         const receitas = await ReceberController.listAllNoPage(datainicio, datafim);
+        const receitas1 = await ReceberController.listAll(1, datainicio, datafim, false, false);
         dispatch({
             "type": "atualizarReceitas",
-            "receitas": 0,
-            "valorTotal": 0,
+            "receitas": await receitasTodosDados(receitas),
+            "valorTotal": somatorioReceitas(receitas),
             "valorTotalReceitasNoPage": totalReceitasSeparadas(receitas)
         })
         const totDespesas = totalDespesasSeparadas(despesastot);
-        console.log("despesas", totDespesas);
         const totReceitas = totalReceitasSeparadas(receitas);
-        console.log("receitas", totReceitas);
         const bal = (totReceitas.somaTotal - totDespesas.somaTotal);
         dispatch({ "type": "balanco", "balanco": bal.toFixed(2)});
         const sal = (totReceitas.somaRecebidas - totDespesas.somaPagas);

@@ -5,6 +5,18 @@ class NotificacaoController{
         const notificacoes = await Notificacao.findAll(page);
         return notificacoes;
     }
+    async listAllDate(datefim) {
+        try{
+            const notificacoes = await Notificacao.findAllDate(datefim);
+            console.log(notificacoes);
+            return notificacoes;
+        }catch(e){
+            console.log(e);
+            return e;
+        }
+        
+        
+    }
 
     async add(texto){
         const notificacao = new Notificacao(texto);

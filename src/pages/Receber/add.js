@@ -12,7 +12,8 @@ import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import { receberValidate } from '../../controllers/utils/validators';
-import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas } from '../../controllers/utils/functions';
+import PagarController from '../../controllers/PagarController';
+import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas, totalDespesasSeparadas } from '../../controllers/utils/functions';
 
 export default function AddReceita({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -103,6 +104,12 @@ export default function AddReceita({ navigation, route }) {
                     "valorTotalReceitasNoPage": totReceitas
             }
             dispatch(action);
+
+            const totDespesasAll = totalDespesasSeparadas(await PagarController.listAllNoPage(datainicio, datafim));
+            const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
+            dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
+            const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
+            dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
             ToastAndroid.show("Receita adicionada com sucesso!", ToastAndroid.SHORT);
             setLoading(false);
             navigation.navigate('ReceitaStack');

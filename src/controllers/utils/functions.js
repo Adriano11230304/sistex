@@ -3,6 +3,7 @@ import CategoriaController from "../CategoriaController";
 import ClienteController from "../ClienteController";
 import * as Notify from "expo-notifications";
 import PagarController from "../PagarController";
+import NotificacaoController from "../NotificacaoController";
 
 
 export async function despTodosDados(despesas) {
@@ -178,11 +179,16 @@ export function totalDespesasSeparadas(despesas) {
 
 export async function notificationLocal() {
     const date = Date.now();
-    console.log("entrou");
     const despesas = await PagarController.despesasVencidas(date);
-    console.log("notificações", despesas);
     let mensagem = "Existem despesas que estão por vencer, verifique-as!";
-    if(despesas.length > 0){
+    console.log("date", new Date(date).toLocaleString().substring(0,2));
+    const dia = parseInt(new Date(date).toLocaleString().substring(0, 2)) - 5;
+    const ano = new Date(date).toLocaleString().substring(6, 10);
+    const mes = new Date(date).toLocaleString().substring(3, 5);
+    const datefim = new Date(ano + "-" + mes + "-" + dia + "T00:00:00").getTime();
+    const not = await NotificacaoController.listAllDate(datefim);
+    if(despesas.length > 0 && not.length == 0){
+        const add = await NotificacaoController.add(mensagem);
         await Notify.scheduleNotificationAsync({
             content: {
                 title: 'Notificação local',

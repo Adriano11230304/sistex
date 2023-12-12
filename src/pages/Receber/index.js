@@ -2,7 +2,6 @@ import { SafeAreaView, StyleSheet, Text, View, FlatList, TextInput, TouchableOpa
 import Header from '../../components/Header'
 import { styles } from './style'
 import ReceberController from '../../controllers/ReceberController';
-import ClienteController from '../../controllers/ClienteController';
 import { useEffect, useState } from 'react';
 import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import LoaderSimple from '../../components/LoaderSimple';
@@ -11,7 +10,8 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
-import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas } from '../../controllers/utils/functions';
+import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas, totalDespesasSeparadas } from '../../controllers/utils/functions';
+import PagarController from '../../controllers/PagarController';
 
 export default function ContasReceber({ navigation, route }) {
     const date = Date.now();
@@ -62,7 +62,11 @@ export default function ContasReceber({ navigation, route }) {
             "valorTotalReceitasNoPage": totReceitas
         })
 
-        console.log(state.valorTotalReceitasNoPage);
+        const totDespesasAll = totalDespesasSeparadas(await PagarController.listAllNoPage(datainicio, datafim));
+        const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
+        dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
+        const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
+        dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
 
         dispatch({ 'type': 'loadingfalse' })
     }

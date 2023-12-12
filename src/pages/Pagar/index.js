@@ -10,8 +10,8 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
-import { despTodosDados, somatorioDespesas, totalDespesasSeparadas, notificationLocal } from '../../controllers/utils/functions';
-
+import { despTodosDados, somatorioDespesas, totalDespesasSeparadas, notificationLocal, totalReceitasSeparadas } from '../../controllers/utils/functions';
+import ReceberController from '../../controllers/ReceberController';
 
 
 
@@ -43,8 +43,6 @@ export default function ContasPagar({ navigation, route }) {
             }
         })
         let mesfim = 1 + parseInt(selected.substring(0, 2));
-        const totDespesas = await PagarController.listAllAll();
-        console.log("total", totDespesas);
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const despesas = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
@@ -65,7 +63,6 @@ export default function ContasPagar({ navigation, route }) {
         }
         const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
         const totDespesasAll = totalDespesasSeparadas(despesastot);
-        console.log(totDespesasAll);
 
         dispatch({
             "type": "atualizarDespesas",
@@ -85,6 +82,13 @@ export default function ContasPagar({ navigation, route }) {
             "valorTotalVariaveis": somatorioDespesas(despesasv),
             "valorTotalDespesasNoPage": totDespesasAll
         })
+    
+        const totReceitas = totalReceitasSeparadas(await ReceberController.listAllNoPage(datainicio, datafim));
+        
+        const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
+        dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
+        const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
+        dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
 
         dispatch({ 'type': 'loadingfalse' })
     }

@@ -40,7 +40,8 @@ class Database{
             tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS notificacoes ("+
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                "texto TEXT);"
+                "texto TEXT, "+
+                "created_at TIMESTAMP);"
                 , [],
                 () => console.log(`Tabela notificacoes criada com sucesso`),
                 (tx, e) => console.log(`Erro ao criar a tabela notificacoes`, e)

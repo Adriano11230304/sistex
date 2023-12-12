@@ -28,6 +28,20 @@ class Notificacao{
         });
     }
 
+    static findAllDate(datefim) {
+        const date = Date.now();
+        return new Promise((resolve, reject) => {
+            Database.db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM notificacoes WHERE created_at <= ?;",
+                    [date],
+                    (_, { rows }) => resolve(rows._array),
+                    (_, error) => reject(error)
+                );
+            });
+        });
+    }
+
     static findById(id) {
         return new Promise((resolve, reject) => {
             Database.db.transaction((tx) => {
@@ -42,11 +56,12 @@ class Notificacao{
     }
 
     create() {
+        const date = Date.now();
         return new Promise((resolve, reject) => {
             Database.db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO notificacoes (texto) values (?);",
-                    [this.texto],
+                    "INSERT INTO notificacoes (texto, created_at) values (?, ?);",
+                    [this.texto, date],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));
