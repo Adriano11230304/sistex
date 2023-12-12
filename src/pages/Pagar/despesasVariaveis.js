@@ -69,7 +69,6 @@ export default function ContasPagarVariaveis({ navigation, route }) {
         })
 
         dispatch({ 'type': 'loadingfalse' })
-        console.log("entrou");
     }
 
 

@@ -11,13 +11,13 @@ function authReducer(state, action) {
         }case 'atualizarFornecedores': {
             return {...state, fornecedores: action.fornecedores}
         } case 'atualizarDespesasFixas': {
-            return { ...state, despesasFixas: action.despesasFixas, valorTotalFixas: action.valorTotalFixas, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage }
+            return { ...state, despesasFixas: action.despesasFixas, valorTotalFixas: action.valorTotalFixas }
         } case 'atualizarDespesasVariaveis': {
-            return { ...state, despesasVariaveis: action.despesasVariaveis, valorTotalVariaveis: action.valorTotalVariaveis, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage }
+            return { ...state, despesasVariaveis: action.despesasVariaveis, valorTotalVariaveis: action.valorTotalVariaveis }
         }case 'atualizarDespesas': {
-            return{...state, despesas: action.despesas, valorTotal: action.valorTotal, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage}
+            return{...state, despesas: action.despesas, valorTotal: action.valorTotal}
         } case 'atualizarReceitas': {
-            return { ...state, receitas: action.receitas, valorTotalReceitas: action.valorTotalReceitas, valorTotalReceitasNoPage: action.valorTotalReceitasNoPage }
+            return { ...state, receitas: action.receitas, valorTotalReceitas: action.valorTotalReceitas }
         } case 'atualizarCategorias': {
             return { ...state, categorias: action.categorias }
         } case 'atualizarNotificacoes': {
@@ -34,11 +34,18 @@ function authReducer(state, action) {
             return { ...state, saldo: action.saldo }
         } case 'selected': {
             return { ...state, selected: action.selected }
+        } case 'valorTotalDespesasNoPage': {
+            return { ...state, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage }
+        } case 'valorTotalReceitasNoPage': {
+            return { ...state, valorTotalReceitasNoPage: action.valorTotalReceitasNoPage }
         }default: {
             throw new Error(`action.type não tratada: ${action.type}`);
         }
     }
 }
+
+const date = Date.now();
+const dataatual = new Date(date).toLocaleString().substring(3, 10);
 
 const initialState = {
     signed: false,
@@ -60,7 +67,7 @@ const initialState = {
     valorTotalReceitasNoPage: {"somaNaoRecebidas": 0, "somaRecebidas": 0, "somaTotal": 0},
     saldo: 0,
     balanco: 0,
-    selected: "12/2023"
+    selected: dataatual
 }
 
 function AuthProvider({ children }) {

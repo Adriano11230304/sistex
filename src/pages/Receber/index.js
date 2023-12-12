@@ -52,21 +52,11 @@ export default function ContasReceber({ navigation, route }) {
             setPrevPage(false);
         }
 
-        const receitastot = await ReceberController.listAllNoPage(datainicio, datafim);
-        const totReceitas = totalReceitasSeparadas(receitastot);
-
         dispatch({
             "type": "atualizarReceitas",
             "receitas": await receitasTodosDados(receitas),
-            "valorTotalReceitas": somatorioReceitas(receitas),
-            "valorTotalReceitasNoPage": totReceitas
+            "valorTotalReceitas": somatorioReceitas(receitas)
         })
-
-        const totDespesasAll = totalDespesasSeparadas(await PagarController.listAllNoPage(datainicio, datafim));
-        const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
-        dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
-        const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
-        dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
 
         dispatch({ 'type': 'loadingfalse' })
     }
@@ -96,8 +86,7 @@ export default function ContasReceber({ navigation, route }) {
             const action = {
                 "type": "atualizarReceitas",
                 "receitas": receitasTotais,
-                "valorTotalReceitas": somatorioReceitas(newList),
-                "valorTotalReceitasNoPage": totReceitas
+                "valorTotalReceitas": somatorioReceitas(newList)
             }
 
             dispatch(action);

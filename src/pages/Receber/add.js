@@ -94,16 +94,21 @@ export default function AddReceita({ navigation, route }) {
             const dataatual = new Date(date).toLocaleString().substring(3, 10);
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-            const receitastot = await ReceberController.listAllNoPage(datainicio, datafim);
+            const datainicioHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-01T00:00:00").getTime();
+            const datafimHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-31T00:00:00").getTime();
+            const receitastot = await ReceberController.listAllNoPage(datainicioHome, datafimHome);
             const totReceitas = totalReceitasSeparadas(receitastot);
             const receitas = await ReceberController.listAll(1, datainicio, datafim);
             const action = {
                     "type": "atualizarReceitas",
                     "receitas": await receitasTodosDados(receitas),
-                    "valorTotalReceitas": somatorioReceitas(receitas),
-                    "valorTotalReceitasNoPage": totReceitas
+                    "valorTotalReceitas": somatorioReceitas(receitas)
             }
             dispatch(action);
+            dispatch({
+                "type": "valorTotalReceitasNoPage",
+                "valorTotalReceitasNoPage": totReceitas
+            })
 
             const totDespesasAll = totalDespesasSeparadas(await PagarController.listAllNoPage(datainicio, datafim));
             const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);

@@ -110,13 +110,19 @@ export default function AddDespesas({ navigation, route }) {
             const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
             const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
             const despesasFixas = await PagarController.listAllFixas(1, datainicio, datafim);
-            const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
+            console.log(state.selected);
+            const datainicioHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-01T00:00:00").getTime();
+            const datafimHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-31T00:00:00").getTime();
+            const despesastot = await PagarController.listAllNoPage(datainicioHome, datafimHome);
             const totDespesas = totalDespesasSeparadas(despesastot);
+            dispatch({
+                "type": "valorTotalDespesasNoPage",
+                "valorTotalDespesasNoPage": totDespesas
+            })
                 const actionFixas = {
                     "type": "atualizarDespesasFixas",
                     "despesasFixas": await despTodosDados(despesasFixas),
-                    "valorTotalFixas": somatorioDespesas(despesasFixas),
-                    "valorTotalDespesasNoPage": totDespesas
+                    "valorTotalFixas": somatorioDespesas(despesasFixas)
                 }
                 dispatch(actionFixas);
           
@@ -124,8 +130,7 @@ export default function AddDespesas({ navigation, route }) {
                 const actionVariaveis = {
                     "type": "atualizarDespesasVariaveis",
                     "despesasVariaveis": await despTodosDados(despesasVariaveis),
-                    "valorTotalVariaveis": somatorioDespesas(despesasVariaveis),
-                    "valorTotalDespesasNoPage": totDespesas
+                    "valorTotalVariaveis": somatorioDespesas(despesasVariaveis)
                 }
                 dispatch(actionVariaveis);
            
@@ -133,8 +138,7 @@ export default function AddDespesas({ navigation, route }) {
                 const action = {
                     "type": "atualizarDespesas",
                     "despesas": await despTodosDados(despesas),
-                    "valorTotal": somatorioDespesas(despesas),
-                    "valorTotalDespesasNoPage": totDespesas
+                    "valorTotal": somatorioDespesas(despesas)
                 }
                 dispatch(action);
                 ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);

@@ -67,20 +67,17 @@ export default function ContasPagar({ navigation, route }) {
         dispatch({
             "type": "atualizarDespesas",
             "despesas": await despTodosDados(despesas),
-            "valorTotal": somatorioDespesas(despesas),
-            "valorTotalDespesasNoPage": totDespesasAll
+            "valorTotal": somatorioDespesas(despesas)
         })
         dispatch({
             "type": "atualizarDespesasFixas",
             "despesasFixas": await despTodosDados(despesasf),
-            "valorTotalFixas": somatorioDespesas(despesasf),
-            "valorTotalDespesasNoPage": totDespesasAll
+            "valorTotalFixas": somatorioDespesas(despesasf)
         })
         dispatch({
             "type": "atualizarDespesasVariaveis",
             "despesasVariaveis": await despTodosDados(despesasv),
-            "valorTotalVariaveis": somatorioDespesas(despesasv),
-            "valorTotalDespesasNoPage": totDespesasAll
+            "valorTotalVariaveis": somatorioDespesas(despesasv)
         })
     
         const totReceitas = totalReceitasSeparadas(await ReceberController.listAllNoPage(datainicio, datafim));
@@ -89,7 +86,7 @@ export default function ContasPagar({ navigation, route }) {
         dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
         const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
         dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
-
+        dispatch({"type": "selected", "selected": dataatual})
         dispatch({ 'type': 'loadingfalse' })
     }
 
@@ -118,13 +115,13 @@ export default function ContasPagar({ navigation, route }) {
             const action = {
                 "type": "atualizarDespesas",
                 "despesas": despesasTotais,
-                "valorTotal": somatorioDespesas(newList),
-                "valorTotalDespesasNoPage": totDespesas
+                "valorTotal": somatorioDespesas(newList)
             }
 
             dispatch(action);
             setNexPage(false);
             setPrevPage(false);
+            dispatch({"type": "selected", "selected": dataatual})
             dispatch({ "type": "loadingfalse" })
         }else{
             await listDespesas();

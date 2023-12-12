@@ -15,7 +15,6 @@ export default function Home({ navigation }) {
     const {state, dispatch} = useAuth();
     const date = Date.now();
     const dataatual = new Date(date).toLocaleString().substring(3, 10);
-    const [selected, setSelected] = useState(dataatual);
     const countries = ["01/2023", "02/2023", "03/2023", "04/2023", "05/2023", "06/2023", "07/2023", "08/2023", "09/2023", "10/2023", "11/2023", "12/2023", "01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024", "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024", "01/2025", "02/2025", "03/2025", "04/2025", "05/2025", "06/2025", "07/2025", "08/2025", "09/2025", "10/2025", "11/2025", "12/2025"]
     let defaultValue;
     countries.map(count => {
@@ -61,39 +60,22 @@ export default function Home({ navigation }) {
 
     async function atualizarDespesasReceitas(){
         dispatch({"type": "loading"});
-        let mesfim = 1 + parseInt(selected.substring(0, 2));
-        const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-        const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
+        let mesfim = 1 + parseInt(state.selected.substring(0, 2));
+        const datainicio = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-01T00:00:00").getTime();
+        const datafim = new Date(state.selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
         const totDespesasAll = totalDespesasSeparadas(despesastot);
         const despesas = await PagarController.listAll(1, datainicio, datafim, false, false);
         const despesasf = await PagarController.listAllFixas(1, datainicio, datafim, false, false);
         const despesasv = await PagarController.listAllVariaveis(1, datainicio, datafim, false, false);
         dispatch({
-            "type": "atualizarDespesas",
-            "despesas": await despTodosDados(despesas),
-            "valorTotal": somatorioDespesas(despesas),
+            "type": "valorTotalDespesasNoPage",
             "valorTotalDespesasNoPage": totDespesasAll
         })
-        dispatch({
-            "type": "atualizarDespesasFixas",
-            "despesasFixas": await despTodosDados(despesasf),
-            "valorTotalFixas": somatorioDespesas(despesasf),
-            "valorTotalDespesasNoPage": totDespesasAll
-        })
-        dispatch({
-            "type": "atualizarDespesasVariaveis",
-            "despesasVariaveis": await despTodosDados(despesasv),
-            "valorTotalVariaveis": somatorioDespesas(despesasv),
-            "valorTotalDespesasNoPage": totDespesasAll
-        })
-        console.log("despesas", state.valorTotalDespesasNoPage);
         const receitas = await ReceberController.listAllNoPage(datainicio, datafim);
         const receitas1 = await ReceberController.listAll(1, datainicio, datafim, false, false);
         dispatch({
-            "type": "atualizarReceitas",
-            "receitas": await receitasTodosDados(receitas),
-            "valorTotal": somatorioReceitas(receitas),
+            "type": "valorTotalReceitasNoPage",
             "valorTotalReceitasNoPage": totalReceitasSeparadas(receitas)
         })
         const totDespesas = totalDespesasSeparadas(despesastot);
@@ -102,7 +84,6 @@ export default function Home({ navigation }) {
         dispatch({ "type": "balanco", "balanco": bal.toFixed(2)});
         const sal = (totReceitas.somaRecebidas - totDespesas.somaPagas);
         dispatch({ "type": "saldo", "saldo": sal.toFixed(2)});
-        dispatch({ "type": "selected", "selected": selected});
         dispatch({ "type": "loadingfalse" });
     }
     
