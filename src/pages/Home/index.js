@@ -57,7 +57,7 @@ export default function Home({ navigation }) {
 
     useEffect(() => {
         atualizarDespesasReceitas();
-    }, [selected])
+    }, [state.selected])
 
     async function atualizarDespesasReceitas(){
         dispatch({"type": "loading"});
@@ -102,6 +102,7 @@ export default function Home({ navigation }) {
         dispatch({ "type": "balanco", "balanco": bal.toFixed(2)});
         const sal = (totReceitas.somaRecebidas - totDespesas.somaPagas);
         dispatch({ "type": "saldo", "saldo": sal.toFixed(2)});
+        dispatch({ "type": "selected", "selected": selected});
         dispatch({ "type": "loadingfalse" });
     }
     
@@ -117,7 +118,7 @@ export default function Home({ navigation }) {
                     buttonStyle={styles.selected}
                     defaultValue={defaultValue}
                     data={countries}
-                    onSelect={(selectedItem, index) => { setSelected(selectedItem); }}
+                    onSelect={(selectedItem, index) => { dispatch({"type": "selected", "selected": selectedItem}) }}
                 />
             </View>
             {state.loading ?

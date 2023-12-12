@@ -37,15 +37,18 @@ class Database{
                 () => console.log(`Tabela categorias criada com sucesso`),
                 (tx, e) => console.log(`Erro ao criar a tabela receber`, e)
             );
+
             tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS notificacoes ("+
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 "texto TEXT, "+
-                "created_at TIMESTAMP);"
+                "created_at TIMESTAMP, "+
+                "type TEXT);"
                 , [],
                 () => console.log(`Tabela notificacoes criada com sucesso`),
                 (tx, e) => console.log(`Erro ao criar a tabela notificacoes`, e)
             );
+
             tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS pagar ("+
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, "+

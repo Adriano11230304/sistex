@@ -32,6 +32,8 @@ function authReducer(state, action) {
             return { ...state, balanco: action.balanco }
         } case 'saldo': {
             return { ...state, saldo: action.saldo }
+        } case 'selected': {
+            return { ...state, selected: action.selected }
         }default: {
             throw new Error(`action.type não tratada: ${action.type}`);
         }
@@ -57,7 +59,8 @@ const initialState = {
     valorTotalDespesasNoPage: {"somaNaoPagas": 0, "somaNaoPagasFixas": 0, "somaPagas": 0, "somaPagasFixas": 0, "somaTotal": 0},
     valorTotalReceitasNoPage: {"somaNaoRecebidas": 0, "somaRecebidas": 0, "somaTotal": 0},
     saldo: 0,
-    balanco: 0
+    balanco: 0,
+    selected: "12/2023"
 }
 
 function AuthProvider({ children }) {
