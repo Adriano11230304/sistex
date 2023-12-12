@@ -180,15 +180,24 @@ export function totalDespesasSeparadas(despesas) {
 export async function notificationLocal() {
     const date = Date.now();
     const despesas = await PagarController.despesasVencidas(date);
-    let mensagem = "Existem despesas que estão por vencer, verifique-as!";
+    let mensagem = "Existem despesas que estão vencidas, verifique-as!";
     console.log("date", new Date(date).toLocaleString().substring(0,2));
     const dia = parseInt(new Date(date).toLocaleString().substring(0, 2)) - 5;
     const ano = new Date(date).toLocaleString().substring(6, 10);
     const mes = new Date(date).toLocaleString().substring(3, 5);
     const datefim = new Date(ano + "-" + mes + "-" + dia + "T00:00:00").getTime();
     const not = await NotificacaoController.listAllDate(datefim);
-    if(despesas.length > 0 && not.length == 0){
-        const add = await NotificacaoController.add(mensagem);
+    let despesastrue = false;
+    for(let noti of not){
+        if(noti.type == 'despesas' && !despesastrue){
+            despesastrue = true;
+            console.log("entrou");
+        }
+    }
+
+    console.log("true", despesastrue);
+    if(despesas.length > 0 && !despesastrue){
+        const add = await NotificacaoController.add(mensagem, "despesas");
         await Notify.scheduleNotificationAsync({
             content: {
                 title: 'Notificação local',
@@ -201,5 +210,41 @@ export async function notificationLocal() {
         });
     }
     
+};
+
+
+export async function notificationLocalReceitas() {
+    const date = Date.now();
+    const despesas = await PagarController.despesasVencidas(date);
+    let mensagem = "Existem receitas que estão vencidas, verifique-as!";
+    console.log("date", new Date(date).toLocaleString().substring(0, 2));
+    const dia = parseInt(new Date(date).toLocaleString().substring(0, 2)) - 5;
+    const ano = new Date(date).toLocaleString().substring(6, 10);
+    const mes = new Date(date).toLocaleString().substring(3, 5);
+    const datefim = new Date(ano + "-" + mes + "-" + dia + "T00:00:00").getTime();
+    const not = await NotificacaoController.listAllDate(datefim);
+
+    let receitastrue = false;
+    for (let noti of not) {
+        if(noti.type == 'receitas' && !receitastrue){
+            receitastrue = true;
+        }
+    }
+
+    console.log("true", receitastrue);
+    if (despesas.length > 0 && !receitastrue) {
+        const add = await NotificacaoController.add(mensagem, "receitas");
+        await Notify.scheduleNotificationAsync({
+            content: {
+                title: 'Notificação local',
+                body: mensagem,
+                data: [],
+            },
+            trigger: {
+                seconds: 1,
+            },
+        });
+    }
+
 };
 

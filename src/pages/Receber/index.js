@@ -10,8 +10,9 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
-import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas, totalDespesasSeparadas } from '../../controllers/utils/functions';
+import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas, totalDespesasSeparadas, notificationLocalReceitas } from '../../controllers/utils/functions';
 import PagarController from '../../controllers/PagarController';
+import NotificacaoController from '../../controllers/NotificacaoController';
 
 export default function ContasReceber({ navigation, route }) {
     const date = Date.now();
@@ -34,6 +35,7 @@ export default function ContasReceber({ navigation, route }) {
 
     async function atualizarReceitas() {
         dispatch({ 'type': 'loading' });
+        await notificationLocalReceitas();
         let mesfim = 1 + parseInt(selected.substring(0, 2));
         const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
@@ -57,6 +59,11 @@ export default function ContasReceber({ navigation, route }) {
             "receitas": await receitasTodosDados(receitas),
             "valorTotalReceitas": somatorioReceitas(receitas)
         })
+
+        dispatch({
+            "type": "atualizarNotificacoes",
+            "notificacoes": await NotificacaoController.listAll(1)
+        });
 
         dispatch({ 'type': 'loadingfalse' })
     }

@@ -3,9 +3,11 @@ import Database from '../models/Database'
 class Notificacao{
     id;
     texto;
+    type;
 
-    constructor(texto, id = 1){
+    constructor(texto, type, id = 1){
         this.id = id;
+        this.type = type;
         this.texto = texto;
     }
 
@@ -28,7 +30,7 @@ class Notificacao{
         });
     }
 
-    static findAllDate(datefim) {
+    static findAllDate() {
         const date = Date.now();
         return new Promise((resolve, reject) => {
             Database.db.transaction((tx) => {
@@ -60,8 +62,8 @@ class Notificacao{
         return new Promise((resolve, reject) => {
             Database.db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO notificacoes (texto, created_at) values (?, ?);",
-                    [this.texto, date],
+                    "INSERT INTO notificacoes (texto, created_at, type) values (?, ?, ?);",
+                    [this.texto, date, this.type],
                     (_, { rowsAffected, insertId }) => {
                         if (rowsAffected > 0) resolve(insertId);
                         else reject("Error inserting obj: " + JSON.stringify(obj));

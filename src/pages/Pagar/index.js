@@ -12,6 +12,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
 import { despTodosDados, somatorioDespesas, totalDespesasSeparadas, notificationLocal, totalReceitasSeparadas } from '../../controllers/utils/functions';
 import ReceberController from '../../controllers/ReceberController';
+import NotificacaoController from '../../controllers/NotificacaoController';
 
 
 
@@ -79,6 +80,11 @@ export default function ContasPagar({ navigation, route }) {
             "despesasVariaveis": await despTodosDados(despesasv),
             "valorTotalVariaveis": somatorioDespesas(despesasv)
         })
+
+        dispatch({
+            "type": "atualizarNotificacoes",
+            "notificacoes": await NotificacaoController.listAll(1)
+        });
     
         const totReceitas = totalReceitasSeparadas(await ReceberController.listAllNoPage(datainicio, datafim));
         

@@ -13,7 +13,7 @@ import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import { receberValidate } from '../../controllers/utils/validators';
 import PagarController from '../../controllers/PagarController';
-import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas, totalDespesasSeparadas } from '../../controllers/utils/functions';
+import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas, totalDespesasSeparadas, notificationLocalReceitas } from '../../controllers/utils/functions';
 
 export default function AddReceita({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -50,6 +50,7 @@ export default function AddReceita({ navigation, route }) {
 
     const addReceber = async () => {
         setLoading(true);
+        await notificationLocalReceitas();
         const dataEntradaFormatada = new Date(data_entrada.replace("/", "-").replace("/", "-") + "T00:00:00").getTime();
         let dataRecebimentoFormatada;
         let dataVencimento = data_vencimento ? new Date(data_vencimento.replace("/", "-").replace("/", "-") + "T00:00:00").getTime() : null;

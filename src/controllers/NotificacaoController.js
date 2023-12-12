@@ -5,9 +5,9 @@ class NotificacaoController{
         const notificacoes = await Notificacao.findAll(page);
         return notificacoes;
     }
-    async listAllDate(datefim) {
+    async listAllDate() {
         try{
-            const notificacoes = await Notificacao.findAllDate(datefim);
+            const notificacoes = await Notificacao.findAllDate();
             console.log(notificacoes);
             return notificacoes;
         }catch(e){
@@ -18,8 +18,8 @@ class NotificacaoController{
         
     }
 
-    async add(texto){
-        const notificacao = new Notificacao(texto);
+    async add(texto, type){
+        const notificacao = new Notificacao(texto, type);
         try{
             await notificacao.create();
             return "Notificação criada com sucesso!";
