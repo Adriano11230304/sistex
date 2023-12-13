@@ -13,7 +13,8 @@ import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import CategoriaController from '../../controllers/CategoriaController';
 import { pagarValidate } from '../../controllers/utils/validators';
-import { despTodosDados, somatorioDespesas, totalDespesasSeparadas } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas, totalDespesasSeparadas, receitasTodosDados, somatorioReceitas, totalReceitasSeparadas } from '../../controllers/utils/functions';
+import ReceberController from '../../controllers/ReceberController';
 
 export default function AddDespesas({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -119,6 +120,13 @@ export default function AddDespesas({ navigation, route }) {
                 "type": "valorTotalDespesasNoPage",
                 "valorTotalDespesasNoPage": totDespesas
             })
+            const receitastot = await ReceberController.listAllNoPage(datainicioHome, datafimHome);
+            const totReceitas = totalReceitasSeparadas(receitastot);
+            const totDespesasAll = totalDespesasSeparadas(despesastot);
+            const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
+            dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
+            const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
+            dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
                 const actionFixas = {
                     "type": "atualizarDespesasFixas",
                     "despesasFixas": await despTodosDados(despesasFixas),
@@ -218,6 +226,7 @@ export default function AddDespesas({ navigation, route }) {
                         <View style={styles.labelinputdate}>
                                 <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePicker(true)}>
                                     <Text style={styles.labelDate}>Data de entrada: {data_entrada}</Text>
+                                    <FontAwesome name="calendar" size={24} color="black" />
                             </TouchableOpacity>
                                 <Modal
                                     style={styles.modalDataEntrada}

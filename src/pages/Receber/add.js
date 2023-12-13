@@ -110,11 +110,12 @@ export default function AddReceita({ navigation, route }) {
                 "type": "valorTotalReceitasNoPage",
                 "valorTotalReceitasNoPage": totReceitas
             })
-
-            const totDespesasAll = totalDespesasSeparadas(await PagarController.listAllNoPage(datainicio, datafim));
+            const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
+            const totDespesasAll = totalDespesasSeparadas(despesastot);
             const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
             dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
             const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
+
             dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
             ToastAndroid.show("Receita adicionada com sucesso!", ToastAndroid.SHORT);
             setLoading(false);

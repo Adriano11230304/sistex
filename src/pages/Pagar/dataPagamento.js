@@ -4,7 +4,7 @@ import { styles } from './style'
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import PagarController from '../../controllers/PagarController';
 import { useAuth } from '../../store/auth';
-import { despTodosDados } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas, totalDespesasSeparadas } from '../../controllers/utils/functions';
 
 
 export default function AddDespesasPagamento({ navigation, route }) {
@@ -18,6 +18,18 @@ export default function AddDespesasPagamento({ navigation, route }) {
         const dataatual = new Date(dateNow).toLocaleString().substring(3, 10);
         const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
         const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
+
+        const datainicioHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-01T00:00:00").getTime();
+        const datafimHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-31T00:00:00").getTime();
+        const despesastot = await PagarController.listAllNoPage(datainicioHome, datafimHome);
+        const totDespesas = totalDespesasSeparadas(despesastot);
+        console.log(totDespesas);
+        
+        /*dispatch({
+            "type": "valorTotalDespesasNoPage",
+            "valorTotalDespesasNoPage": totDespesas
+        })*/
+
         if (route.params.prefix == 'fixa'){
             const despesas = await PagarController.listAllFixas(1, datainicio, datafim);
             const action = {

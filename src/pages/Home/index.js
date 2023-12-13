@@ -134,6 +134,10 @@ export default function Home({ navigation }) {
                 </View>
                 <View style={styles.viewReceber}>
                     <Text style={styles.contasReceberTitle}>Receitas</Text>
+                        <View style={styles.viewdespesas}>
+                            <Text style={styles.contasReceber}>Totais</Text>
+                            <Text style={styles.valorPagar}>R$ {state.valorTotalReceitasNoPage.somaTotal}</Text>
+                        </View>
                     <View style={styles.viewdespesas}>
                         <Text style={styles.contasReceber}>Não rec.</Text>
                         <Text style={styles.valorPagar}>R$ {state.valorTotalReceitasNoPage.somaNaoRecebidas}</Text>
