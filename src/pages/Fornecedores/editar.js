@@ -31,7 +31,8 @@ export default function EditFornecedores({ navigation, route }) {
         setLoading(true);
         const validateforn = {
             "name": nome,
-            "email": email
+            "email": email,
+            "cnpj": cnpj
         }
         const teste = await fornecedorValidate(validateforn);
         if (teste.isValid) {

@@ -12,7 +12,7 @@ import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import CategoriaController from '../../controllers/CategoriaController';
 import Vazio from '../../components/Vazio';
-import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
+import { atualizarHome, atualizarValoresDespesas, despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
 
 
 
@@ -27,7 +27,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
             defaultValue = dataatual
         }
     })
-    const [selected, setSelected] = useState(dataatual);
+
     const [pagas, setPagas] = useState(false);
     const [naoPagas, setNaoPagas] = useState(false);
     const { state, dispatch } = useAuth();
@@ -38,11 +38,9 @@ export default function ContasPagarVariaveis({ navigation, route }) {
 
     async function atualizarDespesas() {
         dispatch({ 'type': 'loading' });
-        const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-        let mesfim = 1 + parseInt(selected.substring(0, 2));
-        const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
-        const despesas = await PagarController.listAllVariaveis(page, datainicio, datafim, pagas, naoPagas);
-        const despesast = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
+        const datainicio = new Date(state.selectedDespesasv.substring(3, 8) + "-" + state.selectedDespesasv.substring(0, 2) + "-01T00:00:00").getTime();
+        let mesfim = 1 + parseInt(state.selectedDespesasv.substring(0, 2));
+        const datafim = new Date(state.selectedDespesasv.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const despNext = await PagarController.listAllVariaveis(page + 1, datainicio, datafim, pagas, naoPagas);
         const despPrev = await PagarController.listAllVariaveis(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
@@ -57,16 +55,8 @@ export default function ContasPagarVariaveis({ navigation, route }) {
             setPrevPage(false);
         }
 
-        dispatch({
-            "type": "atualizarDespesasVariaveis",
-            "despesasVariaveis": await despTodosDados(despesas),
-            "valorTotalVariaveis": somatorioDespesas(despesas)
-        })
-        dispatch({
-            "type": "atualizarDespesas",
-            "despesas": await despTodosDados(despesast),
-            "valorTotal": somatorioDespesas(despesast)
-        })
+        await atualizarHome(state.selected, dispatch);
+        await atualizarValoresDespesas(page, state.selectedDespesasv, dispatch, pagas, naoPagas);
 
         dispatch({ 'type': 'loadingfalse' })
     }
@@ -74,7 +64,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
 
     useEffect(() => {
         listDespesas();
-    }, [selected, pagas, naoPagas, page])
+    }, [state.selectedDespesasv, pagas, naoPagas, page])
 
 
     async function listDespesas() {
@@ -86,9 +76,9 @@ export default function ContasPagarVariaveis({ navigation, route }) {
     async function handleOrderClick() {
         if (searchText != "") {
             dispatch({ "type": "loading" })
-            const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-            let mesfim = 1 + parseInt(selected.substring(0, 2));
-            const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
+            const datainicio = new Date(state.selectedDespesasv.substring(3, 8) + "-" + state.selectedDespesasv.substring(0, 2) + "-01T00:00:00").getTime();
+            let mesfim = 1 + parseInt(state.selectedDespesasv.substring(0, 2));
+            const datafim = new Date(state.selectedDespesasv.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
             let newList = null;
             newList = await PagarController.findFornecedororCategoriaVariaveis(searchText, datainicio, datafim, 50);
             
@@ -230,7 +220,7 @@ export default function ContasPagarVariaveis({ navigation, route }) {
                         buttonStyle={styles.selected}
                         defaultValue={defaultValue}
                         data={countries}
-                        onSelect={(selectedItem, index) => { setSelected(selectedItem); }}
+                        onSelect={(selectedItem, index) => { dispatch({"type": "selectedDespesasv", "selectedDespesasv": selectedItem})}}
                     />
                 </View>
             </View>

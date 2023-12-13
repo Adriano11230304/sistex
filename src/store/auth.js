@@ -34,6 +34,14 @@ function authReducer(state, action) {
             return { ...state, saldo: action.saldo }
         } case 'selected': {
             return { ...state, selected: action.selected }
+        } case 'selectedDespesas': {
+            return { ...state, selectedDespesas: action.selectedDespesas }
+        } case 'selectedReceitas': {
+            return { ...state, selectedReceitas: action.selectedReceitas }
+        } case 'selectedDespesasf': {
+            return { ...state, selectedDespesasf: action.selectedDespesasf }
+        } case 'selectedDespesasv': {
+            return { ...state, selectedDespesasv: action.selectedDespesasv }
         } case 'valorTotalDespesasNoPage': {
             return { ...state, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage }
         } case 'valorTotalReceitasNoPage': {
@@ -67,7 +75,11 @@ const initialState = {
     valorTotalReceitasNoPage: {"somaNaoRecebidas": 0, "somaRecebidas": 0, "somaTotal": 0},
     saldo: 0,
     balanco: 0,
-    selected: dataatual
+    selected: dataatual,
+    selectedDespesas: dataatual,
+    selectedDespesasf: dataatual,
+    selectedDespesasv: dataatual,
+    selectedReceitas: dataatual
 }
 
 function AuthProvider({ children }) {

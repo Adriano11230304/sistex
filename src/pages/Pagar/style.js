@@ -182,7 +182,11 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         paddingRight: '5%'
     },
+    iconDate:{
+        paddingLeft: '5%'
+    },
     labelAdd:{
+        flexDirection: 'row',
         fontSize: 15,
         paddingRight: '5%'
     },

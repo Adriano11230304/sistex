@@ -11,7 +11,7 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
-import { despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
+import { atualizarHome, atualizarValoresDespesas, despTodosDados, somatorioDespesas } from '../../controllers/utils/functions';
 import { Modal } from 'react-native-paper';
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 
@@ -28,7 +28,7 @@ export default function ContasPagarFixas({ navigation, route }) {
             defaultValue = dataatual
         }
     })
-    const [selected, setSelected] = useState(dataatual);
+
     const [pagas, setPagas] = useState(false);
     const [naoPagas, setNaoPagas] = useState(false);
     const { state, dispatch } = useAuth();
@@ -39,10 +39,8 @@ export default function ContasPagarFixas({ navigation, route }) {
 
     async function atualizarDespesas() {
         dispatch({ 'type': 'loading' });
-        const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-        const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
-        const despesas = await PagarController.listAllFixas(page, datainicio, datafim, pagas, naoPagas);
-        const despesast = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
+        const datainicio = new Date(state.selectedDespesasf.substring(3, 8) + "-" + state.selectedDespesasf.substring(0, 2) + "-01T00:00:00").getTime();
+        const datafim = new Date(state.selectedDespesasf.substring(3, 8) + "-" + state.selectedDespesasf.substring(0, 2) + "-31T00:00:00").getTime();
         const despNext = await PagarController.listAllFixas(page + 1, datainicio, datafim, pagas, naoPagas);
         const despPrev = await PagarController.listAllFixas(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
@@ -57,16 +55,8 @@ export default function ContasPagarFixas({ navigation, route }) {
             setPrevPage(false);
         }
 
-        dispatch({
-            "type": "atualizarDespesasFixas",
-            "despesasFixas": await despTodosDados(despesas),
-            "valorTotalFixas": somatorioDespesas(despesas)
-        })
-        dispatch({
-            "type": "atualizarDespesas",
-            "despesas": await despTodosDados(despesast),
-            "valorTotal": somatorioDespesas(despesast)
-        })
+        await atualizarHome(state.selected, dispatch);
+        await atualizarValoresDespesas(page, state.selectedDespesasf, dispatch, pagas, naoPagas)
 
         dispatch({ 'type': 'loadingfalse' })
     }
@@ -74,7 +64,7 @@ export default function ContasPagarFixas({ navigation, route }) {
 
     useEffect(() => {
         listDespesas();
-    }, [selected, pagas, naoPagas, page])
+    }, [state.selectedDespesasf, pagas, naoPagas, page])
 
     async function listDespesas() {
         if (searchText == "") {
@@ -85,8 +75,8 @@ export default function ContasPagarFixas({ navigation, route }) {
     async function handleOrderClick() {
         if (searchText != "") {
             dispatch({ "type": "loading" })
-            const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-            const datafim = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+            const datainicio = new Date(state.selectedDespesasf.substring(3, 8) + "-" + state.selectedDespesasf.substring(0, 2) + "-01T00:00:00").getTime();
+            const datafim = new Date(state.selectedDespesasf.substring(3, 8) + "-" + state.selectedDespesasf.substring(0, 2) + "-31T00:00:00").getTime();
             let newList = null;
             newList = await PagarController.findFornecedororCategoriaFixas(searchText, datainicio, datafim, 50);
             const despesasTotais = await despTodosDados(newList);
@@ -228,7 +218,7 @@ export default function ContasPagarFixas({ navigation, route }) {
                         buttonStyle={styles.selected}
                         defaultValue={defaultValue}
                         data={countries}
-                        onSelect={(selectedItem, index) => { setSelected(selectedItem); }}
+                        onSelect={(selectedItem, index) => { dispatch({"type": "selectedDespesasf", "selectedDespesasf": selectedItem}) }}
                     />
                 </View>
 

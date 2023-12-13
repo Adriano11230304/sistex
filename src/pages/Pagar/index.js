@@ -10,7 +10,7 @@ import { SeparatorItem } from '../../components/SeparatorItem';
 import Checkbox from 'expo-checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import Vazio from '../../components/Vazio';
-import { despTodosDados, somatorioDespesas, totalDespesasSeparadas, notificationLocal, totalReceitasSeparadas } from '../../controllers/utils/functions';
+import { despTodosDados, somatorioDespesas, totalDespesasSeparadas, notificationLocal, totalReceitasSeparadas, atualizarHome, atualizarValoresDespesas, atualizarValoresDespesasFind } from '../../controllers/utils/functions';
 import ReceberController from '../../controllers/ReceberController';
 import NotificacaoController from '../../controllers/NotificacaoController';
 
@@ -26,7 +26,6 @@ export default function ContasPagar({ navigation, route }) {
             defaultValue = dataatual
         }
     })
-    const [selected, setSelected] = useState(dataatual);
     const [pagas, setPagas] = useState(false);
     const [naoPagas, setNaoPagas] = useState(false);
     const { state, dispatch } = useAuth();
@@ -43,12 +42,9 @@ export default function ContasPagar({ navigation, route }) {
                 defaultValue = dataatual
             }
         })
-        let mesfim = 1 + parseInt(selected.substring(0, 2));
-        const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-        const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
-        const despesas = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
-        const despesasf = await PagarController.listAllFixas(page, datainicio, datafim, pagas, naoPagas);
-        const despesasv = await PagarController.listAllVariaveis(page, datainicio, datafim, pagas, naoPagas);
+        let mesfim = 1 + parseInt(state.selectedDespesas.substring(0, 2));
+        const datainicio = new Date(state.selectedDespesas.substring(3, 8) + "-" + state.selectedDespesas.substring(0, 2) + "-01T00:00:00").getTime();
+        const datafim = new Date(state.selectedDespesas.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
         const despNext = await PagarController.listAll(page + 1, datainicio, datafim, pagas, naoPagas);
         const despPrev = await PagarController.listAll(page - 1, datainicio, datafim, pagas, naoPagas);
         if (despNext.length > 0) {
@@ -62,44 +58,22 @@ export default function ContasPagar({ navigation, route }) {
         } else {
             setPrevPage(false);
         }
-        const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
-        const totDespesasAll = totalDespesasSeparadas(despesastot);
 
-        dispatch({
-            "type": "atualizarDespesas",
-            "despesas": await despTodosDados(despesas),
-            "valorTotal": somatorioDespesas(despesas)
-        })
-        dispatch({
-            "type": "atualizarDespesasFixas",
-            "despesasFixas": await despTodosDados(despesasf),
-            "valorTotalFixas": somatorioDespesas(despesasf)
-        })
-        dispatch({
-            "type": "atualizarDespesasVariaveis",
-            "despesasVariaveis": await despTodosDados(despesasv),
-            "valorTotalVariaveis": somatorioDespesas(despesasv)
-        })
+        await atualizarHome(state.selected, dispatch);
+        await atualizarValoresDespesas(page, state.selectedDespesas, dispatch, pagas, naoPagas);
 
         dispatch({
             "type": "atualizarNotificacoes",
             "notificacoes": await NotificacaoController.listAll(1)
         });
-    
-        const totReceitas = totalReceitasSeparadas(await ReceberController.listAllNoPage(datainicio, datafim));
         
-        const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
-        dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
-        const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
-        dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
-        dispatch({"type": "selected", "selected": dataatual})
         dispatch({ 'type': 'loadingfalse' })
     }
 
 
     useEffect(() => {
         listDespesas();
-    }, [selected, pagas, naoPagas, page])
+    }, [state.selectedDespesas, pagas, naoPagas, page])
 
     async function listDespesas(){
         if(searchText == ""){
@@ -110,24 +84,9 @@ export default function ContasPagar({ navigation, route }) {
     async function handleOrderClick(){
         if (searchText != "") {
             dispatch({ "type": "loading" })
-            const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-            let mesfim = 1 + parseInt(selected.substring(0, 2));
-            const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
-            let newList = null;
-            newList = await PagarController.findFornecedororCategoria(searchText, datainicio, datafim, 50);
-            const despesasTotais = await despTodosDados(newList);
-            const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
-            const totDespesas = totalDespesasSeparadas(despesastot);
-            const action = {
-                "type": "atualizarDespesas",
-                "despesas": despesasTotais,
-                "valorTotal": somatorioDespesas(newList)
-            }
-
-            dispatch(action);
+            await atualizarValoresDespesasFind(state.selectedDespesas, dispatch, searchText);
             setNexPage(false);
             setPrevPage(false);
-            dispatch({"type": "selected", "selected": dataatual})
             dispatch({ "type": "loadingfalse" })
         }else{
             await listDespesas();
@@ -258,7 +217,7 @@ export default function ContasPagar({ navigation, route }) {
                         buttonStyle={styles.selected} 
                         defaultValue={defaultValue}
                         data={countries}
-                        onSelect={(selectedItem, index) => {setSelected(selectedItem);}}
+                        onSelect={(selectedItem, index) => {dispatch({"type": "selectedDespesas", "selectedDespesas": selectedItem})}}
                     />
                 </View>
             </View>

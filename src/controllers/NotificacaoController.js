@@ -8,7 +8,6 @@ class NotificacaoController{
     async listAllDate() {
         try{
             const notificacoes = await Notificacao.findAllDate();
-            console.log(notificacoes);
             return notificacoes;
         }catch(e){
             console.log(e);

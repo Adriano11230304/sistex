@@ -3,7 +3,9 @@ import CategoriaController from "../CategoriaController";
 import ClienteController from "../ClienteController";
 import * as Notify from "expo-notifications";
 import PagarController from "../PagarController";
+import ReceberController from "../ReceberController";
 import NotificacaoController from "../NotificacaoController";
+import { useAuth } from '../../store/auth';
 
 
 export async function despTodosDados(despesas) {
@@ -181,7 +183,6 @@ export async function notificationLocal() {
     const date = Date.now();
     const despesas = await PagarController.despesasVencidas(date);
     let mensagem = "Existem despesas que estão vencidas, verifique-as!";
-    console.log("date", new Date(date).toLocaleString().substring(0,2));
     const dia = parseInt(new Date(date).toLocaleString().substring(0, 2)) - 5;
     const ano = new Date(date).toLocaleString().substring(6, 10);
     const mes = new Date(date).toLocaleString().substring(3, 5);
@@ -191,11 +192,9 @@ export async function notificationLocal() {
     for(let noti of not){
         if(noti.type == 'despesas' && !despesastrue){
             despesastrue = true;
-            console.log("entrou");
         }
     }
 
-    console.log("true", despesastrue);
     if(despesas.length > 0 && !despesastrue){
         const add = await NotificacaoController.add(mensagem, "despesas");
         await Notify.scheduleNotificationAsync({
@@ -217,7 +216,6 @@ export async function notificationLocalReceitas() {
     const date = Date.now();
     const despesas = await PagarController.despesasVencidas(date);
     let mensagem = "Existem receitas que estão vencidas, verifique-as!";
-    console.log("date", new Date(date).toLocaleString().substring(0, 2));
     const dia = parseInt(new Date(date).toLocaleString().substring(0, 2)) - 5;
     const ano = new Date(date).toLocaleString().substring(6, 10);
     const mes = new Date(date).toLocaleString().substring(3, 5);
@@ -231,7 +229,6 @@ export async function notificationLocalReceitas() {
         }
     }
 
-    console.log("true", receitastrue);
     if (despesas.length > 0 && !receitastrue) {
         const add = await NotificacaoController.add(mensagem, "receitas");
         await Notify.scheduleNotificationAsync({
@@ -247,4 +244,94 @@ export async function notificationLocalReceitas() {
     }
 
 };
+
+export async function atualizarHome(selected, dispatch){
+    const datainicioHome = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
+    const datafimHome = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+    const despesastot = await PagarController.listAllNoPage(datainicioHome, datafimHome);
+    const totDespesasAll = totalDespesasSeparadas(despesastot);
+    const totReceitas = totalReceitasSeparadas(await ReceberController.listAllNoPage(datainicioHome, datafimHome));
+    const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
+    dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
+    const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
+    dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
+    dispatch({
+        "type": "valorTotalDespesasNoPage",
+        "valorTotalDespesasNoPage": totDespesasAll
+    })
+    dispatch({
+        "type": "valorTotalReceitasNoPage",
+        "valorTotalReceitasNoPage": totReceitas
+    })
+}
+
+export async function atualizarValoresDespesas(page, selectedDespesas, dispatch, pagas, naoPagas){
+    const datainicio = new Date(selectedDespesas.substring(3, 8) + "-" + selectedDespesas.substring(0, 2) + "-01T00:00:00").getTime();
+    const datafim = new Date(selectedDespesas.substring(3, 8) + "-" + selectedDespesas.substring(0, 2) + "-31T00:00:00").getTime();
+    const despesasFixas = await PagarController.listAllFixas(1, datainicio, datafim, pagas, naoPagas);
+    const despesasVariaveis = await PagarController.listAllVariaveis(1, datainicio, datafim, pagas, naoPagas);
+    const despesas = await PagarController.listAll(page, datainicio, datafim, pagas, naoPagas);
+    const action = {
+        "type": "atualizarDespesas",
+        "despesas": await despTodosDados(despesas),
+        "valorTotal": somatorioDespesas(despesas)
+    }
+    dispatch(action);
+    const actionVariaveis = {
+        "type": "atualizarDespesasVariaveis",
+        "despesasVariaveis": await despTodosDados(despesasVariaveis),
+        "valorTotalVariaveis": somatorioDespesas(despesasVariaveis)
+    }
+    dispatch(actionVariaveis);
+    const actionFixas = {
+        "type": "atualizarDespesasFixas",
+        "despesasFixas": await despTodosDados(despesasFixas),
+        "valorTotalFixas": somatorioDespesas(despesasFixas)
+    }
+    dispatch(actionFixas);
+}
+
+export async function atualizarValoresDespesasFind(selectedDespesas, dispatch, searchText){
+    const datainicio = new Date(selectedDespesas.substring(3, 8) + "-" + selectedDespesas.substring(0, 2) + "-01T00:00:00").getTime();
+    let mesfim = 1 + parseInt(selectedDespesas.substring(0, 2));
+    const datafim = new Date(selectedDespesas.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
+    let newList = null;
+    newList = await PagarController.findFornecedororCategoria(searchText, datainicio, datafim, 50);
+    const despesasTotais = await despTodosDados(newList);
+    const action = {
+        "type": "atualizarDespesas",
+        "despesas": despesasTotais,
+        "valorTotal": somatorioDespesas(newList)
+    }
+
+    dispatch(action);
+}
+
+export async function atualizarValoresReceitas(page, selectedReceitas, dispatch, recebidas, naoRecebidas){
+    let mesfim = 1 + parseInt(selectedReceitas.substring(0, 2));
+    const datainicio = new Date(selectedReceitas.substring(3, 8) + "-" + selectedReceitas.substring(0, 2) + "-01T00:00:00").getTime();
+    const datafim = new Date(selectedReceitas.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
+    const receitas = await ReceberController.listAll(page, datainicio, datafim, recebidas, naoRecebidas);
+    dispatch({
+        "type": "atualizarReceitas",
+        "receitas": await receitasTodosDados(receitas),
+        "valorTotalReceitas": somatorioReceitas(receitas)
+    })
+}
+
+export async function atualizarValoresReceitasFind(selectedReceitas, dispatch, searchText){
+    const datainicio = new Date(selectedReceitas.substring(3, 8) + "-" + selectedReceitas.substring(0, 2) + "-01T00:00:00").getTime();
+    let mesfim = 1 + parseInt(selectedReceitas.substring(0, 2));
+    const datafim = new Date(selectedReceitas.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
+    let newList = null;
+    newList = await ReceberController.findClientesorForma(searchText, datainicio, datafim, 50);
+    const receitasTotais = await receitasTodosDados(newList);
+    const action = {
+        "type": "atualizarReceitas",
+        "receitas": receitasTotais,
+        "valorTotalReceitas": somatorioReceitas(newList)
+    }
+
+    dispatch(action);
+}
 

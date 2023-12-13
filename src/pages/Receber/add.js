@@ -13,7 +13,7 @@ import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import { receberValidate } from '../../controllers/utils/validators';
 import PagarController from '../../controllers/PagarController';
-import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas, totalDespesasSeparadas, notificationLocalReceitas } from '../../controllers/utils/functions';
+import { receitasTodosDados, somatorioReceitas, totalReceitasSeparadas, totalDespesasSeparadas, notificationLocalReceitas, atualizarHome, atualizarValoresReceitas } from '../../controllers/utils/functions';
 
 export default function AddReceita({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -92,31 +92,8 @@ export default function AddReceita({ navigation, route }) {
                 parc--;
             }
 
-            const dataatual = new Date(date).toLocaleString().substring(3, 10);
-            const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
-            const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-            const datainicioHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-01T00:00:00").getTime();
-            const datafimHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-31T00:00:00").getTime();
-            const receitastot = await ReceberController.listAllNoPage(datainicioHome, datafimHome);
-            const totReceitas = totalReceitasSeparadas(receitastot);
-            const receitas = await ReceberController.listAll(1, datainicio, datafim);
-            const action = {
-                    "type": "atualizarReceitas",
-                    "receitas": await receitasTodosDados(receitas),
-                    "valorTotalReceitas": somatorioReceitas(receitas)
-            }
-            dispatch(action);
-            dispatch({
-                "type": "valorTotalReceitasNoPage",
-                "valorTotalReceitasNoPage": totReceitas
-            })
-            const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
-            const totDespesasAll = totalDespesasSeparadas(despesastot);
-            const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
-            dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
-            const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
-
-            dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
+            await atualizarHome(state.selected, dispatch);
+            await atualizarValoresReceitas(1, state.selectedReceitas, dispatch, false, false);
             ToastAndroid.show("Receita adicionada com sucesso!", ToastAndroid.SHORT);
             setLoading(false);
             navigation.navigate('ReceitaStack');

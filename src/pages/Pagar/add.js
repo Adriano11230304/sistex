@@ -13,8 +13,7 @@ import Vazio from '../../components/Vazio';
 import { SeparatorItem } from '../../components/SeparatorItem';
 import CategoriaController from '../../controllers/CategoriaController';
 import { pagarValidate } from '../../controllers/utils/validators';
-import { despTodosDados, somatorioDespesas, totalDespesasSeparadas, receitasTodosDados, somatorioReceitas, totalReceitasSeparadas } from '../../controllers/utils/functions';
-import ReceberController from '../../controllers/ReceberController';
+import { atualizarHome, atualizarValoresDespesas } from '../../controllers/utils/functions';
 
 export default function AddDespesas({ navigation, route }) {
     const { state, dispatch } = useAuth();
@@ -96,7 +95,7 @@ export default function AddDespesas({ navigation, route }) {
                     ano++;
                 }
                 mes = mes < 10 ? "0"+mes : mes;
-                console.log("data_vencimento", dataVencimento, data_vencimento);
+                
                 if(parc > 1){
                     let data = new Date(ano + "-" + mes + "-01T00:00:00").getTime();
                     const desp = await PagarController.add(valor, obs, parc, fixa, categoria_id, fornecedor_id, date, data, false, null, forma_pagamento, true, dataVencimento);
@@ -107,59 +106,17 @@ export default function AddDespesas({ navigation, route }) {
                 parc--;
             }
 
-            const dataatual = new Date(date).toLocaleString().substring(3, 10);
-            const datainicio = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-01T00:00:00").getTime();
-            const datafim = new Date(dataatual.substring(3, 8) + "-" + dataatual.substring(0, 2) + "-31T00:00:00").getTime();
-            const despesasFixas = await PagarController.listAllFixas(1, datainicio, datafim);
-            console.log(state.selected);
-            const datainicioHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-01T00:00:00").getTime();
-            const datafimHome = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-31T00:00:00").getTime();
-            const despesastot = await PagarController.listAllNoPage(datainicioHome, datafimHome);
-            const totDespesas = totalDespesasSeparadas(despesastot);
-            dispatch({
-                "type": "valorTotalDespesasNoPage",
-                "valorTotalDespesasNoPage": totDespesas
-            })
-            const receitastot = await ReceberController.listAllNoPage(datainicioHome, datafimHome);
-            const totReceitas = totalReceitasSeparadas(receitastot);
-            const totDespesasAll = totalDespesasSeparadas(despesastot);
-            const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
-            dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
-            const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
-            dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
-                const actionFixas = {
-                    "type": "atualizarDespesasFixas",
-                    "despesasFixas": await despTodosDados(despesasFixas),
-                    "valorTotalFixas": somatorioDespesas(despesasFixas)
-                }
-                dispatch(actionFixas);
-          
-                const despesasVariaveis = await PagarController.listAllVariaveis(1, datainicio, datafim);
-                const actionVariaveis = {
-                    "type": "atualizarDespesasVariaveis",
-                    "despesasVariaveis": await despTodosDados(despesasVariaveis),
-                    "valorTotalVariaveis": somatorioDespesas(despesasVariaveis)
-                }
-                dispatch(actionVariaveis);
-           
-                const despesas = await PagarController.listAll(1, datainicio, datafim);
-                const action = {
-                    "type": "atualizarDespesas",
-                    "despesas": await despTodosDados(despesas),
-                    "valorTotal": somatorioDespesas(despesas)
-                }
-                dispatch(action);
-                ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
-                setLoading(false);
-                if(route.params.prefix == 'variavel'){
-                    navigation.navigate('PagarFixaStack');
-                }else if(route.params.prefix == 'variavel'){
-                    navigation.navigate('PagarVariavelStack');
-                }else{
-                    navigation.navigate('PagarStack');
-                }
-                
-            
+        await atualizarHome(state.selected, dispatch);
+        await atualizarValoresDespesas(1, state.selectedDespesas, dispatch, false, false);
+            ToastAndroid.show("Despesa adicionada com sucesso!", ToastAndroid.SHORT);
+            setLoading(false);
+            if(route.params.prefix == 'fixa'){
+                navigation.navigate('PagarFixaStack');
+            }else if(route.params.prefix == 'variavel'){
+                navigation.navigate('PagarVariavelStack');
+            }else{
+                navigation.navigate('PagarStack');
+            }    
         } else {
             ToastAndroid.show(teste.validate, ToastAndroid.SHORT);
             setLoading(false);
@@ -226,7 +183,7 @@ export default function AddDespesas({ navigation, route }) {
                         <View style={styles.labelinputdate}>
                                 <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePicker(true)}>
                                     <Text style={styles.labelDate}>Data de entrada: {data_entrada}</Text>
-                                    <FontAwesome name="calendar" size={24} color="black" />
+                                    <FontAwesome style={styles.iconDate} name="calendar" size={24} color="black" />
                             </TouchableOpacity>
                                 <Modal
                                     style={styles.modalDataEntrada}
@@ -360,6 +317,7 @@ export default function AddDespesas({ navigation, route }) {
                             <View style={styles.labelinputdate}>
                                 <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePickerPagamento(true)}>
                                     <Text style={styles.labelDate}>Data de pagamento: {data_pagamento}</Text>
+                                    <FontAwesome style={styles.iconDate} name="calendar" size={24} color="black" />
                                 </TouchableOpacity>
                                 <Modal
                                     statusBarTranslucent={true}
@@ -387,6 +345,7 @@ export default function AddDespesas({ navigation, route }) {
                             <View style={styles.labelinputdate}>
                                 <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePickerVencimento(true)}>
                                     <Text style={styles.labelDate}>Data de vencimento: {data_vencimento}</Text>
+                                    <FontAwesome style={styles.iconDate} name="calendar" size={24} color="black" />
                                 </TouchableOpacity>
                                 <Modal
                                     statusBarTranslucent={true}

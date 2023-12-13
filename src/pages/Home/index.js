@@ -7,7 +7,7 @@ import UserController from '../../controllers/UserController';
 import PagarController from '../../controllers/PagarController';
 import ReceberController from '../../controllers/ReceberController';
 import SelectDropdown from 'react-native-select-dropdown';
-import { totalDespesasSeparadas, totalReceitasSeparadas, despTodosDados, receitasTodosDados, somatorioDespesas, somatorioReceitas } from '../../controllers/utils/functions';
+import { atualizarHome, atualizarValoresDespesas } from '../../controllers/utils/functions';
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native'
 import LoaderSimple from '../../components/LoaderSimple';
 
@@ -60,30 +60,8 @@ export default function Home({ navigation }) {
 
     async function atualizarDespesasReceitas(){
         dispatch({"type": "loading"});
-        let mesfim = 1 + parseInt(state.selected.substring(0, 2));
-        const datainicio = new Date(state.selected.substring(3, 8) + "-" + state.selected.substring(0, 2) + "-01T00:00:00").getTime();
-        const datafim = new Date(state.selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
-        const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
-        const totDespesasAll = totalDespesasSeparadas(despesastot);
-        const despesas = await PagarController.listAll(1, datainicio, datafim, false, false);
-        const despesasf = await PagarController.listAllFixas(1, datainicio, datafim, false, false);
-        const despesasv = await PagarController.listAllVariaveis(1, datainicio, datafim, false, false);
-        dispatch({
-            "type": "valorTotalDespesasNoPage",
-            "valorTotalDespesasNoPage": totDespesasAll
-        })
-        const receitas = await ReceberController.listAllNoPage(datainicio, datafim);
-        const receitas1 = await ReceberController.listAll(1, datainicio, datafim, false, false);
-        dispatch({
-            "type": "valorTotalReceitasNoPage",
-            "valorTotalReceitasNoPage": totalReceitasSeparadas(receitas)
-        })
-        const totDespesas = totalDespesasSeparadas(despesastot);
-        const totReceitas = totalReceitasSeparadas(receitas);
-        const bal = (totReceitas.somaTotal - totDespesas.somaTotal);
-        dispatch({ "type": "balanco", "balanco": bal.toFixed(2)});
-        const sal = (totReceitas.somaRecebidas - totDespesas.somaPagas);
-        dispatch({ "type": "saldo", "saldo": sal.toFixed(2)});
+        await atualizarHome(state.selected, dispatch);
+        await atualizarValoresDespesas(1, state.selectedDespesas, dispatch, false, false);
         dispatch({ "type": "loadingfalse" });
     }
     
