@@ -32,6 +32,10 @@ function authReducer(state, action) {
             return { ...state, balanco: action.balanco }
         } case 'saldo': {
             return { ...state, saldo: action.saldo }
+        } case 'balancoRel': {
+            return { ...state, balancoRel: action.balancoRel }
+        } case 'saldoRel': {
+            return { ...state, saldoRel: action.saldoRel }
         } case 'selected': {
             return { ...state, selected: action.selected }
         } case 'selectedDespesas': {
@@ -42,10 +46,16 @@ function authReducer(state, action) {
             return { ...state, selectedDespesasf: action.selectedDespesasf }
         } case 'selectedDespesasv': {
             return { ...state, selectedDespesasv: action.selectedDespesasv }
+        } case 'selectedRelatorios': {
+            return { ...state, selectedRelatorios: action.selectedRelatorios }
         } case 'valorTotalDespesasNoPage': {
             return { ...state, valorTotalDespesasNoPage: action.valorTotalDespesasNoPage }
         } case 'valorTotalReceitasNoPage': {
             return { ...state, valorTotalReceitasNoPage: action.valorTotalReceitasNoPage }
+        } case 'valorTotalDespesasNoPageRel': {
+            return { ...state, valorTotalDespesasNoPageRel: action.valorTotalDespesasNoPageRel }
+        } case 'valorTotalReceitasNoPageRel': {
+            return { ...state, valorTotalReceitasNoPageRel: action.valorTotalReceitasNoPageRel }
         }default: {
             throw new Error(`action.type não tratada: ${action.type}`);
         }
@@ -73,13 +83,18 @@ const initialState = {
     receitas: null,
     valorTotalDespesasNoPage: {"somaNaoPagas": 0, "somaNaoPagasFixas": 0, "somaPagas": 0, "somaPagasFixas": 0, "somaTotal": 0},
     valorTotalReceitasNoPage: {"somaNaoRecebidas": 0, "somaRecebidas": 0, "somaTotal": 0},
+    valorTotalDespesasNoPageRel: {"somaNaoPagas": 0, "somaNaoPagasFixas": 0, "somaPagas": 0, "somaPagasFixas": 0, "somaTotal": 0},
+    valorTotalReceitasNoPageRel: {"somaNaoRecebidas": 0, "somaRecebidas": 0, "somaTotal": 0},
     saldo: 0,
     balanco: 0,
+    saldoRel: 0,
+    balancoRel: 0,
     selected: dataatual,
     selectedDespesas: dataatual,
     selectedDespesasf: dataatual,
     selectedDespesasv: dataatual,
-    selectedReceitas: dataatual
+    selectedReceitas: dataatual,
+    selectedRelatorios: dataatual
 }
 
 function AuthProvider({ children }) {

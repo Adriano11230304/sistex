@@ -1,21 +1,23 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import Header from '../../components/Header'
 import { styles } from './style'
-import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native'
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryGroup } from 'victory-native'
 import {useAuth} from '../../store/auth';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useEffect, useState } from 'react';
 import LoaderSimple from '../../components/LoaderSimple';
-import PagarController from '../../controllers/PagarController';
-import ReceberController from '../../controllers/ReceberController';
-import { totalDespesasSeparadas, totalReceitasSeparadas, despTodosDados, receitasTodosDados, somatorioDespesas, somatorioReceitas } from '../../controllers/utils/functions';
+import { atualizarRel, atualizarRelatoriostotais } from '../../controllers/utils/functions';
 
 export default function Relatorios() {
     const date = Date.now();
     const dataatual = new Date(date).toLocaleString().substring(3, 10);
-    console.log(dataatual);
     const {state, dispatch} = useAuth();
-    const [selected, setSelected] = useState(dataatual);
+    const [ mesAnterior, setMesAnterior ] = useState([]);
+    const [ mesAtual, setMesAtual ] = useState([]);
+
+    useEffect(() => {
+        setandoMesanterior();
+    }, [state.selectedRelatorios])
     
     const countries = ["01/2023", "02/2023", "03/2023", "04/2023", "05/2023", "06/2023", "07/2023", "08/2023", "09/2023", "10/2023", "11/2023", "12/2023", "01/2024", "02/2024", "03/2024", "04/2024", "05/2024", "06/2024", "07/2024", "08/2024", "09/2024", "10/2024", "11/2024", "12/2024", "01/2025", "02/2025", "03/2025", "04/2025", "05/2025", "06/2025", "07/2025", "08/2025", "09/2025", "10/2025", "11/2025", "12/2025"]
     let defaultValue;
@@ -26,15 +28,15 @@ export default function Relatorios() {
     })
     const dataPagar = [
         {
-            "x": "Desp Total",
-            "y": parseFloat(state.valorTotalDespesasNoPage.somaTotal)
+            "x": "Totais",
+            "y": parseFloat(state.valorTotalDespesasNoPageRel.somaTotal)
         },
         {
-            "y": parseFloat(state.valorTotalDespesasNoPage.somaPagas),
+            "y": parseFloat(state.valorTotalDespesasNoPageRel.somaPagas),
             "x": 'Desp Pagas'
         },
         {
-            "y": parseFloat(state.valorTotalDespesasNoPage.somaNaoPagas),
+            "y": parseFloat(state.valorTotalDespesasNoPageRel.somaNaoPagas),
             "x": 'Desp Não Pagas'
         }
     ]
@@ -42,68 +44,49 @@ export default function Relatorios() {
     const dataReceitas = [
         {
             "x": "Rec totais",
-            "y": parseFloat(state.valorTotalReceitasNoPage.somaTotal)
+            "y": parseFloat(state.valorTotalReceitasNoPageRel.somaTotal)
 
         },
         {
             "x": "Rec. recebidas",
-            "y": parseFloat(state.valorTotalReceitasNoPage.somaRecebidas)
+            "y": parseFloat(state.valorTotalReceitasNoPageRel.somaRecebidas)
         },
         {
             "x": "Rec não rec",
-            "y": parseFloat(state.valorTotalReceitasNoPage.somaNaoRecebidas)
+            "y": parseFloat(state.valorTotalReceitasNoPageRel.somaNaoRecebidas)
         }
     ]
+
+    let nao = parseFloat(state.valorTotalReceitasNoPageRel.somaNaoRecebidas) - parseFloat(state.valorTotalDespesasNoPageRel.somaNaoPagas);
+    let efet = parseFloat(state.valorTotalReceitasNoPageRel.somaRecebidas) - parseFloat(state.valorTotalDespesasNoPageRel.somaPagas);
+
+    let dadosgerais = [
+        [{ x: "Total", y: parseFloat(state.valorTotalReceitasNoPageRel.somaTotal) }, { x: "efetivadas", y: parseFloat(state.valorTotalReceitasNoPageRel.somaRecebidas) }, { x: "não efetiv.", y: parseFloat(state.valorTotalReceitasNoPageRel.somaNaoRecebidas) }],
+        [{ x: "Total", y: parseFloat(state.valorTotalDespesasNoPageRel.somaTotal) }, { x: "efetivadas", y: parseFloat(state.valorTotalDespesasNoPageRel.somaPagas) }, { x: "não efetiv.", y: parseFloat(state.valorTotalDespesasNoPageRel.somaNaoPagas) }],
+        [{ x: "Total", y: parseFloat(state.balancoRel) }, { x: "efetivadas", y: efet }, { x: "não efetiv.", y: nao }],
+    ]
+    async function setandoMesanterior(){
+        let mesanterior = parseInt(state.selectedRelatorios.substring(0,2)) - 1;
+        if(mesanterior < 1){
+            mesanterior = 1;
+        }
+
+        mesanterior = mesanterior + state.selectedRelatorios.substring(2,8);
+        const dadosMesesAnteriores = await atualizarRelatoriostotais(mesanterior);
+        setMesAnterior(dadosMesesAnteriores);
+
+        
+    }
 
 
     useEffect(() => {
         atualizarDespesasReceitas();
-    }, [ selected ])
+    }, [ state.selectedRelatorios ])
 
 
     async function atualizarDespesasReceitas() {
         dispatch({ "type": "loading" });
-        let mesfim = 1 + parseInt(selected.substring(0, 2));
-        const datainicio = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
-        const datafim = new Date(selected.substring(3, 8) + "-" + mesfim + "-01T00:00:00").getTime();
-        const despesastot = await PagarController.listAllNoPage(datainicio, datafim);
-        const totDespesasAll = totalDespesasSeparadas(despesastot);
-        const despesas = await PagarController.listAll(1, datainicio, datafim, false, false);
-        const despesasf = await PagarController.listAllFixas(1, datainicio, datafim, false, false);
-        const despesasv = await PagarController.listAllVariaveis(1, datainicio, datafim, false, false);
-        dispatch({
-            "type": "atualizarDespesas",
-            "despesas": await despTodosDados(despesas),
-            "valorTotal": somatorioDespesas(despesas),
-            "valorTotalDespesasNoPage": totDespesasAll
-        })
-        dispatch({
-            "type": "atualizarDespesasFixas",
-            "despesasFixas": await despTodosDados(despesasf),
-            "valorTotalFixas": somatorioDespesas(despesasf),
-            "valorTotalDespesasNoPage": totDespesasAll
-        })
-        dispatch({
-            "type": "atualizarDespesasVariaveis",
-            "despesasVariaveis": await despTodosDados(despesasv),
-            "valorTotalVariaveis": somatorioDespesas(despesasv),
-            "valorTotalDespesasNoPage": totDespesasAll
-        })
-        console.log("despesas", state.valorTotalDespesasNoPage);
-        const receitas = await ReceberController.listAllNoPage(datainicio, datafim);
-        const receitas1 = await ReceberController.listAll(1, datainicio, datafim, false, false);
-        dispatch({
-            "type": "atualizarReceitas",
-            "receitas": await receitasTodosDados(receitas),
-            "valorTotal": somatorioReceitas(receitas),
-            "valorTotalReceitasNoPage": totalReceitasSeparadas(receitas)
-        })
-        const totDespesas = totalDespesasSeparadas(despesastot);
-        const totReceitas = totalReceitasSeparadas(receitas);
-        const bal = (totReceitas.somaTotal - totDespesas.somaTotal);
-        dispatch({ "type": "balanco", "balanco": bal.toFixed(2) });
-        const sal = (totReceitas.somaRecebidas - totDespesas.somaPagas);
-        dispatch({ "type": "saldo", "saldo": sal.toFixed(2) });
+        await atualizarRel(state.selectedRelatorios, dispatch);
         dispatch({ "type": "loadingfalse" });
     }
 
@@ -121,7 +104,7 @@ export default function Relatorios() {
                     buttonStyle={styles.selected}
                     defaultValue={defaultValue}
                     data={countries}
-                    onSelect={(selectedItem, index) => { setSelected(selectedItem); }}
+                    onSelect={(selectedItem, index) => { dispatch({"type": "selectedRelatorios", "selectedRelatorios": selectedItem}) }}
                 />
             </View>
             {state.loading ?
@@ -132,29 +115,22 @@ export default function Relatorios() {
                 <>
                     <ScrollView showsVerticalScrollIndicator={false} style={styles.grafico}>
                         <View>
-                            <Text style={styles.balancoText}>Despesas</Text>
-                            <VictoryChart domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}>
-                                <VictoryBar
-                                        style={{
-                                            data: {
-                                                fill: "#c43a31",
-                                                width: 25
-                                            }
-                                        }}
-                                data={dataPagar} x="x" y="y" />
-                            </VictoryChart>
-                        </View>
-                        <View>
-                            <Text style={styles.balancoText}>Receitas</Text>
-                            <VictoryChart domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}>
-                                <VictoryBar
-                                        style={{
-                                            data: {
-                                                fill: "#418452",
-                                                width: 25
-                                            }
-                                        }}
-                                data={dataReceitas} x="x" y="y" />
+                            <Text style={styles.balancoText}>Receitas e Despesas mensais</Text>
+                            <VictoryChart height={250} width={350} theme={VictoryTheme.material}>
+                                <VictoryGroup offset={20}
+                                    colorScale={"qualitative"}
+                                    scale={{x: "log", y: "log"}}
+                                >
+                                    <VictoryBar
+                                        data={dadosgerais[0]}
+                                    />
+                                    <VictoryBar
+                                        data={dadosgerais[1]}
+                                    />
+                                    <VictoryBar
+                                        data={dadosgerais[2]}
+                                    />
+                                </VictoryGroup>
                             </VictoryChart>
                         </View>
                         <View>

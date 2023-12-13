@@ -265,6 +265,39 @@ export async function atualizarHome(selected, dispatch){
     })
 }
 
+export async function atualizarRel(selected, dispatch){
+    const datainicioHome = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
+    const datafimHome = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+    const despesastot = await PagarController.listAllNoPage(datainicioHome, datafimHome);
+    const totDespesasAll = totalDespesasSeparadas(despesastot);
+    const totReceitas = totalReceitasSeparadas(await ReceberController.listAllNoPage(datainicioHome, datafimHome));
+    const bal = (totReceitas.somaTotal - totDespesasAll.somaTotal);
+    dispatch({ "type": "balancoRel", "balancoRel": bal.toFixed(2) });
+    const sal = (totReceitas.somaRecebidas - totDespesasAll.somaPagas);
+    dispatch({ "type": "saldoRel", "saldoRel": sal.toFixed(2) });
+    dispatch({
+        "type": "valorTotalDespesasNoPageRel",
+        "valorTotalDespesasNoPageRel": totDespesasAll
+    })
+    dispatch({
+        "type": "valorTotalReceitasNoPageRel",
+        "valorTotalReceitasNoPageRel": totReceitas
+    })
+}
+
+export async function atualizarRelatoriostotais(selected, dispatch){
+    const datainicioHome = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-01T00:00:00").getTime();
+    const datafimHome = new Date(selected.substring(3, 8) + "-" + selected.substring(0, 2) + "-31T00:00:00").getTime();
+    const despesastot = await PagarController.listAllNoPage(datainicioHome, datafimHome);
+    const totDespesasAll = totalDespesasSeparadas(despesastot);
+    const totReceitas = totalReceitasSeparadas(await ReceberController.listAllNoPage(datainicioHome, datafimHome));
+    return {
+        "totDespesas": totDespesasAll,
+        "totReceitas": totReceitas
+    }
+    
+}
+
 export async function atualizarValoresDespesas(page, selectedDespesas, dispatch, pagas, naoPagas){
     const datainicio = new Date(selectedDespesas.substring(3, 8) + "-" + selectedDespesas.substring(0, 2) + "-01T00:00:00").getTime();
     const datafim = new Date(selectedDespesas.substring(3, 8) + "-" + selectedDespesas.substring(0, 2) + "-31T00:00:00").getTime();

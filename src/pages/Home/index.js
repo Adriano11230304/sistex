@@ -8,7 +8,7 @@ import PagarController from '../../controllers/PagarController';
 import ReceberController from '../../controllers/ReceberController';
 import SelectDropdown from 'react-native-select-dropdown';
 import { atualizarHome, atualizarValoresDespesas } from '../../controllers/utils/functions';
-import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native'
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryGroup } from 'victory-native'
 import LoaderSimple from '../../components/LoaderSimple';
 
 export default function Home({ navigation }) {
@@ -53,6 +53,17 @@ export default function Home({ navigation }) {
             "y": parseFloat(state.valorTotalReceitasNoPage.somaNaoRecebidas)
         }
     ]
+
+    const nao = parseFloat(state.valorTotalReceitasNoPage.somaNaoRecebidas) - parseFloat(state.valorTotalDespesasNoPage.somaNaoPagas);
+    const efet = parseFloat(state.valorTotalReceitasNoPage.somaRecebidas) - parseFloat(state.valorTotalDespesasNoPage.somaPagas);
+
+    const dadosgerais = [
+        [{ x: "Total", y: parseFloat(state.valorTotalReceitasNoPage.somaTotal) }, { x: "efetivadas", y: parseFloat(state.valorTotalReceitasNoPage.somaRecebidas) }, { x: "não efetiv.", y: parseFloat(state.valorTotalReceitasNoPage.somaNaoRecebidas) }],
+        [{ x: "Total", y: parseFloat(state.valorTotalDespesasNoPage.somaTotal) }, { x: "efetivadas", y: parseFloat(state.valorTotalDespesasNoPage.somaPagas) }, { x: "não efetiv.", y: parseFloat(state.valorTotalDespesasNoPage.somaNaoPagas) }],
+        [{ x: "Total", y: parseFloat(state.balanco) }, { x: "efetivadas", y: efet }, { x: "não efetiv.", y: nao }],
+    ]
+
+
 
     useEffect(() => {
         atualizarDespesasReceitas();
@@ -130,30 +141,24 @@ export default function Home({ navigation }) {
             <View style={styles.balanco}><Text style={styles.balancoText}>Saldo em caixa R$ {state.saldo}</Text></View>
                     <ScrollView showsVerticalScrollIndicator={false} style={styles.grafico}>
                         <View>
-                            <Text style={styles.balancoText}>Despesas</Text>
-                            <VictoryChart domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}>
-                                <VictoryBar
-                                style={{
-                                    data: {
-                                        fill: "#c43a31"
-                                    }
-                                }}
-                                data={dataPagar} x="x" y="y" />
+                        <Text style={styles.balancoText}>Valores Gerais</Text>
+                            <VictoryChart height={250} width={350} theme={VictoryTheme.material}>
+                                <VictoryGroup offset={20}
+                                    colorScale={"qualitative"}
+                                    scale={{x: "log", y: "log"}}
+                                >
+                                    <VictoryBar
+                                        data={dadosgerais[0]}
+                                    />
+                                    <VictoryBar
+                                        data={dadosgerais[1]}
+                                    />
+                                    <VictoryBar
+                                        data={dadosgerais[2]}
+                                    />
+                                </VictoryGroup>
                             </VictoryChart>
-                        </View>
-                        <View>
-                            <Text style={styles.balancoText}>Receitas</Text>
-                            <VictoryChart domainPadding={20} height={250} width={350} theme={VictoryTheme.material}>
-                                <VictoryBar
-                                style={{
-                                    data: {
-                                        fill: "#418452",
-                                        width: 25
-                                    }
-                                }}  
-                                data={dataReceitas}
-                                />
-                            </VictoryChart>
+
                         </View>
                     </ScrollView>
                 </>
