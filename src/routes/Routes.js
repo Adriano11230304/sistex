@@ -27,6 +27,9 @@ import AddReceita from '../pages/Receber/add';
 import VisReceber from '../pages/Receber/visualizar';
 import AddReceitasRecebimento from '../pages/Receber/dataRecebimento';
 import UpdateReceita from '../pages/Receber/update';
+import Nfse from '../pages/NFSe';
+import AddNfse from '../pages/NFSe/add';
+import Visnfse from '../pages/NFSe/visualizar';
 
 
 const Stack = createNativeStackNavigator();
@@ -106,6 +109,16 @@ export const CategoriaStack = () => {
     <Stack.Navigator initialRouteName='CategoriasStack' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="CategoriasStack" component={Categorias} />
       <Stack.Screen name="AddCategoria" component={AddCategoria} />
+    </Stack.Navigator>
+  );
+};
+
+export const NfseStack = () => {
+  return (
+    <Stack.Navigator initialRouteName='NfseStack' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="NfseStack" component={Nfse} />
+      <Stack.Screen name="AddNfse" component={AddNfse} />
+      <Stack.Screen name="VisNfse" component={Visnfse} />
     </Stack.Navigator>
   );
 };

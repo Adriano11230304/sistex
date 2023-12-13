@@ -8,7 +8,7 @@ import Relatorios from '../pages/Relatorios';
 import Nfse from '../pages/NFSe';
 import CredenciaisGoogle from '../pages/CredenciaisGoogle';
 import Backups from '../pages/Backups';
-import { FornecedorStack, PagarStack, CategoriaStack, ReceitasStack, PagarFixaStack, PagarVariavelStack, ClienteStack } from './Routes';
+import { FornecedorStack, PagarStack, CategoriaStack, ReceitasStack, PagarFixaStack, PagarVariavelStack, ClienteStack, NfseStack } from './Routes';
 
 const Drawer = createDrawerNavigator();
 
@@ -34,7 +34,7 @@ function DrawerRoutes({ navigation }) {
                     <Drawer.Screen name="Relatórios Financeiros" component={Relatorios} options={{ drawerIcon: ({ color }) => (<AntDesign name="areachart" size={24} color={color} />), }} />
                     <Drawer.Screen name="Clientes" component={ClienteStack} options={{ drawerIcon: ({ color }) => (<AntDesign name="contacts" size={24} color={color} />), }} />
                     <Drawer.Screen name="Fornecedores" component={FornecedorStack} options={{ drawerIcon: ({ color }) => (<Entypo name="v-card" size={24} color={color} />), }} />
-                    <Drawer.Screen name="Template de NFSe" component={Nfse} options={{ drawerIcon: ({ color }) => (<Entypo name="direction" size={24} color={color} />), }} />
+                    <Drawer.Screen name="Template de NFSe" component={NfseStack} options={{ drawerIcon: ({ color }) => (<Entypo name="direction" size={24} color={color} />), }} />
                     <Drawer.Screen name="Credenciais Google" component={CredenciaisGoogle} options={{ drawerIcon: ({ color }) => (<AntDesign name="google" size={24} color={color} />), }} />
                     <Drawer.Screen name="Backups" component={Backups} options={{ drawerIcon: ({ color }) => (<MaterialIcons name="backup" size={24} color={color} />), }} />
                     <Drawer.Screen name="Categorias" component={CategoriaStack} options={{ drawerIcon: ({ color }) => (<AntDesign name="tago" size={24} color="black" />), }} />

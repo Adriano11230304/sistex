@@ -50,6 +50,18 @@ class Database{
             );
 
             tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS nfse (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "cliente_id INTEGER, " +
+                "valor FLOAT, " +
+                "descricao TEXT," +
+                "FOREIGN KEY(cliente_id) REFERENCES clientes(id));"
+                , [],
+                () => console.log(`Tabela nfse criada com sucesso`),
+                (tx, e) => console.log(`Erro ao criar a tabela nfse`, e)
+            );
+
+            tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS pagar ("+
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 "valor FLOAT, "+

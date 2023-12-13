@@ -22,6 +22,8 @@ function authReducer(state, action) {
             return { ...state, categorias: action.categorias }
         } case 'atualizarNotificacoes': {
             return { ...state, notificacoes: action.notificacoes }
+        } case 'atualizarNfse': {
+            return { ...state, nfse: action.nfse }
         }case 'loading':{
             return {...state, loading: true}
         }case 'loadingfalse':{
@@ -94,7 +96,8 @@ const initialState = {
     selectedDespesasf: dataatual,
     selectedDespesasv: dataatual,
     selectedReceitas: dataatual,
-    selectedRelatorios: dataatual
+    selectedRelatorios: dataatual,
+    nfse: null
 }
 
 function AuthProvider({ children }) {
