@@ -149,12 +149,15 @@ export default function Home({ navigation }) {
                                 >
                                     <VictoryBar
                                         data={dadosgerais[0]}
+                                        style={{ data: { fill: "green" } }}
                                     />
                                     <VictoryBar
                                         data={dadosgerais[1]}
+                                        style={{ data: { fill: "#c43a31" } }}
                                     />
                                     <VictoryBar
                                         data={dadosgerais[2]}
+                                        style={{ data: { fill: "black" } }}
                                     />
                                 </VictoryGroup>
                             </VictoryChart>

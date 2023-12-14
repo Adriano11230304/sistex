@@ -147,6 +147,7 @@ export default function AddReceita({ navigation, route }) {
                         <View style={styles.labelinputdate}>
                                 <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePicker(true)}>
                                     <Text style={styles.labelDate}>Data de entrada: {data_entrada}</Text>
+                                    <FontAwesome style={styles.iconDate} name="calendar" size={24} color="black" />
                                 </TouchableOpacity>
                                 <Modal
                                     style={styles.modalDataEntrada}
@@ -228,6 +229,7 @@ export default function AddReceita({ navigation, route }) {
                             <View style={styles.labelinputdate}>
                                 <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePickerRecebimento(true)}>
                                     <Text style={styles.labelDate}>Data de recebimento: {data_recebimento}</Text>
+                                    <FontAwesome style={styles.iconDate} name="calendar" size={24} color="black" />
                                 </TouchableOpacity>
                                 <Modal
                                     statusBarTranslucent={true}
@@ -255,6 +257,7 @@ export default function AddReceita({ navigation, route }) {
                             <View style={styles.labelinputdate}>
                                 <TouchableOpacity style={styles.labelAdd} onPress={() => setModalVisiblePickerVencimento(true)}>
                                     <Text style={styles.labelDate}>Data de vencimento: {data_vencimento}</Text>
+                                    <FontAwesome style={styles.iconDate} name="calendar" size={24} color="black" />
                                 </TouchableOpacity>
                                 <Modal
                                     statusBarTranslucent={true}
@@ -299,7 +302,7 @@ export default function AddReceita({ navigation, route }) {
                             <SelectDropdown
                                 buttonStyle={styles.selectedFixa}
                                 defaultValue={forma_recebimento}
-                                data={["crédito", "pix", "debito"]}
+                                data={["crédito", "pix", "debito", "dinheiro"]}
                                 onSelect={(selectedItem, index) => { setForma_recebimento(selectedItem); }}
                             />
                         </View>

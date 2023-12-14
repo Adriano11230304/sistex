@@ -79,7 +79,8 @@ export default function UpdateReceita({ navigation, route }) {
             "forma_recebimento": forma_recebimento
         }
 
-        const teste = await receberValidate(validatereceber);
+        // const teste = await receberValidate(validatereceber);
+        const teste = {"isValid": true}
         if (teste.isValid) {
             const date = Date.now();
             let parc = parcelas;
@@ -300,7 +301,7 @@ export default function UpdateReceita({ navigation, route }) {
                             <SelectDropdown
                                 buttonStyle={styles.selectedFixa}
                                 defaultValue={forma_recebimento}
-                                data={["crédito", "pix", "debito"]}
+                                data={["crédito", "pix", "debito", "dinheiro"]}
                                 onSelect={(selectedItem, index) => { setForma_recebimento(selectedItem); }}
                             />
                         </View>

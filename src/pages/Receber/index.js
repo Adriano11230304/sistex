@@ -64,7 +64,7 @@ export default function ContasReceber({ navigation, route }) {
 
     useEffect(() => {
         listReceitas();
-    }, [selected, recebidas, naoRecebidas, page])
+    }, [state.selectedReceitas, recebidas, naoRecebidas, page])
 
     async function listReceitas() {
         if (searchText == "") {
@@ -203,7 +203,7 @@ export default function ContasReceber({ navigation, route }) {
                         buttonStyle={styles.selected}
                         defaultValue={defaultValue}
                         data={countries}
-                        onSelect={(selectedItem, index) => { setSelected(selectedItem); }}
+                        onSelect={(selectedItem, index) => { dispatch({"type": "selectedReceitas", "selectedReceitas": selectedItem}) }}
                     />
                 </View>
             </View>

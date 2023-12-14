@@ -182,7 +182,11 @@ export const styles = StyleSheet.create({
     },
     labelAdd: {
         fontSize: 15,
-        paddingRight: '5%'
+        paddingRight: '5%',
+        flexDirection: 'row'
+    },
+    iconDate: {
+        paddingLeft: '5%'
     },
     inputAddValor: {
         fontSize: 15,

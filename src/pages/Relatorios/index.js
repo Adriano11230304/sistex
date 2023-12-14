@@ -123,25 +123,32 @@ export default function Relatorios() {
                                 >
                                     <VictoryBar
                                         data={dadosgerais[0]}
+                                        style={{ data: { fill: "green" } }}
                                     />
                                     <VictoryBar
                                         data={dadosgerais[1]}
+                                            style={{ data: { fill: "#c43a31" } }}
                                     />
                                     <VictoryBar
                                         data={dadosgerais[2]}
+                                            style={{ data: { fill: "black" } }}
                                     />
                                 </VictoryGroup>
                             </VictoryChart>
                         </View>
                         <View>
                         <Text style={styles.balancoText}>Despesas em Gráfico de Pizza</Text>
-                        <VictoryPie domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}
+                        <VictoryPie 
+                                    colorScale={["black", "green", "red"]}
+                        domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}
                             data={dataPagar}
                         />
                         </View>
                         <View>
                         <Text style={styles.balancoText}>Receitas em Gráfico de Pizza</Text>
-                        <VictoryPie domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}
+                        <VictoryPie 
+                                    colorScale={["black", "green", "red"]}
+                        domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}
                             data={dataReceitas}
                         />
                         </View>
