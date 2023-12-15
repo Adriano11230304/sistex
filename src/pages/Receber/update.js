@@ -92,7 +92,9 @@ export default function UpdateReceita({ navigation, route }) {
             rec.data_vencimento = dataVencimento;
             rec.cliente_id = cliente_id;
             rec.forma_recebimento = forma_recebimento;
+            console.log(rec);
             const receita = await ReceberController.update(rec);
+            console.log(receita);
 
             await atualizarHome(state.selected, dispatch);
             await atualizarValoresReceitas(1, state.selectedReceitas, dispatch, false, false);

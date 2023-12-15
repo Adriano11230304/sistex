@@ -53,7 +53,7 @@ class ReceberController {
     }
 
     async update(rec) {
-        const receita = new Receber(rec.valor, rec.parcelas, rec.parcelamento, rec.observacoes, rec.data_entrada, rec.recebida, rec.data_recebimento, rec.cliente_id, rec.forma_recebimento, rec.data_vencimento);
+        const receita = new Receber(rec.valor, rec.parcelas, rec.parcelamento, rec.observacoes, rec.data_entrada, rec.recebida, rec.data_recebimento, rec.cliente_id, rec.forma_recebimento, rec.data_vencimento, rec.id);
         console.log("receita", receita);
         try {
             await receita.update();
