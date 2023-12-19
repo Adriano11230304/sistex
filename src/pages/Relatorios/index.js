@@ -28,10 +28,6 @@ export default function Relatorios() {
     })
     const dataPagar = [
         {
-            "x": "Totais",
-            "y": parseFloat(state.valorTotalDespesasNoPageRel.somaTotal)
-        },
-        {
             "y": parseFloat(state.valorTotalDespesasNoPageRel.somaPagas),
             "x": 'Desp Pagas'
         },
@@ -42,11 +38,6 @@ export default function Relatorios() {
     ]
 
     const dataReceitas = [
-        {
-            "x": "Rec totais",
-            "y": parseFloat(state.valorTotalReceitasNoPageRel.somaTotal)
-
-        },
         {
             "x": "Rec. recebidas",
             "y": parseFloat(state.valorTotalReceitasNoPageRel.somaRecebidas)
@@ -139,7 +130,7 @@ export default function Relatorios() {
                         <View>
                         <Text style={styles.balancoText}>Despesas em Gráfico de Pizza</Text>
                         <VictoryPie 
-                                    colorScale={["black", "green", "red"]}
+                                    colorScale={[ "green", "red"]}
                         domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}
                             data={dataPagar}
                         />
@@ -147,7 +138,7 @@ export default function Relatorios() {
                         <View>
                         <Text style={styles.balancoText}>Receitas em Gráfico de Pizza</Text>
                         <VictoryPie 
-                                    colorScale={["black", "green", "red"]}
+                                    colorScale={["green", "red"]}
                         domainPadding={{ x: 20 }} height={250} width={350} theme={VictoryTheme.material}
                             data={dataReceitas}
                         />
